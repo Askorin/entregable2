@@ -83,10 +83,11 @@ vector<int> eratosthenes(size_t m) {
 
 unsigned long long hashInt(string user_id)
 {
+    size_t m = 49157;
+    unsigned long long userid = stoull(user_id);
+    size_t a = 45382, b = 11923;
 
-
-
-    return 0;
+    return (a * userid + b) % m;
 }
 
 
