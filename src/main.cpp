@@ -81,7 +81,13 @@ vector<int> eratosthenes(size_t m) {
     return res;
 }
 
+unsigned long long hashInt(string user_id)
+{
 
+
+
+    return 0;
+}
 
 
 int main() {
