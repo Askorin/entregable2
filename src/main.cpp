@@ -97,12 +97,21 @@ int main() {
 
 
     /* Guardaremos cuenta de las veces que se hasheo a cada indice aquí */
-    vector<int> resultados(m, 0);
+    /*vector<int> resultados(m, 0);
     for (size_t i = 1; i < data.size(); ++i) {
         string username = data[i][2];
         size_t idx = h2(username, m);
         ++resultados[idx];
+    } */
+
+    // Lo mismo, pero para user_id.
+    vector<int> resultados(m, 0);
+    for (size_t i = 1; i < data.size(); ++i) {
+        string userid = data[i][1];
+        unsigned long long idx = hashInt(userid);
+        ++resultados[idx];
     }
+
 
     int max = 0;
     int cant_colisiones = 0;
