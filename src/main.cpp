@@ -80,12 +80,12 @@ vector<int> eratosthenes(size_t m) {
     }
     return res;
 }
-
-unsigned long long hashInt(string user_id)
+// Función Hash para el user ID
+unsigned long long h1(string user_id)
 {
-    size_t m = 49157;
+    size_t m = 49157, a = 45382, b = 11923;
+    
     unsigned long long userid = stoull(user_id);
-    size_t a = 45382, b = 11923;
 
     return (a * userid + b) % m;
 }
@@ -108,7 +108,9 @@ int main() {
     vector<int> resultados(m, 0);
     for (size_t i = 1; i < data.size(); ++i) {
         string userid = data[i][1];
-        unsigned long long idx = hashInt(userid);
+        //cout << userid << endl;
+        unsigned long long idx = h1(userid);
+       // cout << idx << endl;
         ++resultados[idx];
     }
 
