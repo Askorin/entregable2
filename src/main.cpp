@@ -22,6 +22,7 @@ vector<vector<string>> read_csv(string filename) {
         rows.push_back(row);
     }
     return rows;
+
 }
 
 void write_csv(vector<int> mivector, string filename) {
