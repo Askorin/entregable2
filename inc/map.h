@@ -7,44 +7,29 @@
 
 
 
-/* Implementación de un hashmap a través de arreglo open-hashing */
 class HashMap {
-private:
-    std::vector<data_struct> arr;
-
-    // Función de hasheo para user_id
-    size_t h1(unsigned long long user_id) {
-        return 0;
-    }
-
-    // Función de hasheo para username
-    size_t h2(std::string username) {
-        return 0;
-    }
 public:
-    HashMap() {
-        this->arr = std::vector<data_struct>(20, data_struct("na", 0, "na", 0, 0, 0, "na"));
-    }
 
-    data_struct get(std::string username) {
-        size_t idx = h2(username);
-        return arr[idx];
-    }
+    HashMap();
+    /* Para username */
+    virtual data_struct get(std::string username) = 0;
 
-    data_struct get(unsigned long long user_id) {
-        size_t idx = h1(user_id);
-        return arr[idx];
-    }
+    /* Para userid */
+    virtual data_struct get(unsigned long long user_id) = 0;
 
-    void put(std::string username, data_struct value) {
-        size_t idx = h2(username);
-    }
+    /* Para username */
+    virtual void put(std::string username, data_struct value) = 0;
 
-    void put(unsigned long long user_id, data_struct value) {
-        size_t idx = h1(user_id);
-    }
+    /* Para userid */
+    virtual void put(unsigned long long user_id, data_struct value) = 0;
 
-    
+    /* Para username */
+    virtual void remove(std::string username) = 0;
+
+    /* Para userid */
+    virtual void remove(unsigned long long userid) = 0;
+
+    virtual size_t size() = 0;
 };
 
 
