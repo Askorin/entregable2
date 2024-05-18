@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include "../inc/open_hashing_map.h"
 
 using namespace std;
 vector<vector<string>> read_csv(string filename) {
@@ -12,6 +13,8 @@ vector<vector<string>> read_csv(string filename) {
 
     vector<vector<string>> rows;
     string line, temp;
+    /* Removemos la primera fila */
+    getline(fin, line);
     while (getline(fin, line)) {
         stringstream ss(line);
         vector<string> row = vector<string>(0);
@@ -90,21 +93,11 @@ unsigned long long h1(string user_id)
     return (a * userid + b) % m;
 }
 
-
-int main() {
+void testColisiones() {
     size_t m = 49157;
     vector<vector<string>> data = read_csv("../data/universities_followers_no_dups.csv");
 
 
-    /* Guardaremos cuenta de las veces que se hasheo a cada indice aquí */
-    /*vector<int> resultados(m, 0);
-    for (size_t i = 1; i < data.size(); ++i) {
-        string username = data[i][2];
-        size_t idx = h2(username, m);
-        ++resultados[idx];
-    } */
-
-    // Lo mismo, pero para user_id.
     vector<int> resultados(m, 0);
     for (size_t i = 1; i < data.size(); ++i) {
         string userid = data[i][1];
@@ -127,7 +120,77 @@ int main() {
     cout << "cantidad de colisiones: " << cant_colisiones << endl;
 
     write_csv(resultados, "../data/results.csv");
-    
-    
+
+}
+
+
+
+vector<data_struct> convertData(vector<vector<string>> data) {
+    vector<data_struct> res = vector<data_struct>();;
+    for (auto elemento : data) {
+        string university = elemento[0];
+        unsigned long long user_id = stoull(elemento[1]);
+        string username = elemento[2];
+        unsigned int n_tweets = stoul(elemento[3]);
+        unsigned int friend_count = stoul(elemento[4]);
+        unsigned int follower_count = stoul(elemento[5]);
+        string created_at = elemento[6];
+
+        data_struct elementoConvertido = data_struct(university, user_id, username, n_tweets,
+                friend_count, follower_count, created_at);
+        res.push_back(elementoConvertido);
+    }
+    return res;
+}
+
+void testColisionesUsername() {
+    size_t m = 49157;
+    vector<vector<string>> data = read_csv("../data/universities_followers_no_dups.csv");
+    vector<data_struct> convertedData = convertData(data);
+
+
+    /* Guardaremos cuenta de las veces que se hasheo a cada indice aquí */
+    vector<int> resultados(m, 0);
+
+    for (auto data : convertedData) {
+        string username = data.username;
+        size_t idx = h2(username, m);
+        ++resultados[idx];
+    }
+
+    int max = 0;
+    int cant_colisiones = 0;
+
+    for (int i = 0; i < resultados.size(); ++i) {
+        int count = resultados[i];
+        max = count > max ? count : max;
+        if (count > 1) {
+            cant_colisiones += count - 1;
+        }
+        
+    }
+
+    cout << "cantidad de veces máxima hasheada al mismo índice: " << max << endl;
+    cout << "cantidad de colisiones: " << cant_colisiones << endl;
+
+    write_csv(resultados, "../data/results.csv");
+}
+
+void testEncadenamiento() {
+    vector<vector<string>> data = read_csv("../data/universities_followers_no_dups.csv");
+    vector<data_struct> convertedData = convertData(data);
+    OpenHashingMap mimapa = OpenHashingMap();
+
+    for (auto entry : convertedData) {
+        mimapa.put(entry.username, entry);
+    }
+}
+
+
+int main() {
+        
+    // testColisionesUsername();
+    testEncadenamiento(); 
+
     return 0;
 }
