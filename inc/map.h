@@ -5,12 +5,11 @@
 #include "data_struct.h"
 #include <iostream>
 
-
-
 class HashMap {
 public:
 
-    HashMap();
+    HashMap() {
+    }
     /* Para username */
     virtual data_struct get(std::string username) = 0;
 
@@ -30,6 +29,27 @@ public:
     virtual void remove(unsigned long long userid) = 0;
 
     virtual size_t size() = 0;
+};
+
+class HashMapLinear : public HashMap {
+HashMapLinear(){}
+data_struct get(std::string userId) {
+        unsigned long long idx = hashFunction(userId), p;
+        size_t m = 49157;
+
+        for ( p = 0; p < m; p++) {
+            if() {
+
+            }
+        }
+        
+    }
+
+
+data_struct put(std::string userId, data_struct value) {
+    unsigned long long idx = hashFunction(userId);
+
+}
 };
 
 
