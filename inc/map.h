@@ -31,26 +31,5 @@ public:
     virtual size_t size() = 0;
 };
 
-class HashMapLinear : public HashMap {
-HashMapLinear(){}
-data_struct get(std::string userId) {
-        unsigned long long idx = hashFunction(userId), p;
-        size_t m = 49157;
-
-        for ( p = 0; p < m; p++) {
-            if() {
-
-            }
-        }
-        
-    }
-
-
-data_struct put(std::string userId, data_struct value) {
-    unsigned long long idx = hashFunction(userId);
-
-}
-};
-
 
 #endif

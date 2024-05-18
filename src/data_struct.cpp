@@ -12,6 +12,11 @@ data_struct::data_struct(std::string university, unsigned long long user_id, std
         this->friend_count = friend_count;
         this->follower_count = follower_count;
         this->created_at = created_at;
+        this->valid = true;
+}
+
+void data_struct::setValid(bool valid) {
+    this->valid = valid;
 }
 
 std::ostream& operator << (std::ostream &os, const data_struct &elem) {
