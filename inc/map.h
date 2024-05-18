@@ -5,6 +5,7 @@
 #include "data_struct.h"
 #include <iostream>
 
+<<<<<<< HEAD
 /* Implementación de un hashmap a través de arreglo open-hashing */
 class HashMap {
 private:
@@ -42,15 +43,27 @@ public:
         size_t idx = h1(user_id);
         return Tabla[idx];
     }
+=======
 
-    void put(std::string username, data_struct value) {
-        size_t idx = h2(username);
-    }
 
-    void put(unsigned long long user_id, data_struct value) {
-        size_t idx = h1(user_id);
-    }
+class HashMap {
+public:
 
+    HashMap();
+    /* Para username */
+    virtual data_struct get(std::string username) = 0;
+
+    /* Para userid */
+    virtual data_struct get(unsigned long long user_id) = 0;
+>>>>>>> main
+
+    /* Para username */
+    virtual void put(std::string username, data_struct value) = 0;
+
+    /* Para userid */
+    virtual void put(unsigned long long user_id, data_struct value) = 0;
+
+<<<<<<< HEAD
     
 
     
@@ -78,6 +91,15 @@ data_struct put(std::string userId, data_struct value) {
 
 }
 
+=======
+    /* Para username */
+    virtual void remove(std::string username) = 0;
+
+    /* Para userid */
+    virtual void remove(unsigned long long userid) = 0;
+
+    virtual size_t size() = 0;
+>>>>>>> main
 };
 
 
