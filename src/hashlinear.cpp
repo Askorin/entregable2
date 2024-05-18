@@ -63,6 +63,7 @@ public:
             if(mirror[idx] == Empty || mirror[idx] == Available) 
             {
                 table[idx] = value;
+                mirror[idx] == Occupied;
                 p = m+1;
             }
 
