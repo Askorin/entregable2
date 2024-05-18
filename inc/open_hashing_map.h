@@ -11,9 +11,11 @@
 class OpenHashingMap : public HashMap {
 private:
     std::vector<std::vector<data_struct>> table;
-    const size_t M = 49157;
+    const size_t N = 49157;
     // Función de hasheo para username
     size_t hashUsername(std::string username);
+
+    size_t n;
 
 public:
     OpenHashingMap();
@@ -37,6 +39,8 @@ public:
     void remove(unsigned long long userid) override;
 
     size_t size() override;
+
+    bool isEmpty() override;
 
 };
 

@@ -21,12 +21,13 @@ size_t OpenHashingMap::hashUsername(std::string username) {
     /* mult mod prime con a, b menores a m (tamaño de la tabla, número primo, quizás). */
     size_t a = 45382, b = 11923;
     
-    return (a * sum + b) % M;
+    return (a * sum + b) % N;
 
 }
 
 OpenHashingMap::OpenHashingMap() {
-    this->table = std::vector(M, std::vector<data_struct>());
+    this->table = std::vector(N, std::vector<data_struct>());
+    this->n = 0;
 }
 
 data_struct OpenHashingMap::get(std::string username) {
@@ -64,6 +65,7 @@ void OpenHashingMap::put(std::string username, data_struct value) {
     }
 
     table[idx].push_back(value);
+    ++n;
 };
 
 /* Para userid */
@@ -77,6 +79,7 @@ void OpenHashingMap::remove(std::string username) {
     for (size_t i = 0; i < chain.size(); ++i) {
         if (chain[i].username == username) {
             table[idx].erase(table[idx].begin() + i);
+            --n;
             return;
         }
     }
@@ -87,5 +90,9 @@ void OpenHashingMap::remove(unsigned long long userid) {
 };
 
 size_t OpenHashingMap::size() {
+    return n;
 };
 
+bool OpenHashingMap::isEmpty() {
+    return n == 0;
+};
