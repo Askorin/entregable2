@@ -47,21 +47,18 @@ void OpenHashingMap::put(std::string username, data_struct value) {
     std::vector<data_struct> chain = table[idx];
 
 
-    if (idx == 47705) {
-        std::cout << "Tratando de ingresar: \n";
-        std::cout << value << "\n\n";
-        std::cout << "---- Hasheados a idx " << idx << " ----\n\n";
-    }
+    // if (chain.size() > 3) {
+    //     std::cout << "Tratando de ingresar: \n";
+    //     std::cout << value << "\n\n";
+    //     std::cout << "---- Hasheados a idx " << idx << " ----\n\n";
+    // }
     for (auto entry : chain) {
-        if (idx == 47705) {
-            std::cout << entry << "\n\n";
-        }
+        // if (chain.size() > 3) {
+        //     std::cout << entry << "\n\n";
+        // }
         if (entry.username == username) return;
     }
 
-    if (idx == 47705) {
-        std::cout << "llegamos" << std::endl;
-    }
     table[idx].push_back(value);
 };
 
