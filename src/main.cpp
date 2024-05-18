@@ -184,6 +184,26 @@ void testEncadenamiento() {
     for (auto entry : convertedData) {
         mimapa.put(entry.username, entry);
     }
+
+    cout << "Elementos ingresados:  " << mimapa.size() << "\n\n";
+    cout << "Factor de carga:  " << (float) mimapa.size() / 41957 << "\n\n";
+
+    /* Probaremos algunos usernames interesantes */
+    data_struct val = mimapa.get("pachiamira");
+    cout << val << "\n\n";
+    val = mimapa.get("Pancho3001");
+    cout << val << "\n\n";
+    val = mimapa.get("rwdiazguaita");
+    cout << val << "\n\n";
+
+    mimapa.remove("rwdiazguaita");
+
+    val = mimapa.get("Pancho3001");
+    cout << val << "\n\n";
+    val = mimapa.get("rwdiazguaita");
+    cout << val << "\n\n";
+
+    cout << "Elementos ingresados:  " << mimapa.size() << "\n\n";
 }
 
 
