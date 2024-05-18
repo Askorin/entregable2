@@ -26,7 +26,7 @@ public:
     virtual void remove(std::string username) = 0;
 
     /* Para userid */
-    virtual void remove(unsigned long long userid) = 0;
+    virtual data_struct remove(unsigned long long userid) = 0;
 
     virtual size_t size() = 0;
 
