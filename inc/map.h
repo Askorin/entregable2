@@ -10,7 +10,8 @@
 class HashMap {
 public:
 
-    HashMap();
+    HashMap() {
+    }
     /* Para username */
     virtual data_struct get(std::string username) = 0;
 
