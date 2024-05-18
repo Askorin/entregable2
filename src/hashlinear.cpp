@@ -1,8 +1,7 @@
 #include <vector>
 #include <string>
-#include "data_struct.h"
-#include "map.h"
-#include <iostream>
+#include "../inc/data_struct.h"
+#include "../inc/map.h"
 
 class HashLinear : public HashMap {
 private:
@@ -35,14 +34,14 @@ public:
         for (p; p < Max; p++)
         {
 
-            if(mirror[idx] == Empty || mirror[idx] == Available)
+            if(mirror[idx] == Empty)
             {
                 data_struct empty(0,0,0,0,0,0,0);
                 empty.setValid(false);
                 return empty;
             }
 
-            else if (table[idx].user_id = userId )
+            else if (table[idx].user_id == userId )
             {
                 data_struct tmp = table[idx];
                 return tmp;
@@ -63,7 +62,7 @@ public:
             if(mirror[idx] == Empty || mirror[idx] == Available) 
             {
                 table[idx] = value;
-                mirror[idx] == Occupied;
+                mirror[idx] = Occupied;
                 p = m+1;
             }
 
