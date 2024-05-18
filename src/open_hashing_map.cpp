@@ -35,6 +35,10 @@ data_struct OpenHashingMap::get(std::string username) {
     for (auto entry : chain) {
         if (entry.username == username) return entry;
     }
+    /* En este caso no encontramos nada */
+    data_struct retVal("", 0, "", 0, 0, 0, "");
+    retVal.setValid(false);
+    return retVal;
 }
 
 /* Para userid */

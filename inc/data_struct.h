@@ -4,7 +4,6 @@
 
 struct data_struct {
 
-
     bool valid;
 
     std::string university;
