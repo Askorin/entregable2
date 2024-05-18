@@ -57,15 +57,15 @@ public:
     void put(unsigned long long userid, data_struct value) 
     {
         unsigned long long idx = h1(userid);
-        for (int p = idx, m = 49157; p < m ; p++)
+        int p = 0, Max = 49157;
+        for (p; p < Max; p++)
         {
             if(mirror[idx] == Empty || mirror[idx] == Available) 
             {
                 table[idx] = value;
                 mirror[idx] = Occupied;
-                p = m+1;
             }
-
+            idx = (idx + 1) % Max;
         }
     }
 
