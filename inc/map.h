@@ -5,8 +5,6 @@
 #include "data_struct.h"
 #include <iostream>
 
-
-
 class HashMap {
 public:
 
