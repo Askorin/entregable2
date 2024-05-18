@@ -23,7 +23,7 @@ public:
     virtual void put(unsigned long long user_id, data_struct value) = 0;
 
     /* Para username */
-    virtual void remove(std::string username) = 0;
+    virtual data_struct remove(std::string username) = 0;
 
     /* Para userid */
     virtual data_struct remove(unsigned long long userid) = 0;

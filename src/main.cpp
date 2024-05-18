@@ -196,12 +196,17 @@ void testEncadenamiento() {
     val = mimapa.get("rwdiazguaita");
     cout << val << "\n\n";
 
-    mimapa.remove("rwdiazguaita");
+    val = mimapa.remove("rwdiazguaita");
+    cout << val << "\n\n";
 
     val = mimapa.get("Pancho3001");
     cout << val << "\n\n";
     val = mimapa.get("rwdiazguaita");
     cout << val << "\n\n";
+
+    val = mimapa.remove("rwdiazguaita");
+    cout << val << "\n\n";
+
 
     cout << "Elementos ingresados:  " << mimapa.size() << "\n\n";
 }

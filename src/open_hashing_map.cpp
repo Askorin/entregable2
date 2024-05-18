@@ -73,20 +73,26 @@ void OpenHashingMap::put(unsigned long long user_id, data_struct value) {
 };
 
 /* Para username */
-void OpenHashingMap::remove(std::string username) {
+data_struct OpenHashingMap::remove(std::string username) {
     size_t idx = hashUsername(username);
+
     std::vector<data_struct> chain = table[idx];
     for (size_t i = 0; i < chain.size(); ++i) {
-        if (chain[i].username == username) {
+        data_struct valor = chain[i];
+        if (valor.username == username) {
             table[idx].erase(table[idx].begin() + i);
             --n;
-            return;
+            return valor;
         }
     }
+
+    data_struct retVal("", 0, "", 0, 0, 0, "");
+    retVal.setValid(false);
+    return retVal;
 };
 
 /* Para userid */
-void OpenHashingMap::remove(unsigned long long userid) {
+data_struct OpenHashingMap::remove(unsigned long long userid) {
 };
 
 size_t OpenHashingMap::size() {
