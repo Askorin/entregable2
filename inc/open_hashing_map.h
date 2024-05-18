@@ -33,10 +33,10 @@ public:
     void put(unsigned long long user_id, data_struct value) override;
 
     /* Para username */
-    void remove(std::string username) override;
+    data_struct remove(std::string username) override;
 
     /* Para userid */
-    void remove(unsigned long long userid) override;
+    data_struct remove(unsigned long long userid) override;
 
     size_t size() override;
 
