@@ -227,29 +227,40 @@ void testLineal() {
 
     /* Probaremos algunos usernames interesantes */
 
+    /* Imprime pachiamira */
     data_struct val = mimapa.get(32631258);
     cout << val << "\n\n";
+    /* Imprime Pancho3001 */
     val = mimapa.get(301185416);
     cout << val << "\n\n";
+    /* Imprime rwdiazguaita */
     val = mimapa.get(101859333);
     cout << val << "\n\n";
 
+    /* Imprime rwdiazguaita */
+    data_struct rwdiaz = mimapa.remove(101859333);
+    cout << rwdiaz << "\n\n";
+
+    /* Imprime Pancho3001 */
+    val = mimapa.get(301185416);
+    cout << val << "\n\n";
+    /* Imprime nulo */
+    val = mimapa.get(101859333);
+    cout << val << "\n\n";
+
+    /* Imprime nulo */
     val = mimapa.remove(101859333);
     cout << val << "\n\n";
 
-    val = mimapa.get(301185416);
-    cout << val << "\n\n";
+    /* Imprime nulo */
     val = mimapa.get(101859333);
     cout << val << "\n\n";
 
-    val = mimapa.remove(101859333);
-    cout << val << "\n\n";
-
-    val = mimapa.get(101859333);
+    /* Imprime nulo */
     mimapa.remove(101859333);
-    mimapa.put(101859333, val);
-    mimapa.put(101859333, val);
-    val = mimapa.get(101859333);
+    mimapa.put(rwdiaz.user_id, rwdiaz);
+    mimapa.put(rwdiaz.user_id, val);
+    val = mimapa.get(rwdiaz.user_id);
     cout << val << "\n\n";
 
 
