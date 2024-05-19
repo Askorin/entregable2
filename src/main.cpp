@@ -7,6 +7,8 @@
 /* TODO: Proablemente dejar en un header y compilar por separado */
 #include "hashlinear.cpp"
 
+#include <chrono>
+
 using namespace std;
 vector<vector<string>> read_csv(string filename) {
     ifstream fin;
@@ -85,44 +87,13 @@ vector<int> eratosthenes(size_t m) {
     }
     return res;
 }
+
 // Función Hash para el user ID
-unsigned long long h1(string user_id)
+unsigned long long h1(unsigned long long user_id)
 {
     size_t m = 49157, a = 45382, b = 11923;
-    
-    unsigned long long userid = stoull(user_id);
 
-    return (a * userid + b) % m;
-}
-
-void testColisiones() {
-    size_t m = 49157;
-    vector<vector<string>> data = read_csv("../data/universities_followers_no_dups.csv");
-
-
-    vector<int> resultados(m, 0);
-    for (size_t i = 1; i < data.size(); ++i) {
-        string userid = data[i][1];
-        //cout << userid << endl;
-        unsigned long long idx = h1(userid);
-       // cout << idx << endl;
-        ++resultados[idx];
-    }
-
-
-    int max = 0;
-    int cant_colisiones = 0;
-    for (int count : resultados) {
-        max = count > max ? count : max;
-        if (count > 1) {
-            cant_colisiones += count - 1;
-        }
-    }
-    cout << "cantidad de veces máxima hasheada al mismo índice: " << max << endl;
-    cout << "cantidad de colisiones: " << cant_colisiones << endl;
-
-    write_csv(resultados, "../data/results.csv");
-
+    return (a * user_id + b) % m;
 }
 
 
@@ -157,6 +128,39 @@ void testColisionesUsername() {
     for (auto data : convertedData) {
         string username = data.username;
         size_t idx = h2(username, m);
+        ++resultados[idx];
+    }
+
+    int max = 0;
+    int cant_colisiones = 0;
+
+    for (int i = 0; i < resultados.size(); ++i) {
+        int count = resultados[i];
+        max = count > max ? count : max;
+        if (count > 1) {
+            cant_colisiones += count - 1;
+        }
+        
+    }
+
+    cout << "cantidad de veces máxima hasheada al mismo índice: " << max << endl;
+    cout << "cantidad de colisiones: " << cant_colisiones << endl;
+
+    write_csv(resultados, "../data/results.csv");
+}
+
+void testColisionesUserId() {
+    size_t m = 49157;
+    vector<vector<string>> data = read_csv("../data/universities_followers_no_dups.csv");
+    vector<data_struct> convertedData = convertData(data);
+
+
+    /* Guardaremos cuenta de las veces que se hasheo a cada indice aquí */
+    vector<int> resultados(m, 0);
+
+    for (auto data : convertedData) {
+        unsigned long long userId = data.user_id;
+        size_t idx = h1(userId);
         ++resultados[idx];
     }
 
@@ -268,11 +272,57 @@ void testLineal() {
 }
 
 
+double insertionTimer(HashMap& mapa, vector<data_struct> datos, bool user_id) {
+
+    auto start = chrono::high_resolution_clock::now();
+    for (auto entry : datos) {
+        if (user_id) mapa.put(entry.user_id, entry);
+        else mapa.put(entry.username, entry);
+    }
+    auto end = chrono::high_resolution_clock::now();
+
+    // auto delta = chrono::duration_cast<chrono::milliseconds>(end - start);
+    /* milisegundos tipo double */
+    auto delta = chrono::duration<double, std::milli>(end - start);
+
+    return delta.count();
+}
+
+void timeTest() {
+
+    /* Leemos los datos y convertimos a el struct */
+    vector<vector<string>> data = read_csv("../data/universities_followers_no_dups.csv");
+    vector<data_struct> convertedData = convertData(data);
+
+    /* Mapas de hashing abierto y cerrado */
+    OpenHashingMap abierto = OpenHashingMap();
+    HashLinear linear = HashLinear();
+
+
+    /* Tiempo de inserción con llaves de user_id */
+    double tiempoAbierto = insertionTimer(abierto, convertedData, true); 
+    double tiempoLinear = insertionTimer(linear, convertedData, true); 
+
+    cout << "############################################" << endl;
+    cout << "#                                          #" << endl;
+    cout << "#            TIEMPOS CON USERID            #" << endl;
+    cout << "#                                          #" << endl;
+    cout << "############################################" << endl;
+    cout << "---- Tiempo de inserción para hashing abierto ----" << endl;
+    cout << tiempoAbierto << " ms\n\n";
+    cout << "---- Tiempo de inserción para hashing cerrado ----" << endl;
+    cout << tiempoLinear << " ms\n\n";
+
+}
+
+
 int main() {
         
     // testColisionesUsername();
+    // testColisionesUserId();
     // testEncadenamiento(); 
-    testLineal();
+    // testLineal();
+    timeTest();
 
     return 0;
 }

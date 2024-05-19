@@ -22,9 +22,9 @@ public:
 
     unsigned long long h1(unsigned long long user_id)
     {
-        size_t m = 49157, a = 45382, b = 11923;
+        size_t a = 45382, b = 11923;
 
-        return (a * user_id + b) % m;
+        return (a * user_id + b) % N;
     }
 
 
@@ -33,9 +33,9 @@ public:
     data_struct get(unsigned long long userId) override
     {
         unsigned long long idx = h1(userId);
-        int p = 0, Max = 49157;
+        int p = 0;
 
-        for (p; p < Max; p++)
+        for (p; p < N; p++)
         {
 
             if(mirror[idx] == Empty)
@@ -55,7 +55,7 @@ public:
 
             else
             {
-                idx = (idx + 1) % Max;
+                idx = (idx + 1) % N;
             }
         }
     }
@@ -82,8 +82,8 @@ public:
          */
         
         unsigned long long idx = h1(userid);
-        int p = 0, Max = 49157;
-        for (p; p < Max; p++)
+        int p = 0;
+        for (p; p < N; p++)
         {
             if(mirror[idx] == Empty || mirror[idx] == Available) 
             {
@@ -92,7 +92,7 @@ public:
                 ++n;
                 return;
             }
-            idx = (idx + 1) % Max;
+            idx = (idx + 1) % N;
         }
     }
 
@@ -101,9 +101,9 @@ public:
     data_struct remove(unsigned long long userid) override 
     {
         unsigned long long idx = h1(userid);
-        int p = 0, Max = 49157;
+        int p = 0;
 
-        for (p; p < Max; p++)
+        for (p; p < N; p++)
         {
             if(mirror[idx] == Empty)
             {
@@ -119,7 +119,7 @@ public:
                 return tmp;
             }
 
-            idx = (idx + 1) % Max;
+            idx = (idx + 1) % N;
         }
     }
 
