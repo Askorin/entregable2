@@ -7,6 +7,7 @@ class HashLinear : public HashMap {
 private:
     std::vector<data_struct> table;
     std::vector<int> mirror;
+    size_t n;
 
 public:
     enum Status 
@@ -17,7 +18,7 @@ public:
     };
 
     /*Se crea vector mirror que servirá para saber si las posiciones estan vacias o disponibles.*/    
-    HashLinear() :mirror(49157, Empty) {}
+    HashLinear() : table(49157, data_struct("", 0, "", 0, 0, 0, "")), mirror(49157, Empty), n(0) { }
 
     unsigned long long h1(unsigned long long user_id)
     {
@@ -26,7 +27,10 @@ public:
         return (a * user_id + b) % m;
     }
 
-    data_struct get(unsigned long long userId) 
+
+    data_struct get(std::string username) override { }
+
+    data_struct get(unsigned long long userId) override
     {
         unsigned long long idx = h1(userId);
         int p = 0, Max = 49157;
@@ -36,12 +40,14 @@ public:
 
             if(mirror[idx] == Empty)
             {
-                data_struct empty(0,0,0,0,0,0,0);
+
+
+                data_struct empty("",0,"",0,0,0,"");
                 empty.setValid(false);
                 return empty;
             }
 
-            else if (table[idx].user_id == userId )
+            else if (mirror[idx] == Occupied & table[idx].user_id == userId)
             {
                 data_struct tmp = table[idx];
                 return tmp;
@@ -54,8 +60,27 @@ public:
         }
     }
 
-    void put(unsigned long long userid, data_struct value) 
+
+    void put(std::string username, data_struct value) override { }
+
+    void put(unsigned long long userid, data_struct value) override
     {
+        /* Esto es más o menos ineficiente, pero funciona */
+        data_struct elem = get(userid);
+        
+        /* 
+         * En este caso la clave ya estaba ingresada en el mapa, por ahora
+         * no modificaremos su valor ni nada, solo la devolveremos.
+         */
+        if (elem.valid) {
+            return;
+        }
+
+        /* 
+         * En caso contrario, nos aseguramos de que la clave no está duplicada,
+         * podemos explorar dónde colocarla.
+         */
+        
         unsigned long long idx = h1(userid);
         int p = 0, Max = 49157;
         for (p; p < Max; p++)
@@ -64,32 +89,47 @@ public:
             {
                 table[idx] = value;
                 mirror[idx] = Occupied;
+                ++n;
+                return;
             }
             idx = (idx + 1) % Max;
         }
     }
 
-    data_struct remove(unsigned long long userid) 
+    data_struct remove(std::string username) override { }
+
+    data_struct remove(unsigned long long userid) override 
     {
         unsigned long long idx = h1(userid);
+        int p = 0, Max = 49157;
 
-        if(mirror[idx] == Occupied){
-
-            data_struct tmp = get(userid);
-            mirror[idx] = Available;
-            return tmp;
-        }
-
-        else
+        for (p; p < Max; p++)
         {
-                data_struct empty(0,0,0,0,0,0,0);
+            if(mirror[idx] == Empty)
+            {
+                data_struct empty("",0,"",0,0,0,"");
                 empty.setValid(false);
                 return empty;
-        }
+            }
+            else if (mirror[idx] == Occupied & table[idx].user_id == userid)
+            {
+                data_struct tmp = table[idx];
+                mirror[idx] = Available;
+                --n;
+                return tmp;
+            }
 
-              
+            idx = (idx + 1) % Max;
+        }
     }
 
-    
+
+    size_t size() override {
+        return n;
+    }
+
+    bool isEmpty() override {
+        return n == 0;
+    }
 
 };

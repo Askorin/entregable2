@@ -4,6 +4,8 @@
 #include <sstream>
 #include <vector>
 #include "../inc/open_hashing_map.h"
+/* TODO: Proablemente dejar en un header y compilar por separado */
+#include "hashlinear.cpp"
 
 using namespace std;
 vector<vector<string>> read_csv(string filename) {
@@ -211,11 +213,55 @@ void testEncadenamiento() {
     cout << "Elementos ingresados:  " << mimapa.size() << "\n\n";
 }
 
+void testLineal() {
+    vector<vector<string>> data = read_csv("../data/universities_followers_no_dups.csv");
+    vector<data_struct> convertedData = convertData(data);
+    HashLinear mimapa = HashLinear();
+
+    for (auto entry : convertedData) {
+        mimapa.put(entry.user_id, entry);
+    }
+
+    cout << "Elementos ingresados:  " << mimapa.size() << "\n\n";
+    cout << "Factor de carga:  " << (float) mimapa.size() / 41957 << "\n\n";
+
+    /* Probaremos algunos usernames interesantes */
+
+    data_struct val = mimapa.get(32631258);
+    cout << val << "\n\n";
+    val = mimapa.get(301185416);
+    cout << val << "\n\n";
+    val = mimapa.get(101859333);
+    cout << val << "\n\n";
+
+    val = mimapa.remove(101859333);
+    cout << val << "\n\n";
+
+    val = mimapa.get(301185416);
+    cout << val << "\n\n";
+    val = mimapa.get(101859333);
+    cout << val << "\n\n";
+
+    val = mimapa.remove(101859333);
+    cout << val << "\n\n";
+
+    val = mimapa.get(101859333);
+    mimapa.remove(101859333);
+    mimapa.put(101859333, val);
+    mimapa.put(101859333, val);
+    val = mimapa.get(101859333);
+    cout << val << "\n\n";
+
+
+    cout << "Elementos ingresados:  " << mimapa.size() << "\n\n";
+}
+
 
 int main() {
         
     // testColisionesUsername();
-    testEncadenamiento(); 
+    // testEncadenamiento(); 
+    testLineal();
 
     return 0;
 }
