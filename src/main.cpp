@@ -69,25 +69,6 @@ size_t h2(string username, size_t m) {
 }
 
 
-vector<int> eratosthenes(size_t m) {
-    vector<int> res = vector<int>();;
-    vector<bool> primos(m, true);
-    for (size_t p = 2; p * p < m; p++) {
-        if (primos[p]) {
-            for (size_t i = p * p; i < m; i += p) {
-                primos[i] = false;
-            }
-        }
-    }
-
-    for (size_t p = 2; p < m; p++) {
-        if (primos[p]) {
-            res.push_back(p);
-        }
-    }
-    return res;
-}
-
 // Función Hash para el user ID
 unsigned long long h1(unsigned long long user_id)
 {
