@@ -6,6 +6,7 @@
 #include "../inc/open_hashing_map.h"
 /* TODO: Proablemente dejar en un header y compilar por separado */
 #include "hashlinear.cpp"
+#include "../inc/quad_map.h"
 
 #include <chrono>
 
@@ -278,11 +279,13 @@ void timeTest() {
     /* Mapas de hashing abierto y cerrado */
     OpenHashingMap abierto = OpenHashingMap();
     HashLinear linear = HashLinear();
+    QuadMap quad = QuadMap();
 
 
     /* Tiempo de inserción con llaves de user_id */
     double tiempoAbierto = insertionTimer(abierto, convertedData, true); 
     double tiempoLinear = insertionTimer(linear, convertedData, true); 
+    double tiempoQuad = insertionTimer(quad, convertedData, true); 
 
     cout << "############################################" << endl;
     cout << "#                                          #" << endl;
@@ -291,8 +294,10 @@ void timeTest() {
     cout << "############################################" << endl;
     cout << "---- Tiempo de inserción para hashing abierto ----" << endl;
     cout << tiempoAbierto << " ms\n\n";
-    cout << "---- Tiempo de inserción para hashing cerrado ----" << endl;
+    cout << "---- Tiempo de inserción para hashing cerrado, probing lineal ----" << endl;
     cout << tiempoLinear << " ms\n\n";
+    cout << "---- Tiempo de inserción para hashing cerrado, probing cuadrático ----" << endl;
+    cout << tiempoQuad << " ms\n\n";
 
 }
 

@@ -4,8 +4,8 @@
 
 struct data_struct {
 
+    /* 1 byte */
     bool valid;
-
     std::string university;
     /* 64 bits */
     unsigned long long user_id;
