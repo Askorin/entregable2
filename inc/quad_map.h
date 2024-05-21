@@ -1,5 +1,5 @@
-#ifndef OPEN_HASHING_MAP_H
-#define OPEN_HASHING_MAP_H
+#ifndef QUAD_MAP_H
+#define QUAD_MAP_H
 #include "map.h"
 #include <vector>
 #include <string>
@@ -8,21 +8,28 @@
 
 
 
-class OpenHashingMap : public HashMap {
+class QuadMap : public HashMap {
 private:
-    std::vector<std::vector<data_struct>> table;
-
+    std::vector<data_struct> table;
+    std::vector<int> mirror;
     // Función de hasheo para username
     size_t hashUsername(std::string username);
 
     // Función de hasheo para username
     size_t hashId(unsigned long long id);
 
+
     size_t n;
 
 public:
-    
-    OpenHashingMap();
+    enum Status 
+    {
+        Empty,
+        Available,
+        Occupied
+    };
+
+    QuadMap();
 
     /* Para username */
     data_struct get(std::string username) override;

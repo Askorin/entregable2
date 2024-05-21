@@ -81,7 +81,7 @@ public:
          * podemos explorar dónde colocarla.
          */
         
-        unsigned long long idx = h1(userid);
+        size_t idx = h1(userid);
         int p = 0;
         for (p; p < N; p++)
         {

@@ -6,6 +6,8 @@
 #include <iostream>
 
 class HashMap {
+protected:
+    const size_t N = 49157;
 public:
 
     HashMap() {
