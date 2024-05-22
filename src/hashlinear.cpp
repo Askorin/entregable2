@@ -64,6 +64,7 @@ public:
             {
                 table[idx] = value;
                 mirror[idx] = Occupied;
+                return;
             }
             idx = (idx + 1) % Max;
         }

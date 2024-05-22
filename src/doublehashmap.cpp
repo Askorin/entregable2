@@ -38,6 +38,9 @@ class DoubleHash : public HashMap {
        data_struct get(unsigned long long userId) 
     {
         unsigned long long idx = h1(userId);
+        unsigned long long hash1 = h1(userId);
+        unsigned long long hash2 = d1(userId);
+
         int p = 0, Max = 49157;
 
         for (p; p < Max; p++)
@@ -58,11 +61,59 @@ class DoubleHash : public HashMap {
 
             else
             {
-                idx = (idx + 1) % Max;
+                idx = (hash1 + p*hash2) % Max;
             }
         }
     }
-    
+
+    void put (unsigned long long user_id, data_struct value)
+    {
+        unsigned long long idx = h1(user_id);
+
+        if(mirror[idx] = Occupied)
+        {
+            unsigned long long hash1 = h1(user_id);
+            unsigned long long hash2 = d1(user_id);
+
+            for (size_t i = 0, Max = 49157; i < Max; i++)
+            {
+                idx = (hash1 + i*hash2) % Max;
+                
+                if(mirror[idx] == Empty || mirror[idx] == Available)
+                {
+                    table[idx] = value;
+                    mirror[idx] = Occupied;
+                    
+                    return;
+                }
+
+            }
+            
+        }
+    }
+
+     data_struct remove(unsigned long long userid) 
+    {
+        unsigned long long hash1 = h1(userid);
+        unsigned long long hash2 = d1(userid);
+        unsigned long long idx = hash1;
+        int Max = 49157;
+
+        for (int i = 0; i < Max; i++) 
+        {
+            if (mirror[idx] == Occupied && table[idx].user_id == userid) 
+            {
+                mirror[idx] = Available;
+                data_struct tmp = table[idx];
+                return tmp;
+            }
+            
+            idx = (hash1 + i * hash2) % Max;
+
+        }
+        
+
+    }
 
     
 
