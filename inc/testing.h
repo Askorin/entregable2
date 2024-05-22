@@ -6,7 +6,7 @@
 #include <vector>
 
 
-double insertionTimer(HashMap& mapa, std::vector<data_struct> datos);
+double insertionTimer(HashMap& mapa, std::vector<data_struct> datos, bool isUserId);
 
 double insertionTimer(std::unordered_map<unsigned long long, data_struct>& mapa, 
         std::vector<data_struct> datos);

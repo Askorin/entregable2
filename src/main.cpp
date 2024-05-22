@@ -3,9 +3,7 @@
 #include <vector>
 #include "../inc/data_parsing.h"
 #include "../inc/testing.h"
-#include "../inc/open_hashing_map.h"
 /* TODO: Proablemente dejar en un header y compilar por separado */
-#include "../inc/hash_linear.h"
 
 using namespace std;
 

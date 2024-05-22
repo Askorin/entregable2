@@ -9,18 +9,27 @@
 
 using namespace std;
 
-/* Para userId */
-double insertionTimer(HashMap& mapa, vector<data_struct> datos) {
+double insertionTimer(HashMap& mapa, vector<data_struct> datos, bool isUserId) {
 
-    auto start = chrono::high_resolution_clock::now();
-    for (auto entry : datos) {
-        mapa.put(entry.user_id, entry);
+    chrono::duration<double, milli> delta;
+    if (isUserId) {
+        auto start = chrono::high_resolution_clock::now();
+        for (auto entry : datos) {
+            mapa.put(entry.user_id, entry);
+        }
+        auto end = chrono::high_resolution_clock::now();
+        delta = chrono::duration<double, std::milli>(end - start);
+    } else {
+        auto start = chrono::high_resolution_clock::now();
+        for (auto entry : datos) {
+            mapa.put(entry.username, entry);
+        }
+        auto end = chrono::high_resolution_clock::now();
+        delta = chrono::duration<double, milli>(end - start);
     }
-    auto end = chrono::high_resolution_clock::now();
 
     // auto delta = chrono::duration_cast<chrono::milliseconds>(end - start);
     /* milisegundos tipo double */
-    auto delta = chrono::duration<double, std::milli>(end - start);
 
     return delta.count();
 }
@@ -35,23 +44,38 @@ double insertionTimer(unordered_map<unsigned long long, data_struct>& mapa, vect
 
     // auto delta = chrono::duration_cast<chrono::milliseconds>(end - start);
     /* milisegundos tipo double */
+    auto delta = chrono::duration<double, milli>(end - start);
+
+    return delta.count();
+}
+
+double insertionTimer(unordered_map<string, data_struct>& mapa, vector<data_struct> datos) {
+
+    auto start = chrono::high_resolution_clock::now();
+    for (auto entry : datos) {
+        mapa.insert({entry.username, entry});
+    }
+    auto end = chrono::high_resolution_clock::now();
+
+    // auto delta = chrono::duration_cast<chrono::milliseconds>(end - start);
+    /* milisegundos tipo double */
     auto delta = chrono::duration<double, std::milli>(end - start);
 
     return delta.count();
 }
 
 void timeTest(vector<data_struct> datos) {
-    /* Mapas de hashing abierto y cerrado */
+    /* Mapas que usaremos para user_id */
     OpenHashingMap abierto = OpenHashingMap();
     HashLinear linear = HashLinear();
     QuadMap quad = QuadMap();
-    unordered_map<unsigned long long, data_struct> stl;
+    unordered_map<unsigned long long, data_struct> stl = unordered_map<unsigned long long, data_struct>();;
 
 
     /* Tiempo de inserción con llaves de user_id */
-    double tiempoAbierto = insertionTimer(abierto, datos); 
-    double tiempoLinear = insertionTimer(linear, datos); 
-    double tiempoQuad = insertionTimer(quad, datos); 
+    double tiempoAbierto = insertionTimer(abierto, datos, true); 
+    double tiempoLinear = insertionTimer(linear, datos, true); 
+    double tiempoQuad = insertionTimer(quad, datos, true); 
     double tiempoStl = insertionTimer(stl, datos);
 
     cout << "############################################" << endl;
@@ -67,6 +91,35 @@ void timeTest(vector<data_struct> datos) {
     cout << tiempoQuad << " ms\n\n";
     cout << "---- Tiempo de inserción para mapa de la STL ----" << endl;
     cout << tiempoStl << " ms\n\n";
+
+    /* Mapas que usaremos para user_name */
+    abierto = OpenHashingMap();
+    linear = HashLinear();
+    quad = QuadMap();
+    stl = unordered_map<unsigned long long, data_struct>();
+
+    /* Tiempo de inserción con llaves de user_id */
+    tiempoAbierto = insertionTimer(abierto, datos, false); 
+    tiempoLinear = insertionTimer(linear, datos, false); 
+    tiempoQuad = insertionTimer(quad, datos, false); 
+    tiempoStl = insertionTimer(stl, datos);
+
+
+
+    cout << "############################################" << endl;
+    cout << "#                                          #" << endl;
+    cout << "#           TIEMPOS CON USERNAME           #" << endl;
+    cout << "#                                          #" << endl;
+    cout << "############################################" << endl;
+    cout << "---- Tiempo de inserción para hashing abierto ----" << endl;
+    cout << tiempoAbierto << " ms\n\n";
+    cout << "---- Tiempo de inserción para hashing cerrado, probing lineal ----" << endl;
+    cout << tiempoLinear << " ms\n\n";
+    cout << "---- Tiempo de inserción para hashing cerrado, probing cuadrático ----" << endl;
+    cout << tiempoQuad << " ms\n\n";
+    cout << "---- Tiempo de inserción para mapa de la STL ----" << endl;
+    cout << tiempoStl << " ms\n\n";
+
 
 }
 
