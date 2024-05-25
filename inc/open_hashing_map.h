@@ -12,12 +12,6 @@ class OpenHashingMap : public HashMap {
 private:
     std::vector<std::vector<data_struct>> table;
 
-    // Función de hasheo para username
-    size_t hashUsername(std::string username);
-
-    // Función de hasheo para username
-    size_t hashId(unsigned long long id);
-
     size_t n;
 
 public:

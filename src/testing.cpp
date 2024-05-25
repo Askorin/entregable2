@@ -112,9 +112,11 @@ void insertionTimeTest(vector<data_struct> datos) {
     OpenHashingMap abierto;
     HashLinear linear;
     QuadMap quad;
-    unordered_map<unsigned long long, data_struct> stl;
+    unordered_map<unsigned long long, data_struct> stlUl;
+    unordered_map<string, data_struct> stlString;
 
     vector<size_t> cuentas = {1000, 5000, 10000, 15000, datos.size()};
+    size_t nExperimentos = 1000;
     /* 
      * Los datos se guardaran en cuatro filas, cada una con las columnas:
      * tipo_mapa, cuentas_1000, cuentas_5000 ... 
@@ -129,19 +131,18 @@ void insertionTimeTest(vector<data_struct> datos) {
     size_t c = 1;
     for (auto cuenta : cuentas) {
         double tiempoAbierto = 0, tiempoLinear = 0, tiempoQuad = 0, tiempoStl = 0;
-        size_t nExperimentos = 10;
         for (size_t i = 0; i < nExperimentos; ++i) {
             /* Mapas que usaremos para user_id */
             abierto = OpenHashingMap();
             linear = HashLinear();
             quad = QuadMap();
-            stl = unordered_map<unsigned long long, data_struct>();
+            stlUl = unordered_map<unsigned long long, data_struct>();
 
             /* Tiempo de inserción con llaves de user_id */
             tiempoAbierto += insertionTimer(abierto, datos, true, cuenta); 
             tiempoLinear += insertionTimer(linear, datos, true, cuenta); 
             tiempoQuad += insertionTimer(quad, datos, true, cuenta); 
-            tiempoStl += insertionTimer(stl, datos, cuenta);
+            tiempoStl += insertionTimer(stlUl, datos, cuenta);
         }
 
         tiempoAbierto /= nExperimentos;
@@ -154,58 +155,42 @@ void insertionTimeTest(vector<data_struct> datos) {
         data_experimento[3][c] = to_string(tiempoStl);
 
         ++c;
-
-        cout << "############################################" << endl;
-        cout << "#                                          #" << endl;
-        cout << "#            TIEMPOS CON USERID            #" << endl;
-        cout << "#                                          #" << endl;
-        cout << "############################################" << endl;
-
-        cout << "****" << "Primeros " << cuenta << " elementos" << "****" << endl;
-        cout << "---- Tiempo de inserción para hashing abierto ----" << endl;
-        cout << tiempoAbierto << " ms\n\n";
-        cout << "---- Tiempo de inserción para hashing cerrado, probing lineal ----" << endl;
-        cout << tiempoLinear << " ms\n\n";
-        cout << "---- Tiempo de inserción para hashing cerrado, probing cuadrático ----" << endl;
-        cout << tiempoQuad << " ms\n\n";
-        cout << "---- Tiempo de inserción para mapa de la STL ----" << endl;
-        cout << tiempoStl << " ms\n\n\n";
     }
 
     
     write_data({"mapa", "1", "5", "10", "15", "20"}, 
-            data_experimento, "../resultados/inserciones.csv");
+            data_experimento, "../resultados/inserciones_id.csv");
 
-    // cout << "############################################" << endl;
-    // cout << "#                                          #" << endl;
-    // cout << "#           TIEMPOS CON USERNAME           #" << endl;
-    // cout << "#                                          #" << endl;
-    // cout << "############################################" << endl;
-    // for (auto cuenta : cuentas) {
-    //     /* Mapas que usaremos para user_name */
-    //     abierto = OpenHashingMap();
-    //     linear = HashLinear();
-    //     quad = QuadMap();
-    //     stl = unordered_map<unsigned long long, data_struct>();
+    c = 1;
+    for (auto cuenta : cuentas) {
+        double tiempoAbierto = 0, tiempoLinear = 0, tiempoQuad = 0, tiempoStl = 0;
+        for (size_t i = 0; i < nExperimentos; ++i) {
+            /* Mapas que usaremos para username */
+            abierto = OpenHashingMap();
+            linear = HashLinear();
+            quad = QuadMap();
+            stlString = unordered_map<string, data_struct>();
 
-    //     /* Tiempo de inserción con llaves de username */
-    //     double tiempoAbierto = insertionTimer(abierto, datos, false, cuenta); 
-    //     double tiempoLinear = insertionTimer(linear, datos, false, cuenta); 
-    //     double tiempoQuad = insertionTimer(quad, datos, false, cuenta); 
-    //     double tiempoStl = insertionTimer(stl, datos, cuenta);
+            /* Tiempo de inserción con llaves de username */
+            tiempoAbierto += insertionTimer(abierto, datos, false, cuenta); 
+            tiempoLinear += insertionTimer(linear, datos, false, cuenta); 
+            tiempoQuad += insertionTimer(quad, datos, false, cuenta); 
+            tiempoStl += insertionTimer(stlString, datos, cuenta);
+        }
 
+        tiempoAbierto /= nExperimentos;
+        tiempoLinear /= nExperimentos;
+        tiempoQuad /= nExperimentos;
+        tiempoStl /= nExperimentos;
+        data_experimento[0][c] = to_string(tiempoAbierto);
+        data_experimento[1][c] = to_string(tiempoLinear);
+        data_experimento[2][c] = to_string(tiempoQuad);
+        data_experimento[3][c] = to_string(tiempoStl);
 
-    //     cout << "****" << "Primeros " << cuenta << " elementos" << "****" << endl;
-    //     cout << "---- Tiempo de inserción para hashing abierto ----" << endl;
-    //     cout << tiempoAbierto << " ms\n\n";
-    //     cout << "---- Tiempo de inserción para hashing cerrado, probing lineal ----" << endl;
-    //     cout << tiempoLinear << " ms\n\n";
-    //     cout << "---- Tiempo de inserción para hashing cerrado, probing cuadrático ----" << endl;
-    //     cout << tiempoQuad << " ms\n\n";
-    //     cout << "---- Tiempo de inserción para mapa de la STL ----" << endl;
-    //     cout << tiempoStl << " ms\n\n";
-    // }
-
+        ++c;
+    }
+    write_data({"mapa", "1", "5", "10", "15", "20"}, 
+            data_experimento, "../resultados/inserciones_username.csv");
 
 }
 
@@ -379,7 +364,7 @@ void searchTimeTestTipo2(vector<data_struct> datos) {
             data_experimento, "../resultados/busquedas.csv");
 }
 
-void testFuncionamiento(vector<data_struct> datos) {
+bool testFuncionamiento(vector<data_struct> datos) {
     OpenHashingMap abierto{};
     HashLinear linear{};
     QuadMap quad{};
@@ -397,21 +382,53 @@ void testFuncionamiento(vector<data_struct> datos) {
         if (!(datoAbierto == datos[i])) {
             cout << "En abierto, error para:\n";
             cout << datos[i];
-            break;
+            return false;
         }
         if (!(datoLinear  == datos[i])) {
             cout << "En linear, error para:\n";
             cout << datos[i];
-            break;
+            return false;
         }
         if (!(datoQuad  == datos[i])) {
             cout << "En quad, error para:\n";
             cout << datos[i];
-            break;
+            return false;
         }
-
-        // cout << datos[i] << endl;
     }
+
+    /* Ahora para username */
+    abierto = OpenHashingMap();
+    linear = HashLinear();
+    quad = QuadMap();
+
+    for (size_t i = 0; i < datos.size(); ++i) {
+        abierto.put(datos[i].username, datos[i]);
+        linear.put(datos[i].username, datos[i]);
+        quad.put(datos[i].username, datos[i]);
+    }
+
+    for (size_t i = 0; i < datos.size(); ++i) {
+        data_struct datoAbierto = abierto.get(datos[i].username);
+        data_struct datoLinear = abierto.get(datos[i].username);
+        data_struct datoQuad = abierto.get(datos[i].username);
+        if (!(datoAbierto == datos[i])) {
+            cout << "En abierto, error para:\n";
+            cout << datos[i];
+            return false;
+        }
+        if (!(datoLinear  == datos[i])) {
+            cout << "En linear, error para:\n";
+            cout << datos[i];
+            return false;
+        }
+        if (!(datoQuad  == datos[i])) {
+            cout << "En quad, error para:\n";
+            cout << datos[i];
+            return false;
+        }
+    }
+
+    return true;
 }
 
  

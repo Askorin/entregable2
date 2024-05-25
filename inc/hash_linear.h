@@ -9,7 +9,15 @@ class HashLinear : public HashMap {
 private:
     std::vector<data_struct> table;
     std::vector<int> mirror;
+
     size_t n;
+
+    // Función de hasheo para username
+    size_t hashUsername(std::string username);
+
+    // Función de hasheo para username
+    size_t hashId(unsigned long long id);
+
 
 public:
     enum Status 

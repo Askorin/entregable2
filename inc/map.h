@@ -8,6 +8,8 @@
 class HashMap {
 protected:
     size_t N = 49157;
+    size_t hashId(unsigned long long userId);
+    size_t hashUsername(std::string userName);
 public:
 
     HashMap() {

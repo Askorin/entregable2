@@ -123,8 +123,11 @@ int main() {
     // testColisionesUserId();
     // testEncadenamiento(); 
     // testLineal();
-    // insertionTimeTest(convertedData);
-    searchTimeTest(convertedData);
+    if (!testFuncionamiento(convertedData)) return 0;
+    insertionTimeTest(convertedData);
+    searchTimeTestTipo1(convertedData);
+
+    cout << "\n\n### DONE ###\n";
 
     return 0;
 }
