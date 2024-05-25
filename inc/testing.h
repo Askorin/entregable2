@@ -13,8 +13,10 @@ double insertionTimer(std::unordered_map<unsigned long long, data_struct>& mapa,
 
 void insertionTimeTest(std::vector<data_struct> datos);
 
-void searchTimeTest(std::vector<data_struct> datos);
+void searchTimeTestTipo1(std::vector<data_struct> datos);
 
-void testFuncionamiento(std::vector<data_struct> datos);
+void searchTimeTestTipo2(std::vector<data_struct> datos);
+
+bool testFuncionamiento(std::vector<data_struct> datos);
 
 #endif

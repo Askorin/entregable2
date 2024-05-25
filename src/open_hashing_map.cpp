@@ -1,37 +1,6 @@
 #include "../inc/open_hashing_map.h"
 
 
-size_t OpenHashingMap::hashUsername(std::string username) {
-    /* Calcularemos el haschode del string x_0 ... x_d como el polinomio
-     * x_d * alpha ^ 0 + x_d-1 * alpha^1 ... x_0 * alpha ^d
-     */
-
-    /* Ojo que esto puede hacer overflow */
-
-    /* Utilizamos alpha = 33 como recomendado en el ppt del curso. */
-    /* se calcula de manera recursiva como: */
-    size_t alpha = 33;
-    unsigned long long sum = 0;
-    
-    for (auto &ch : username) {
-        sum = (alpha * sum + (int) ch);
-    }
-
-
-    /* mult mod prime con a, b menores a m (tamaño de la tabla, número primo, quizás). */
-    size_t a = 45382, b = 11923;
-    
-    return (a * sum + b) % N;
-
-}
-
-size_t OpenHashingMap::hashId(unsigned long long id) {
-    /* mult mod prime con a, b menores a m (tamaño de la tabla, número primo, quizás). */
-    size_t a = 45382, b = 11923;
-    
-    return (a * id + b) % N;
-
-}
 
 OpenHashingMap::OpenHashingMap() {
     this->table = std::vector(N, std::vector<data_struct>{});
@@ -39,7 +8,7 @@ OpenHashingMap::OpenHashingMap() {
 }
 
 data_struct OpenHashingMap::get(std::string username) {
-    size_t idx = hashUsername(username);
+    size_t idx = HashMap::hashUsername(username);
     std::vector<data_struct> chain = table[idx];
     for (auto entry : chain) {
         if (entry.username == username) return entry;
@@ -52,7 +21,7 @@ data_struct OpenHashingMap::get(std::string username) {
 
 /* Para userid */
 data_struct OpenHashingMap::get(unsigned long long user_id) {
-    size_t idx = hashId(user_id);
+    size_t idx = HashMap::hashId(user_id);
     std::vector<data_struct> chain = table[idx];
     for (auto entry : chain) {
         if (entry.user_id == user_id) return entry;
@@ -65,7 +34,7 @@ data_struct OpenHashingMap::get(unsigned long long user_id) {
 
 /* Para username */
 void OpenHashingMap::put(std::string username, data_struct value) {
-    size_t idx = hashUsername(username);
+    size_t idx = HashMap::hashUsername(username);
     std::vector<data_struct> chain = table[idx];
 
     for (auto entry : chain) {
@@ -78,7 +47,7 @@ void OpenHashingMap::put(std::string username, data_struct value) {
 
 /* Para userid */
 void OpenHashingMap::put(unsigned long long user_id, data_struct value) {
-    size_t idx = hashId(user_id);
+    size_t idx = HashMap::hashId(user_id);
     std::vector<data_struct> chain = table[idx];
 
     for (auto entry : chain) {
@@ -91,7 +60,7 @@ void OpenHashingMap::put(unsigned long long user_id, data_struct value) {
 
 /* Para username */
 data_struct OpenHashingMap::remove(std::string username) {
-    size_t idx = hashUsername(username);
+    size_t idx = HashMap::hashUsername(username);
 
     std::vector<data_struct> chain = table[idx];
     for (size_t i = 0; i < chain.size(); ++i) {
@@ -110,7 +79,7 @@ data_struct OpenHashingMap::remove(std::string username) {
 
 /* Para userid */
 data_struct OpenHashingMap::remove(unsigned long long userid) {
-    size_t idx = hashId(userid);
+    size_t idx = HashMap::hashId(userid);
 
     std::vector<data_struct> chain = table[idx];
     for (size_t i = 0; i < chain.size(); ++i) {
