@@ -34,7 +34,7 @@ size_t OpenHashingMap::hashId(unsigned long long id) {
 }
 
 OpenHashingMap::OpenHashingMap() {
-    this->table = std::vector(N, std::vector<data_struct>());
+    this->table = std::vector(N, std::vector<data_struct>{});
     this->n = 0;
 }
 
