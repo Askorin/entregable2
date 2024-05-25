@@ -25,6 +25,8 @@ struct data_struct {
             std::string created_at);
 
     void setValid(bool valid);
+
+    bool operator == (const data_struct& data);
 };
 
 std::ostream& operator << (std::ostream &os, const data_struct &elem);

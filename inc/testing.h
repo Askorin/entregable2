@@ -11,7 +11,9 @@ double insertionTimer(HashMap& mapa, std::vector<data_struct> datos, bool isUser
 double insertionTimer(std::unordered_map<unsigned long long, data_struct>& mapa, 
         std::vector<data_struct> datos, size_t count);
 
-void timeTest(std::vector<data_struct> datos);
+void insertionTimeTest(std::vector<data_struct> datos);
+
+void searchTimeTest(std::vector<data_struct> datos);
 
 void testFuncionamiento(std::vector<data_struct> datos);
 

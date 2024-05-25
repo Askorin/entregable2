@@ -5,10 +5,10 @@
 
 using namespace std;
 
-vector<vector<string>> read_csv(string filename) {
+vector<vector<string>> read_csv(string filepath) {
     ifstream fin;
 
-    fin.open(filename, ios::in);
+    fin.open(filepath, ios::in);
 
     vector<vector<string>> rows;
     string line, temp;
@@ -27,12 +27,30 @@ vector<vector<string>> read_csv(string filename) {
 
 }
 
-void write_csv(vector<int> mivector, string filename) {
+void write_csv(vector<int> mivector, string filepath) {
     ofstream fout;
-    fout.open(filename, ios::out | ios::trunc);
+    fout.open(filepath, ios::out | ios::trunc);
     fout << "idx,count\n";
     for (size_t i = 0; i < mivector.size(); ++i) {
         fout << i << "," << mivector[i] << "\n";
+    }
+}
+
+void write_data(vector<string> columnas, vector<vector<string>> datos, string filepath) {
+    ofstream fout;
+    fout.open(filepath, ios::out | ios::trunc);
+    for (size_t i = 0; i < columnas.size(); ++i) {
+        fout << columnas[i];
+        if (i != columnas.size() - 1) fout << ",";
+    }
+    fout << "\n";
+    
+    for (auto fila : datos) {
+        for (size_t i = 0; i < fila.size(); ++i) {
+            fout << fila[i];
+            if (i != fila.size() - 1) fout << ",";
+        }
+        fout << "\n";
     }
 }
 

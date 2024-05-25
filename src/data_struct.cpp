@@ -19,6 +19,16 @@ void data_struct::setValid(bool valid) {
     this->valid = valid;
 }
 
+
+bool data_struct::operator == (const data_struct& data) {
+    if (this->university != data.university || this->user_id != data.user_id || this->username != data.username ||
+            this->n_tweets != data.n_tweets || this->friend_count != data.friend_count || this->follower_count != data.follower_count ||
+            this->created_at != data.created_at || this->valid != data.valid) {
+        return false;
+    }
+    return true;
+}
+
 std::ostream& operator << (std::ostream &os, const data_struct &elem) {
         return (os << "university: " << elem.university << "\nuser_id: " << elem.user_id 
                 << "\nusername: " << elem.username << "\nn_tweets: " << elem.n_tweets

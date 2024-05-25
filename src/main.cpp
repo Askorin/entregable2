@@ -118,11 +118,13 @@ int main() {
     vector<data_struct> convertedData = convertData(data);
 
     /* Los tests */
+    // testFuncionamiento(convertedData);
     // testColisionesUsername();
     // testColisionesUserId();
     // testEncadenamiento(); 
     // testLineal();
-    timeTest(convertedData);
+    // insertionTimeTest(convertedData);
+    searchTimeTest(convertedData);
 
     return 0;
 }
