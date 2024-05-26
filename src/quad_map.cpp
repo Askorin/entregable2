@@ -13,7 +13,7 @@ data_struct QuadMap::get(std::string username) {
         size_t newIdx = (idx + size_t(pow(i, 2))) % N;
         if (mirror[newIdx] == Empty) {
             break;
-        } else if ((mirror[newIdx] == Occupied) & (table[newIdx].username == username)) {
+        } else if ((mirror[newIdx] == Occupied) && (table[newIdx].username == username)) {
             returnValue = table[newIdx];
             returnValue.setValid(true);
             break;
@@ -33,7 +33,7 @@ data_struct QuadMap::get(unsigned long long user_id) {
         size_t newIdx = (idx + size_t(pow(i, 2))) % N;
         if (mirror[newIdx] == Empty) {
             break;
-        } else if ((mirror[newIdx] == Occupied) & (table[newIdx].user_id == user_id)) {
+        } else if ((mirror[newIdx] == Occupied) && (table[newIdx].user_id == user_id)) {
             returnValue = table[newIdx];
             returnValue.setValid(true);
             break;
@@ -118,7 +118,7 @@ data_struct QuadMap::remove(std::string username) {
         size_t newIdx = (idx + size_t(pow(i, 2))) % N;
         if (mirror[newIdx] == Empty) {
             break;
-        } else if ((mirror[newIdx] == Occupied) & (table[newIdx].username == username)) {
+        } else if ((mirror[newIdx] == Occupied) && (table[newIdx].username == username)) {
             returnValue = table[newIdx];
             returnValue.setValid(true);
             mirror[newIdx] = Available;
@@ -141,7 +141,7 @@ data_struct QuadMap::remove(unsigned long long user_id) {
         size_t newIdx = (idx + size_t(pow(i, 2))) % N;
         if (mirror[newIdx] == Empty) {
             break;
-        } else if ((mirror[newIdx] == Occupied) & (table[newIdx].user_id == user_id)) {
+        } else if ((mirror[newIdx] == Occupied) && (table[newIdx].user_id == user_id)) {
             returnValue = table[newIdx];
             returnValue.setValid(true);
             mirror[newIdx] = Available;

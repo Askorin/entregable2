@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <string>
 #include "../inc/data_parsing.h"
 #include "../inc/testing.h"
 /* TODO: Proablemente dejar en un header y compilar por separado */
@@ -111,8 +112,14 @@ void testColisionesUserId() {
 
 
 
-int main() {
+int main(int argc, char* argv[]) {
         
+    size_t nExperimentos;
+    if (argc == 2) {
+        nExperimentos = stoi(argv[1]);
+    } else {
+        nExperimentos = 10;
+    }
     /* Leemos los datos y convertimos en vector de data_struct */
     vector<vector<string>> data = read_csv("../data/universities_followers_no_dups.csv");
     vector<data_struct> convertedData = convertData(data);
@@ -124,8 +131,10 @@ int main() {
     // testEncadenamiento(); 
     // testLineal();
     if (!testFuncionamiento(convertedData)) return 0;
-    insertionTimeTest(convertedData);
-    searchTimeTestTipo1(convertedData);
+
+    cout << "### Corriendo " << nExperimentos << " experimentos\n";
+    insertionTimeTest(convertedData, 10);
+    searchTimeTestTipo1(convertedData, 10);
 
     cout << "\n\n### DONE ###\n";
 

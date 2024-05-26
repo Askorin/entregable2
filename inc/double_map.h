@@ -1,22 +1,18 @@
-#ifndef HASH_LINEAR_H
-#define HASH_LINEAR_H
+#ifndef HASH_DOUBLE_H
+#define HASH_DOUBLE_H
 #include <vector>
 #include <string>
 #include "../inc/data_struct.h"
 #include "../inc/map.h"
 
-class HashLinear : public HashMap {
+class DoubleHash : public HashMap {
 private:
     std::vector<data_struct> table;
     std::vector<int> mirror;
 
     size_t n;
 
-    // Función de hasheo para username
-    size_t hashUsername(std::string username);
-
-    // Función de hasheo para username
-    size_t hashId(unsigned long long id);
+    size_t d1(unsigned long long id);
 
 
 public:
@@ -28,7 +24,7 @@ public:
     };
 
     /*Se crea vector mirror que servirá para saber si las posiciones estan vacias o disponibles.*/    
-    HashLinear();
+    DoubleHash();
 
     data_struct get(std::string username) override;
 

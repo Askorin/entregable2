@@ -19,7 +19,7 @@ data_struct HashLinear::get(std::string username) {
             return empty;
         }
 
-        else if ((mirror[idx] == Occupied) & (table[idx].username == username))
+        else if ((mirror[idx] == Occupied) && (table[idx].username == username))
         {
             data_struct tmp = table[idx];
             return tmp;
@@ -46,7 +46,7 @@ data_struct HashLinear::get(unsigned long long userId)
             return empty;
         }
 
-        else if ((mirror[idx] == Occupied) & (table[idx].user_id == userId))
+        else if ((mirror[idx] == Occupied) && (table[idx].user_id == userId))
         {
             data_struct tmp = table[idx];
             return tmp;
@@ -80,7 +80,7 @@ void HashLinear::put(std::string username, data_struct value) {
     size_t idx = HashMap::hashUsername(username);
     for (size_t p = 0; p < N; p++)
     {
-        if(mirror[idx] == Empty || mirror[idx] == Available) 
+        if((mirror[idx] == Empty) || (mirror[idx] == Available)) 
         {
             table[idx] = value;
             mirror[idx] = Occupied;
@@ -112,7 +112,7 @@ void HashLinear::put(unsigned long long userid, data_struct value)
     size_t idx = HashMap::hashId(userid);
     for (size_t p = 0; p < N; p++)
     {
-        if(mirror[idx] == Empty || mirror[idx] == Available) 
+        if((mirror[idx] == Empty) || (mirror[idx] == Available)) 
         {
             table[idx] = value;
             mirror[idx] = Occupied;
@@ -137,7 +137,7 @@ data_struct HashLinear::remove(unsigned long long userid)
             empty.setValid(false);
             return empty;
         }
-        else if ((mirror[idx] == Occupied) & (table[idx].user_id == userid))
+        else if ((mirror[idx] == Occupied) && (table[idx].user_id == userid))
         {
             data_struct tmp = table[idx];
             mirror[idx] = Available;
