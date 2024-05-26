@@ -11,11 +11,11 @@ double insertionTimer(HashMap& mapa, std::vector<data_struct> datos, bool isUser
 double insertionTimer(std::unordered_map<unsigned long long, data_struct>& mapa, 
         std::vector<data_struct> datos, size_t count);
 
-void insertionTimeTest(std::vector<data_struct> datos);
+void insertionTimeTest(std::vector<data_struct> datos, size_t nExperimentos);
 
-void searchTimeTestTipo1(std::vector<data_struct> datos);
+void searchTimeTestTipo1(std::vector<data_struct> datos, size_t nExperimentos);
 
-void searchTimeTestTipo2(std::vector<data_struct> datos);
+void searchTimeTestTipo2(std::vector<data_struct> datos, size_t nExperimentos);
 
 bool testFuncionamiento(std::vector<data_struct> datos);
 
