@@ -16,18 +16,16 @@ size_t HashMap::hashUsername(std::string username) {
         sum = (alpha * sum + (int) ch);
     }
 
-
-    /* mult mod prime con a, b menores a m (tamaño de la tabla, número primo, quizás). */
-    /* Para N = 49157 */
-    size_t a = 45382, b = 11923;
-    
-    return (a * sum + b) % N;
-
+    return hashId(sum);
 }
 
 size_t HashMap::hashId(unsigned long long id) {
     /* mult mod prime con a, b menores a m (tamaño de la tabla, número primo, quizás). */
-    size_t a = 45382, b = 11923;
+    // size_t a = 45382, b = 11923;
+
+    /* Para N = */
+
+    size_t a = 11382, b = 1923;
     
     return (a * id + b) % N;
 

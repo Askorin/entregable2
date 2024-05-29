@@ -123,6 +123,7 @@ int main(int argc, char* argv[]) {
     /* Leemos los datos y convertimos en vector de data_struct */
     vector<vector<string>> data = read_csv("../data/universities_followers_no_dups.csv");
     vector<data_struct> convertedData = convertData(data);
+    cout << "### Dataset con " << convertedData.size() << " elementos ###\n";
 
     /* Los tests */
     // testFuncionamiento(convertedData);
@@ -133,8 +134,11 @@ int main(int argc, char* argv[]) {
     if (!testFuncionamiento(convertedData)) return 0;
 
     cout << "### Corriendo " << nExperimentos << " experimentos\n";
-    insertionTimeTest(convertedData, 10);
-    searchTimeTestTipo1(convertedData, 10);
+    cout << "### Probando Inserciones ###\n";
+    // insertionTimeTest(convertedData, nExperimentos);
+    cout << "### Probando Busquedas ###\n";
+    // searchTimeTestTipo1(convertedData, nExperimentos);
+    searchTimeTestTipo2(convertedData, nExperimentos);
 
     cout << "\n\n### DONE ###\n";
 

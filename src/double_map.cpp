@@ -18,23 +18,21 @@ data_struct DoubleHash::get(std::string username) {
     size_t hash1 = HashMap::hashUsername(username);
     size_t hash2 = d1(hashUsername(username));
     size_t idx;
+    data_struct empty("", 0, "", 0, 0, 0, "");
+    empty.setValid(false);
 
     for (size_t i = 0; i < N; ++i)
     {
         idx = (hash1 + i*hash2) % N;
 
-        if(mirror[idx] == Empty)
-        {
-            data_struct empty("",0,"",0,0,0,"");
-            empty.setValid(false);
-            return empty;
-        }
+        if(mirror[idx] == Empty) break;
         else if ((mirror[idx] == Occupied) && (table[idx].username == username))
         {
             data_struct tmp = table[idx];
             return tmp;
         }
     }
+    return empty;
 
 };
 
@@ -43,23 +41,21 @@ data_struct DoubleHash::get(unsigned long long userId)
     size_t hash1 = HashMap::hashId(userId);
     size_t hash2 = d1(userId);
     size_t idx;
+    data_struct empty("", 0, "", 0, 0, 0, "");
+    empty.setValid(false);
 
     for (size_t i = 0; i < N; ++i)
     {
         idx = (hash1 + i*hash2) % N;
 
-        if(mirror[idx] == Empty)
-        {
-            data_struct empty("",0,"",0,0,0,"");
-            empty.setValid(false);
-            return empty;
-        }
+        if(mirror[idx] == Empty) break;
         else if ((mirror[idx] == Occupied) && (table[idx].user_id == userId))
         {
             data_struct tmp = table[idx];
             return tmp;
         }
     }
+    return empty;
 }
 
 
