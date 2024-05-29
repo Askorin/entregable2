@@ -1,5 +1,4 @@
 #include "../inc/quad_map.h"
-#include <cmath>
 
 
 QuadMap::QuadMap() : table(N, data_struct("", 0, "", 0, 0, 0, "")), mirror(N, Empty), n(0) { }

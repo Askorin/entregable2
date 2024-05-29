@@ -125,22 +125,8 @@ int main(int argc, char* argv[]) {
     vector<data_struct> convertedData = convertData(data);
     cout << "### Dataset con " << convertedData.size() << " elementos ###\n";
 
-    /* Los tests */
-    // testFuncionamiento(convertedData);
-    // testColisionesUsername();
-    // testColisionesUserId();
-    // testEncadenamiento(); 
-    // testLineal();
-    if (!testFuncionamiento(convertedData)) return 0;
-
-    cout << "### Corriendo " << nExperimentos << " experimentos\n";
-    cout << "### Probando Inserciones ###\n";
-    // insertionTimeTest(convertedData, nExperimentos);
-    cout << "### Probando Busquedas ###\n";
-    // searchTimeTestTipo1(convertedData, nExperimentos);
-    searchTimeTestTipo2(convertedData, nExperimentos);
-
-    cout << "\n\n### DONE ###\n";
+    doTests(convertedData, nExperimentos);
+    
 
     return 0;
 }

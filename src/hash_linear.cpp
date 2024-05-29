@@ -7,15 +7,13 @@
 HashLinear::HashLinear() : table(N, data_struct("", 0, "", 0, 0, 0, "")), mirror(N, Empty), n(0) { }
 
 data_struct HashLinear::get(std::string username) {
-    unsigned long long idx = HashMap::hashUsername(username);
+    size_t idx = HashMap::hashUsername(username);
     data_struct empty("", 0, "", 0, 0, 0, "");
     empty.setValid(false);
 
-    for (size_t p = 0; p < N; p++)
+    for (size_t p = 0; p < N; ++p)
     {
-
         if (mirror[idx] == Empty) break;
-
         else if ((mirror[idx] == Occupied) && (table[idx].username == username))
         {
             data_struct tmp = table[idx];
@@ -29,13 +27,12 @@ data_struct HashLinear::get(std::string username) {
 
 data_struct HashLinear::get(unsigned long long userId) 
 {
-    unsigned long long idx = HashMap::hashId(userId);
+    size_t idx = HashMap::hashId(userId);
     data_struct empty("", 0, "", 0, 0, 0, "");
     empty.setValid(false);
 
     for (size_t p = 0; p < N; ++p)
     {
-
         if(mirror[idx] == Empty) break;
 
         else if ((mirror[idx] == Occupied) && (table[idx].user_id == userId))
@@ -117,7 +114,7 @@ data_struct HashLinear::remove(std::string username) { }
 
 data_struct HashLinear::remove(unsigned long long userid) 
 {
-    unsigned long long idx = HashMap::hashId(userid);
+    size_t idx = HashMap::hashId(userid);
 
     for (size_t p = 0; p < N; p++)
     {
