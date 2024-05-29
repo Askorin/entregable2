@@ -10,14 +10,14 @@ data_struct QuadMap::get(std::string username) {
     returnValue.setValid(false);
 
     for (size_t i = 0; i < N; i++) {
-        size_t newIdx = (idx + size_t(pow(i, 2))) % N;
-        if (mirror[newIdx] == Empty) {
+        if (mirror[idx] == Empty) {
             break;
-        } else if ((mirror[newIdx] == Occupied) && (table[newIdx].username == username)) {
-            returnValue = table[newIdx];
+        } else if ((mirror[idx] == Occupied) && (table[idx].username == username)) {
+            returnValue = table[idx];
             returnValue.setValid(true);
             break;
         }
+        idx = (idx + 2 * i + 1) % N;
     }
     
     return returnValue;
@@ -30,14 +30,15 @@ data_struct QuadMap::get(unsigned long long user_id) {
     returnValue.setValid(false);
 
     for (size_t i = 0; i < N; i++) {
-        size_t newIdx = (idx + size_t(pow(i, 2))) % N;
-        if (mirror[newIdx] == Empty) {
+
+        if (mirror[idx] == Empty) {
             break;
-        } else if ((mirror[newIdx] == Occupied) && (table[newIdx].user_id == user_id)) {
-            returnValue = table[newIdx];
+        } else if ((mirror[idx] == Occupied) && (table[idx].user_id == user_id)) {
+            returnValue = table[idx];
             returnValue.setValid(true);
             break;
         }
+        idx = (idx + 2 * i + 1) % N;
     }
     
     return returnValue;
@@ -66,13 +67,13 @@ void QuadMap::put(std::string username, data_struct value) {
     size_t idx = HashMap::hashUsername(username);
 
     for (size_t i = 0; i < N; i++) {
-        size_t newIdx = (idx + size_t(pow(i, 2))) % N;
-        if ((mirror[newIdx] == Empty) || (mirror[newIdx] == Available)) {
-            table[newIdx] = value;
-            mirror[newIdx] = Occupied;
+        if ((mirror[idx] == Empty) || (mirror[idx] == Available)) {
+            table[idx] = value;
+            mirror[idx] = Occupied;
             ++n;
             break;
         }
+        idx = (idx + 2 * i + 1) % N;
     }
 };
 
@@ -97,13 +98,13 @@ void QuadMap::put(unsigned long long user_id, data_struct value) {
     size_t idx = HashMap::hashId(user_id);
 
     for (size_t i = 0; i < N; i++) {
-        size_t newIdx = (idx + size_t(pow(i, 2))) % N;
-        if ((mirror[newIdx] == Empty) || (mirror[newIdx] == Available)) {
-            table[newIdx] = value;
-            mirror[newIdx] = Occupied;
+        if ((mirror[idx] == Empty) || (mirror[idx] == Available)) {
+            table[idx] = value;
+            mirror[idx] = Occupied;
             ++n;
             break;
         }
+        idx = (idx + 2 * i + 1) % N;
     }
         
 };
@@ -115,16 +116,16 @@ data_struct QuadMap::remove(std::string username) {
     returnValue.setValid(false);
 
     for (size_t i = 0; i < N; i++) {
-        size_t newIdx = (idx + size_t(pow(i, 2))) % N;
-        if (mirror[newIdx] == Empty) {
+        if (mirror[idx] == Empty) {
             break;
-        } else if ((mirror[newIdx] == Occupied) && (table[newIdx].username == username)) {
-            returnValue = table[newIdx];
+        } else if ((mirror[idx] == Occupied) && (table[idx].username == username)) {
+            returnValue = table[idx];
             returnValue.setValid(true);
-            mirror[newIdx] = Available;
+            mirror[idx] = Available;
             --n;
             break;
         }
+        idx = (idx + 2 * i + 1) % N;
     }
     
     return returnValue;
@@ -138,16 +139,16 @@ data_struct QuadMap::remove(unsigned long long user_id) {
     returnValue.setValid(false);
 
     for (size_t i = 0; i < N; i++) {
-        size_t newIdx = (idx + size_t(pow(i, 2))) % N;
-        if (mirror[newIdx] == Empty) {
+        if (mirror[idx] == Empty) {
             break;
-        } else if ((mirror[newIdx] == Occupied) && (table[newIdx].user_id == user_id)) {
-            returnValue = table[newIdx];
+        } else if ((mirror[idx] == Occupied) && (table[idx].user_id == user_id)) {
+            returnValue = table[idx];
             returnValue.setValid(true);
-            mirror[newIdx] = Available;
+            mirror[idx] = Available;
             --n;
             break;
         }
+        idx = (idx + 2 * i + 1) % N;
     }
     
     return returnValue;

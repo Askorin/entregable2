@@ -8,10 +8,10 @@ OpenHashingMap::OpenHashingMap() {
 }
 
 data_struct OpenHashingMap::get(std::string username) {
+    
     size_t idx = HashMap::hashUsername(username);
-    std::vector<data_struct> chain = table[idx];
-    for (auto entry : chain) {
-        if (entry.username == username) return entry;
+    for (size_t i = 0; i < table[idx].size(); ++i) {
+        if (table[idx][i].username == username) return table[idx][i];
     }
     /* En este caso no encontramos nada */
     data_struct retVal("", 0, "", 0, 0, 0, "");
@@ -22,9 +22,8 @@ data_struct OpenHashingMap::get(std::string username) {
 /* Para userid */
 data_struct OpenHashingMap::get(unsigned long long user_id) {
     size_t idx = HashMap::hashId(user_id);
-    std::vector<data_struct> chain = table[idx];
-    for (auto entry : chain) {
-        if (entry.user_id == user_id) return entry;
+    for (size_t i = 0; i < table[idx].size(); ++i) {
+        if (table[idx][i].user_id == user_id) return table[idx][i];
     }
     /* En este caso no encontramos nada */
     data_struct retVal("", 0, "", 0, 0, 0, "");
@@ -35,12 +34,9 @@ data_struct OpenHashingMap::get(unsigned long long user_id) {
 /* Para username */
 void OpenHashingMap::put(std::string username, data_struct value) {
     size_t idx = HashMap::hashUsername(username);
-    std::vector<data_struct> chain = table[idx];
-
-    for (auto entry : chain) {
-        if (entry.username == username) return;
+    for (size_t i = 0; i < table[idx].size(); ++i) {
+        if (table[idx][i].username == username) return;
     }
-
     table[idx].push_back(value);
     ++n;
 };
@@ -48,12 +44,9 @@ void OpenHashingMap::put(std::string username, data_struct value) {
 /* Para userid */
 void OpenHashingMap::put(unsigned long long user_id, data_struct value) {
     size_t idx = HashMap::hashId(user_id);
-    std::vector<data_struct> chain = table[idx];
-
-    for (auto entry : chain) {
-        if (entry.user_id == user_id) return;
+    for (size_t i = 0; i < table[idx].size(); ++i) {
+        if (table[idx][i].user_id == user_id) return;
     }
-
     table[idx].push_back(value);
     ++n;
 };
@@ -62,9 +55,8 @@ void OpenHashingMap::put(unsigned long long user_id, data_struct value) {
 data_struct OpenHashingMap::remove(std::string username) {
     size_t idx = HashMap::hashUsername(username);
 
-    std::vector<data_struct> chain = table[idx];
-    for (size_t i = 0; i < chain.size(); ++i) {
-        data_struct valor = chain[i];
+    for (size_t i = 0; i < table[idx].size(); ++i) {
+        data_struct valor = table[idx][i];
         if (valor.username == username) {
             table[idx].erase(table[idx].begin() + i);
             --n;
@@ -81,9 +73,8 @@ data_struct OpenHashingMap::remove(std::string username) {
 data_struct OpenHashingMap::remove(unsigned long long userid) {
     size_t idx = HashMap::hashId(userid);
 
-    std::vector<data_struct> chain = table[idx];
-    for (size_t i = 0; i < chain.size(); ++i) {
-        data_struct valor = chain[i];
+    for (size_t i = 0; i < table[idx].size(); ++i) {
+        data_struct valor = table[idx][i];
         if (valor.user_id == userid) {
             table[idx].erase(table[idx].begin() + i);
             --n;

@@ -68,20 +68,22 @@ double insertionTimer(unordered_map<string, data_struct>& mapa, vector<data_stru
     return delta.count();
 }
 
-double searchTimer(HashMap& mapa, vector<data_struct> datos, bool isUserId, size_t count) {
-
+double searchTimer(HashMap& mapa, vector<data_struct> datos, bool isUserId, size_t count, size_t idxComienzo) {
     chrono::duration<double, milli> delta;
     if (isUserId) {
         auto start = chrono::high_resolution_clock::now();
-        for (size_t i = 0; i < count; ++i) {
-            mapa.get(datos[i].user_id);
+        for (size_t i = idxComienzo; i < count; ++i) {
+           auto valor = mapa.get(datos[i].user_id);
+           if (valor.valid) cout << "Raro\n";
+            
         }
         auto end = chrono::high_resolution_clock::now();
         delta = chrono::duration<double, std::milli>(end - start);
     } else {
         auto start = chrono::high_resolution_clock::now();
-        for (size_t i = 0; i < count; ++i) {
-            mapa.get(datos[i].username);
+        for (size_t i = idxComienzo; i < count; ++i) {
+            auto valor = mapa.get(datos[i].username);
+            if (valor.valid) cout << "Raro\n";
         }
         auto end = chrono::high_resolution_clock::now();
         delta = chrono::duration<double, milli>(end - start);
@@ -94,9 +96,10 @@ double searchTimer(HashMap& mapa, vector<data_struct> datos, bool isUserId, size
 }
 
 
-double searchTimer(unordered_map<unsigned long long, data_struct>& mapa, vector<data_struct> datos, size_t count) {
+double searchTimer(unordered_map<unsigned long long, data_struct>& mapa, vector<data_struct> datos,
+        size_t count, size_t idxComienzo) {
     auto start = chrono::high_resolution_clock::now();
-    for (size_t i = 0; i < count; ++i) {
+    for (size_t i = idxComienzo; i < count; ++i) {
         mapa.find(datos[i].user_id);
     }
 
@@ -108,9 +111,10 @@ double searchTimer(unordered_map<unsigned long long, data_struct>& mapa, vector<
     return delta.count();
 }
 
-double searchTimer(unordered_map<string, data_struct>& mapa, vector<data_struct> datos, size_t count) {
+double searchTimer(unordered_map<string, data_struct>& mapa, vector<data_struct> datos,
+        size_t count, size_t idxComienzo) {
     auto start = chrono::high_resolution_clock::now();
-    for (size_t i = 0; i < count; ++i) {
+    for (size_t i = idxComienzo; i < count; ++i) {
         mapa.find(datos[i].username);
     }
 
@@ -156,10 +160,10 @@ void insertionTimeTest(vector<data_struct> datos, size_t nExperimentos) {
             stlUl = unordered_map<unsigned long long, data_struct>();
 
             /* Tiempo de inserción con llaves de user_id */
-            tiempoAbierto += insertionTimer(abierto, datos, true, cuenta); 
-            tiempoLinear += insertionTimer(linear, datos, true, cuenta); 
-            tiempoQuad += insertionTimer(quad, datos, true, cuenta); 
-            tiempoDoble += insertionTimer(doble, datos, true, cuenta); 
+            tiempoAbierto += insertionTimer(abierto, datos, true, cuenta);
+            tiempoLinear += insertionTimer(linear, datos, true, cuenta);
+            tiempoQuad += insertionTimer(quad, datos, true, cuenta);
+            tiempoDoble += insertionTimer(doble, datos, true, cuenta);
             tiempoStl += insertionTimer(stlUl, datos, cuenta);
         }
 
@@ -269,11 +273,11 @@ void searchTimeTestTipo1(vector<data_struct> datos, size_t nExperimentos) {
         double tiempoAbierto = 0, tiempoLinear = 0, tiempoQuad = 0, tiempoStl = 0, tiempoDoble = 0;
         for (size_t i = 0; i < nExperimentos; ++i) {
             /* Tiempo de busqueda con llaves de user_id */
-            tiempoAbierto += searchTimer(abierto, datos, true, cuenta); 
-            tiempoLinear += searchTimer(linear, datos, true, cuenta); 
-            tiempoQuad += searchTimer(quad, datos, true, cuenta); 
-            tiempoDoble += searchTimer(doble, datos, true, cuenta);
-            tiempoStl += searchTimer(stlUl, datos, cuenta);
+            tiempoAbierto += searchTimer(abierto, datos, true, 1000, 0);
+            tiempoLinear += searchTimer(linear, datos, true, 1000, 0);
+            tiempoQuad += searchTimer(quad, datos, true, 1000, 0);
+            tiempoDoble += searchTimer(doble, datos, true, 1000, 0);
+            tiempoStl += searchTimer(stlUl, datos, 1000, 0);
         }
 
         tiempoAbierto /= nExperimentos;
@@ -326,11 +330,11 @@ void searchTimeTestTipo1(vector<data_struct> datos, size_t nExperimentos) {
         double tiempoAbierto = 0, tiempoLinear = 0, tiempoQuad = 0, tiempoStl = 0, tiempoDoble = 0;
         for (size_t i = 0; i < nExperimentos; ++i) {
             /* Tiempo de busqueda con llaves de username */
-            tiempoAbierto += searchTimer(abierto, datos, false, cuenta); 
-            tiempoLinear += searchTimer(linear, datos, false, cuenta); 
-            tiempoQuad += searchTimer(quad, datos, false, cuenta); 
-            tiempoDoble += searchTimer(doble, datos, false, cuenta);
-            tiempoStl += searchTimer(stlString, datos, cuenta);
+            tiempoAbierto += searchTimer(abierto, datos, false, 1000, 0); 
+            tiempoLinear += searchTimer(linear, datos, false, 1000, 0); 
+            tiempoQuad += searchTimer(quad, datos, false, 1000, 0); 
+            tiempoDoble += searchTimer(doble, datos, false, 1000, 0);
+            tiempoStl += searchTimer(stlString, datos, 1000, 0);
         }
 
         tiempoAbierto /= nExperimentos;
@@ -360,7 +364,7 @@ void searchTimeTestTipo2(vector<data_struct> datos, size_t nExperimentos) {
     QuadMap quad;
     unordered_map<unsigned long long, data_struct> stl;
 
-    vector<size_t> cuentas = {1000, 5000, 10000, 15000, datos.size()};
+    vector<size_t> cuentas = {1000, 5000, 10000, 15000, 17000};
     /* 
      * Los datos se guardaran en cuatro filas, cada una con las columnas:
      * tipo_mapa, cuentas_1000, cuentas_5000 ... 
@@ -371,12 +375,14 @@ void searchTimeTestTipo2(vector<data_struct> datos, size_t nExperimentos) {
     data_experimento[2][0] = "hashing_cerrado_cuadratico";
     data_experimento[3][0] = "stl";
 
+    /*
+     * Se harán 1000 busquedas de elementos no existentes para las 1000 busquedas.
+     * En vista de que ingresaremos los valores en orden, los que siempre quedarán sin insertar
+     * serán los de índices 17000 hacia adelante. Buscaremos aquellos.
+     */
+
     size_t c = 1;
     for (auto cuenta : cuentas) {
-        /* Creamos un subconjunto aleatorio del dataset de {cuenta} elementos */
-        // sample(datos.begin(), datos.end(), back_inserter(subset), cuenta, std::mt19937{random_device{}()});
-        //
-
         /* Mapas que usaremos para user_id */
         abierto = OpenHashingMap();
         linear = HashLinear();
@@ -399,10 +405,10 @@ void searchTimeTestTipo2(vector<data_struct> datos, size_t nExperimentos) {
         double tiempoAbierto = 0, tiempoLinear = 0, tiempoQuad = 0, tiempoStl = 0;
         for (size_t i = 0; i < nExperimentos; ++i) {
             /* Tiempo de busqueda con llaves de user_id */
-            tiempoAbierto += searchTimer(abierto, datos, true, cuenta); 
-            tiempoLinear += searchTimer(linear, datos, true, cuenta); 
-            tiempoQuad += searchTimer(quad, datos, true, cuenta); 
-            tiempoStl += searchTimer(stl, datos, cuenta);
+            tiempoAbierto += searchTimer(abierto, datos, true, 1000, 17000); 
+            tiempoLinear += searchTimer(linear, datos, true, 1000, 17000); 
+            tiempoQuad += searchTimer(quad, datos, true, 1000, 17000); 
+            tiempoStl += searchTimer(stl, datos, 1000, 17000);
         }
 
         tiempoAbierto /= nExperimentos;
@@ -417,8 +423,54 @@ void searchTimeTestTipo2(vector<data_struct> datos, size_t nExperimentos) {
         ++c;
     }
 
-    write_data({"mapa", "1", "5", "10", "15", "20"}, 
-            data_experimento, "../resultados/busquedas.csv");
+    write_data({"mapa", "1", "5", "10", "15", "17"}, 
+            data_experimento, "../resultados/busquedas2_id.csv");
+
+
+    c = 1;
+    for (auto cuenta : cuentas) {
+        /* Mapas que usaremos para username */
+        abierto = OpenHashingMap();
+        linear = HashLinear();
+        quad = QuadMap();
+        stl = unordered_map<unsigned long long, data_struct>();
+
+        /* TODO: Hacer función insertData para dejar de repetir codigo de insercion */
+        /* Insertamos los datos */
+        for (size_t i = 0; i < cuenta; ++i) {
+            abierto.put(datos[i].user_id, datos[i]);
+            linear.put(datos[i].user_id, datos[i]);
+            quad.put(datos[i].user_id, datos[i]);
+        }
+
+        for (size_t i = 0; i < cuenta; ++i) {
+            stl.insert({datos[i].user_id, datos[i]});
+        }
+
+
+        double tiempoAbierto = 0, tiempoLinear = 0, tiempoQuad = 0, tiempoStl = 0;
+        for (size_t i = 0; i < nExperimentos; ++i) {
+            /* Tiempo de busqueda con llaves de username */
+            tiempoAbierto += searchTimer(abierto, datos, false, 1000, 17000); 
+            tiempoLinear += searchTimer(linear, datos, false, 1000, 17000); 
+            tiempoQuad += searchTimer(quad, datos, false, 1000, 17000); 
+            tiempoStl += searchTimer(stl, datos, 1000, 17000);
+        }
+
+        tiempoAbierto /= nExperimentos;
+        tiempoLinear /= nExperimentos;
+        tiempoQuad /= nExperimentos;
+        tiempoStl /= nExperimentos;
+        data_experimento[0][c] = to_string(tiempoAbierto);
+        data_experimento[1][c] = to_string(tiempoLinear);
+        data_experimento[2][c] = to_string(tiempoQuad);
+        data_experimento[3][c] = to_string(tiempoStl);
+
+        ++c;
+    }
+
+    write_data({"mapa", "1", "5", "10", "15", "17"}, 
+            data_experimento, "../resultados/busquedas2_username.csv");
 }
 
 bool testFuncionamiento(vector<data_struct> datos) {
