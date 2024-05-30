@@ -4,7 +4,7 @@
 
 template<typename KeyType, typename ValueType>
 OpenHashingMap<KeyType, ValueType>::OpenHashingMap() :
-    table(std::vector(this->N, std::vector<Entry<KeyType, ValueType>>())), n(0) {}
+    table(std::vector(this->N, std::vector<Entry<KeyType, ValueType>>())) {}
 
 template<typename KeyType, typename ValueType>
 std::optional<ValueType> OpenHashingMap<KeyType, ValueType>::get(KeyType key) {
@@ -16,13 +16,14 @@ std::optional<ValueType> OpenHashingMap<KeyType, ValueType>::get(KeyType key) {
 }
 
 template<typename KeyType, typename ValueType>
-void OpenHashingMap<KeyType, ValueType>::put(KeyType key, ValueType value) {
+std::optional<ValueType> OpenHashingMap<KeyType, ValueType>::put(KeyType key, ValueType value) {
     size_t idx = this->hash(key);
     for (size_t i = 0; i < table[idx].size(); ++i) {
-        if (table[idx][i].key == key) return;
+        if (table[idx][i].key == key) return table[idx][i].value;
     }
     table[idx].push_back(Entry<KeyType, ValueType>(key, value));
-    ++n;
+    ++this->n;
+    return std::nullopt;
 }
 
 template<typename KeyType, typename ValueType>
@@ -64,15 +65,7 @@ ValueType OpenHashingMap<KeyType, ValueType>::remove(KeyType key) {}
 //
 //};
 
-template<typename KeyType, typename ValueType>
-size_t OpenHashingMap<KeyType, ValueType>::size() {
-    return n;
-}
 
-template<typename KeyType, typename ValueType>
-bool OpenHashingMap<KeyType, ValueType>::isEmpty() {
-    return n == 0;
-}
 
 
 template class OpenHashingMap<unsigned long long, data_struct>;

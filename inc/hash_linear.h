@@ -11,8 +11,6 @@ private:
     std::vector<Entry<KeyType, ValueType>> table;
     std::vector<int> mirror;
 
-    size_t n;
-
 public:
     enum Status 
     {
@@ -24,16 +22,10 @@ public:
     HashLinear();
 
     std::optional<ValueType> get(KeyType key) override;
-    /* Para username */
-    void put(KeyType key, ValueType value) override;
 
-    ///* Para username */
+    std::optional<ValueType> put(KeyType key, ValueType value) override;
+
     ValueType remove(KeyType key) override;
-
-    size_t size() override;
-
-    bool isEmpty() override;
-
 };
 
 #endif

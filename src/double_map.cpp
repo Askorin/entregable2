@@ -12,7 +12,7 @@ size_t DoubleHash<KeyType, ValueType>::d1(unsigned long long id) {
 
 template<typename KeyType, typename ValueType>
 DoubleHash<KeyType, ValueType>::DoubleHash() : 
-    table(this->N), mirror(this->N, Empty), n(0) { }
+    table(this->N), mirror(this->N, Empty) { }
 
 
 
@@ -31,14 +31,14 @@ std::optional<ValueType> DoubleHash<KeyType, ValueType>::get(KeyType key) {
 }
 
 template<typename KeyType, typename ValueType>
-void DoubleHash<KeyType, ValueType>::put(KeyType key, ValueType value) {
+std::optional<ValueType> DoubleHash<KeyType, ValueType>::put(KeyType key, ValueType value) {
 
 
     /* Esto es más o menos ineficiente, pero funciona */
     std::optional<ValueType> find = get(key);
     /* La clave ya se encuentra ingresada. */
     if (find) {
-        return;
+        return find.value();
     }
 
     size_t hash1 = this->hash(key);
@@ -50,9 +50,11 @@ void DoubleHash<KeyType, ValueType>::put(KeyType key, ValueType value) {
         if ((mirror[idx] == Empty) || (mirror[idx] == Available)) {
             table[idx] = Entry<KeyType, ValueType>(key, value);
             mirror[idx] = Occupied;
-            return;
+            ++this->n;
+            break;
         }
     }
+    return std::nullopt;
 }
 
 template<typename KeyType, typename ValueType>
@@ -77,18 +79,6 @@ ValueType DoubleHash<KeyType, ValueType>::remove(KeyType key) { };
 //
 //    }
 //}
-
-
-template<typename KeyType, typename ValueType>
-size_t DoubleHash<KeyType, ValueType>::size() {
-    return n;
-}
-
-template<typename KeyType, typename ValueType>
-bool DoubleHash<KeyType, ValueType>::isEmpty() {
-    return n == 0;
-}
-
 
 
 template class DoubleHash<unsigned long long, data_struct>;

@@ -18,20 +18,24 @@ template<typename KeyType, typename ValueType>
 class HashMap {
 protected:
     size_t N = 19913;
+    size_t n;
     size_t hash(KeyType key);
 public:
 
-    HashMap() {};
+    HashMap();
 
     virtual std::optional<ValueType> get(KeyType key) = 0;
 
-    virtual void put(KeyType key, ValueType value) = 0;
+    virtual std::optional<ValueType> put(KeyType key, ValueType value) = 0;
 
     virtual ValueType remove(KeyType key) = 0;
 
-    virtual size_t size() = 0;
+    size_t size();
 
-    virtual bool isEmpty() = 0;
+    bool isEmpty();
+
+    /* Para profiling más que nada. */
+    double getLoadFactor();
 };
 
 #endif

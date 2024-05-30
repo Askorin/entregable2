@@ -5,7 +5,7 @@
 
 template<typename KeyType, typename ValueType>
 QuadMap<KeyType, ValueType>::QuadMap() : 
-    table(this->N), mirror(this->N, Empty), n(0) { }
+    table(this->N), mirror(this->N, Empty) { }
 
 
 template<typename KeyType, typename ValueType>
@@ -20,12 +20,12 @@ std::optional<ValueType> QuadMap<KeyType, ValueType>::get(KeyType key) {
 }
 
 template<typename KeyType, typename ValueType>
-void QuadMap<KeyType, ValueType>::put(KeyType key, ValueType value) {
+std::optional<ValueType> QuadMap<KeyType, ValueType>::put(KeyType key, ValueType value) {
     /* Esto es más o menos ineficiente, pero funciona */
     std::optional<ValueType> find = get(key);
     /* La clave ya se encuentra ingresada. */
     if (find) {
-        return;
+        return find.value();
     }
     
     size_t idx = this->hash(key);
@@ -33,11 +33,12 @@ void QuadMap<KeyType, ValueType>::put(KeyType key, ValueType value) {
         if ((mirror[idx] == Empty) || (mirror[idx] == Available)) {
             table[idx] = Entry<KeyType, ValueType>(key, value);
             mirror[idx] = Occupied;
-            ++n;
+            ++this->n;
             break;
         }
         idx = (idx + 2 * i + 1) % this->N;
     }
+    return std::nullopt;
 }
 
 
@@ -66,15 +67,6 @@ ValueType QuadMap<KeyType, ValueType>::remove(KeyType key) {}
 //    return returnValue;
 //};
 
-template<typename KeyType, typename ValueType>
-size_t QuadMap<KeyType, ValueType>::size() {
-    return n;
-}
-
-template<typename KeyType, typename ValueType>
-bool QuadMap<KeyType, ValueType>::isEmpty() {
-    return n == 0;
-}
 
 template class QuadMap<unsigned long long, data_struct>;
 template class QuadMap<std::string, data_struct>;

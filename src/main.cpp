@@ -121,11 +121,14 @@ int main(int argc, char* argv[]) {
         nExperimentos = 10;
     }
     /* Leemos los datos y convertimos en vector de data_struct */
-    vector<vector<string>> data = read_csv("../data/universities_followers_no_dups.csv");
-    vector<data_struct> convertedData = convertData(data);
-    cout << "### Dataset con " << convertedData.size() << " elementos ###\n";
+    vector<vector<string>> datosReales = read_csv("../data/universities_followers_no_dups.csv");
+    vector<vector<string>> datosRandom = read_csv("../data/universities_followers_no_dups_random.csv");
+    vector<data_struct> datosRealesConverted = convertData(datosReales);
+    vector<data_struct> datosRandomConverted = convertData(datosRandom);
+    cout << "### Dataset real con " << datosRealesConverted.size() << " elementos ###\n";
+    cout << "### Dataset random con " << datosRandomConverted.size() << " elementos ###\n";
 
-    doTests(convertedData, nExperimentos);
+    doTests(datosRealesConverted, datosRandomConverted, nExperimentos);
     
 
     return 0;

@@ -1,3 +1,4 @@
+#include <optional>
 #include <vector>
 #include <string>
 #include "../inc/hash_linear.h"
@@ -5,7 +6,7 @@
 
 template<typename KeyType, typename ValueType>
 HashLinear<KeyType, ValueType>::HashLinear() : 
-    table(this->N), mirror(this->N, Empty), n(0) { }
+    table(this->N), mirror(this->N, Empty) { }
 
 
 
@@ -21,12 +22,12 @@ std::optional<ValueType> HashLinear<KeyType, ValueType>::get(KeyType key) {
 }
 
 template<typename KeyType, typename ValueType>
-void HashLinear<KeyType, ValueType>::put(KeyType key, ValueType value) {
+std::optional<ValueType> HashLinear<KeyType, ValueType>::put(KeyType key, ValueType value) {
     /* Esto es más o menos ineficiente, pero funciona */
     std::optional<ValueType> find = get(key);
     /* La clave ya se encuentra ingresada. */
     if (find) {
-        return;
+        return find.value();
     }
     
     size_t idx = this->hash(key);
@@ -34,11 +35,12 @@ void HashLinear<KeyType, ValueType>::put(KeyType key, ValueType value) {
         if ((mirror[idx] == Empty) || (mirror[idx] == Available)) {
             table[idx] = Entry<KeyType, ValueType>(key, value);
             mirror[idx] = Occupied;
-            ++n;
+            ++this->n;
             break;
         }
         idx = (idx + 1) % this->N;
     }
+    return std::nullopt;
 }
 
 
@@ -69,18 +71,6 @@ ValueType HashLinear<KeyType, ValueType>::remove(KeyType key) {}
 //        idx = (idx + 1) % N;
 //    }
 //}
-
-
-template<typename KeyType, typename ValueType>
-size_t HashLinear<KeyType, ValueType>::size() {
-    return n;
-}
-
-template<typename KeyType, typename ValueType>
-bool HashLinear<KeyType, ValueType>::isEmpty() {
-    return n == 0;
-}
-
 
 template class HashLinear<unsigned long long, data_struct>;
 template class HashLinear<std::string, data_struct>;
