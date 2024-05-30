@@ -4,36 +4,34 @@
 #include <string>
 #include "data_struct.h"
 #include <iostream>
+#include <optional>
 
+template<typename KeyType, typename ValueType>
+struct Entry {
+    KeyType key;
+    ValueType value;
+    Entry();
+    Entry(KeyType key, ValueType val);
+};
+
+template<typename KeyType, typename ValueType>
 class HashMap {
 protected:
     size_t N = 19913;
-    size_t hashId(unsigned long long userId);
-    size_t hashUsername(std::string userName);
+    size_t hash(KeyType key);
 public:
 
-    HashMap() {
-    }
-    /* Para username */
-    virtual data_struct get(std::string username) = 0;
+    HashMap() {};
 
-    /* Para userid */
-    virtual data_struct get(unsigned long long user_id) = 0;
+    virtual std::optional<ValueType> get(KeyType key) = 0;
 
-    /* Para username */
-    virtual void put(std::string username, data_struct value) = 0;
+    virtual void put(KeyType key, ValueType value) = 0;
 
-    /* Para userid */
-    virtual void put(unsigned long long user_id, data_struct value) = 0;
-
-    /* Para username */
-    virtual data_struct remove(std::string username) = 0;
-
-    /* Para userid */
-    virtual data_struct remove(unsigned long long userid) = 0;
+    virtual ValueType remove(KeyType key) = 0;
 
     virtual size_t size() = 0;
 
     virtual bool isEmpty() = 0;
 };
+
 #endif

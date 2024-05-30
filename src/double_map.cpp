@@ -1,135 +1,95 @@
 #include <vector>
-#include <string>
-#include "../inc/data_struct.h"
 #include "../inc/double_map.h"
 
-// Mismo caso que en HashLinear, tabla espejo de disponibilidad de espacios.
-DoubleHash::DoubleHash() : table(N, data_struct("", 0, "", 0, 0, 0, "")), mirror(N, Empty), n(0) { }
-
 //Segunda función Hash, con q un numero primo.
-size_t DoubleHash::d1(unsigned long long id)
-{ 
+/* TODO: Redifinir para manejar genericos y weas */
+template<typename KeyType, typename ValueType>
+size_t DoubleHash<KeyType, ValueType>::d1(unsigned long long id) { 
     int q = 6827; 
     return q - (id % q);
 }
 
 
-data_struct DoubleHash::get(std::string username) {
-    size_t hash1 = HashMap::hashUsername(username);
-    size_t hash2 = d1(hashUsername(username));
+template<typename KeyType, typename ValueType>
+DoubleHash<KeyType, ValueType>::DoubleHash() : 
+    table(this->N), mirror(this->N, Empty), n(0) { }
+
+
+
+template<typename KeyType, typename ValueType>
+std::optional<ValueType> DoubleHash<KeyType, ValueType>::get(KeyType key) {
+    size_t hash1 = this->hash(key);
+    size_t hash2 = d1(this->hash(key));
     size_t idx;
-    data_struct empty("", 0, "", 0, 0, 0, "");
-    empty.setValid(false);
 
-    for (size_t i = 0; i < N; ++i)
-    {
-        idx = (hash1 + i*hash2) % N;
-
-        if(mirror[idx] == Empty) break;
-        else if ((mirror[idx] == Occupied) && (table[idx].username == username))
-        {
-            data_struct tmp = table[idx];
-            return tmp;
-        }
+    for (size_t i = 0; i < this->N; ++i) {
+        idx = (hash1 + i*hash2) % this->N;
+        if (mirror[idx] == Empty) break;
+        else if ((mirror[idx] == Occupied) && (table[idx].key == key)) return table[idx].value;
     }
-    return empty;
-
-};
-
-data_struct DoubleHash::get(unsigned long long userId)
-{
-    size_t hash1 = HashMap::hashId(userId);
-    size_t hash2 = d1(userId);
-    size_t idx;
-    data_struct empty("", 0, "", 0, 0, 0, "");
-    empty.setValid(false);
-
-    for (size_t i = 0; i < N; ++i)
-    {
-        idx = (hash1 + i*hash2) % N;
-
-        if(mirror[idx] == Empty) break;
-        else if ((mirror[idx] == Occupied) && (table[idx].user_id == userId))
-        {
-            data_struct tmp = table[idx];
-            return tmp;
-        }
-    }
-    return empty;
+    return std::nullopt;
 }
 
+template<typename KeyType, typename ValueType>
+void DoubleHash<KeyType, ValueType>::put(KeyType key, ValueType value) {
 
-void DoubleHash::put(std::string username, data_struct value) {
-    data_struct elem = get(username);
 
-    if (elem.valid) {
+    /* Esto es más o menos ineficiente, pero funciona */
+    std::optional<ValueType> find = get(key);
+    /* La clave ya se encuentra ingresada. */
+    if (find) {
         return;
     }
 
-    size_t hash1 = HashMap::hashUsername(username);
-    size_t hash2 = d1(hashUsername(username));
+    size_t hash1 = this->hash(key);
+    size_t hash2 = d1(this->hash(key));
     size_t idx;
 
-    for (size_t i = 0; i < N; ++i) {
-        idx = (hash1 + i * hash2) % N;
+    for (size_t i = 0; i < this->N; ++i) {
+        idx = (hash1 + i * hash2) % this->N;
         if ((mirror[idx] == Empty) || (mirror[idx] == Available)) {
-            table[idx] = value;
-            mirror[idx] = Occupied;
-            return;
-        }
-    }
-};
-
-void DoubleHash::put(unsigned long long userid, data_struct value)
-{
-    data_struct elem = get(userid);
-
-    if (elem.valid) {
-        return;
-    }
-
-    size_t hash1 = HashMap::hashId(userid);
-    size_t hash2 = d1(userid);
-    size_t idx;
-
-    for (size_t i = 0; i < N; ++i) {
-        idx = (hash1 + i * hash2) % N;
-        if ((mirror[idx] == Empty) || (mirror[idx] == Available)) {
-            
-            table[idx] = value;
+            table[idx] = Entry<KeyType, ValueType>(key, value);
             mirror[idx] = Occupied;
             return;
         }
     }
 }
 
-data_struct DoubleHash::remove(std::string username) { };
+template<typename KeyType, typename ValueType>
+ValueType DoubleHash<KeyType, ValueType>::remove(KeyType key) { };
 
-data_struct DoubleHash::remove(unsigned long long userid)
-{
-    unsigned long long hash1 = HashMap::hashId(userid);
-    unsigned long long hash2 = d1(userid);
-    unsigned long long idx = hash1;
+//data_struct DoubleHash::remove(unsigned long long userid)
+//{
+//    unsigned long long hash1 = HashMap::hashId(userid);
+//    unsigned long long hash2 = d1(userid);
+//    unsigned long long idx = hash1;
+//
+//    for (size_t i = 0; i < N; i++) 
+//    {
+//        if (mirror[idx] == Occupied && table[idx].user_id == userid) 
+//        {
+//            mirror[idx] = Available;
+//            data_struct tmp = table[idx];
+//            return tmp;
+//        }
+//        
+//        idx = (hash1 + i * hash2) % N;
+//
+//    }
+//}
 
-    for (size_t i = 0; i < N; i++) 
-    {
-        if (mirror[idx] == Occupied && table[idx].user_id == userid) 
-        {
-            mirror[idx] = Available;
-            data_struct tmp = table[idx];
-            return tmp;
-        }
-        
-        idx = (hash1 + i * hash2) % N;
 
-    }
-}
-
-size_t DoubleHash::size() {
+template<typename KeyType, typename ValueType>
+size_t DoubleHash<KeyType, ValueType>::size() {
     return n;
 }
 
-bool DoubleHash::isEmpty() {
+template<typename KeyType, typename ValueType>
+bool DoubleHash<KeyType, ValueType>::isEmpty() {
     return n == 0;
 }
 
+
+
+template class DoubleHash<unsigned long long, data_struct>;
+template class DoubleHash<std::string, data_struct>;

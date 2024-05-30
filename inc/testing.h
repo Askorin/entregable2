@@ -8,10 +8,16 @@
 
 void doTests(std::vector<data_struct> datos, size_t nExperimentos);
 
-double insertionTimer(HashMap& mapa, std::vector<data_struct> datos, bool isUserId, size_t count);
+double insertionTimer(HashMap<std::string, data_struct>& mapa, std::vector<data_struct> datos, size_t count);
 
-double insertionTimer(std::unordered_map<unsigned long long, data_struct>& mapa, 
+double insertionTimer(HashMap<unsigned long long, data_struct>& mapa, std::vector<data_struct> datos, size_t count);
+
+double insertionTimer(std::unordered_map<unsigned long long, data_struct>& mapa,
         std::vector<data_struct> datos, size_t count);
+
+
+double insertionTimer(std::unordered_map<std::string, data_struct>& mapa, std::vector<data_struct> datos,
+        size_t count);
 
 double searchTimer(std::unordered_map<std::string, data_struct>& mapa, std::vector<data_struct> datos,
         size_t count, size_t idxComienzo);
@@ -20,7 +26,11 @@ double searchTimer(std::unordered_map<unsigned long long, data_struct>& mapa, st
         size_t count, size_t idxComienzo);
 
 
-double searchTimer(HashMap& mapa, std::vector<data_struct> datos, bool isUserId, size_t count, size_t idxComienzo);
+double searchTimer(HashMap<std::string, data_struct>& mapa, std::vector<data_struct> datos,
+        size_t count, size_t idxComienzo);
+
+double searchTimer(HashMap<unsigned long long, data_struct>& mapa, std::vector<data_struct> datos,
+        size_t count, size_t idxComienzo);
 
 void insertionTimeTest(std::vector<data_struct> datos, size_t nExperimentos, std::vector<size_t> cuentas);
 

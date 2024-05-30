@@ -1,97 +1,79 @@
 #include "../inc/open_hashing_map.h"
+#include <optional>
 
 
+template<typename KeyType, typename ValueType>
+OpenHashingMap<KeyType, ValueType>::OpenHashingMap() :
+    table(std::vector(this->N, std::vector<Entry<KeyType, ValueType>>())), n(0) {}
 
-OpenHashingMap::OpenHashingMap() {
-    this->table = std::vector(N, std::vector<data_struct>{});
-    this->n = 0;
+template<typename KeyType, typename ValueType>
+std::optional<ValueType> OpenHashingMap<KeyType, ValueType>::get(KeyType key) {
+    size_t idx = this->hash(key);
+    for (size_t i = 0; i < table[idx].size(); ++i) {
+        if (table[idx][i].key == key) return table[idx][i].value;
+    }
+    return std::nullopt;
 }
 
-data_struct OpenHashingMap::get(std::string username) {
-    
-    size_t idx = HashMap::hashUsername(username);
+template<typename KeyType, typename ValueType>
+void OpenHashingMap<KeyType, ValueType>::put(KeyType key, ValueType value) {
+    size_t idx = this->hash(key);
     for (size_t i = 0; i < table[idx].size(); ++i) {
-        if (table[idx][i].username == username) return table[idx][i];
+        if (table[idx][i].key == key) return;
     }
-    /* En este caso no encontramos nada */
-    data_struct retVal("", 0, "", 0, 0, 0, "");
-    retVal.setValid(false);
-    return retVal;
-}
-
-/* Para userid */
-data_struct OpenHashingMap::get(unsigned long long user_id) {
-    size_t idx = HashMap::hashId(user_id);
-    for (size_t i = 0; i < table[idx].size(); ++i) {
-        if (table[idx][i].user_id == user_id) return table[idx][i];
-    }
-    /* En este caso no encontramos nada */
-    data_struct retVal("", 0, "", 0, 0, 0, "");
-    retVal.setValid(false);
-    return retVal;
-}
-
-/* Para username */
-void OpenHashingMap::put(std::string username, data_struct value) {
-    size_t idx = HashMap::hashUsername(username);
-    for (size_t i = 0; i < table[idx].size(); ++i) {
-        if (table[idx][i].username == username) return;
-    }
-    table[idx].push_back(value);
+    table[idx].push_back(Entry<KeyType, ValueType>(key, value));
     ++n;
-};
+}
 
-/* Para userid */
-void OpenHashingMap::put(unsigned long long user_id, data_struct value) {
-    size_t idx = HashMap::hashId(user_id);
-    for (size_t i = 0; i < table[idx].size(); ++i) {
-        if (table[idx][i].user_id == user_id) return;
-    }
-    table[idx].push_back(value);
-    ++n;
-};
+template<typename KeyType, typename ValueType>
+ValueType OpenHashingMap<KeyType, ValueType>::remove(KeyType key) {}
 
-/* Para username */
-data_struct OpenHashingMap::remove(std::string username) {
-    size_t idx = HashMap::hashUsername(username);
+//data_struct OpenHashingMap::remove(std::string username) {
+//    size_t idx = HashMap::hashUsername(username);
+//
+//    for (size_t i = 0; i < table[idx].size(); ++i) {
+//        data_struct valor = table[idx][i];
+//        if (valor.username == username) {
+//            table[idx].erase(table[idx].begin() + i);
+//            --n;
+//            return valor;
+//        }
+//    }
+//
+//    data_struct retVal("", 0, "", 0, 0, 0, "");
+//    retVal.setValid(false);
+//    return retVal;
+//};
+//
+///* Para userid */
+//data_struct OpenHashingMap::remove(unsigned long long userid) {
+//    size_t idx = HashMap::hashId(userid);
+//
+//    for (size_t i = 0; i < table[idx].size(); ++i) {
+//        data_struct valor = table[idx][i];
+//        if (valor.user_id == userid) {
+//            table[idx].erase(table[idx].begin() + i);
+//            --n;
+//            return valor;
+//        }
+//    }
+//
+//    data_struct retVal("", 0, "", 0, 0, 0, "");
+//    retVal.setValid(false);
+//    return retVal;
+//
+//};
 
-    for (size_t i = 0; i < table[idx].size(); ++i) {
-        data_struct valor = table[idx][i];
-        if (valor.username == username) {
-            table[idx].erase(table[idx].begin() + i);
-            --n;
-            return valor;
-        }
-    }
-
-    data_struct retVal("", 0, "", 0, 0, 0, "");
-    retVal.setValid(false);
-    return retVal;
-};
-
-/* Para userid */
-data_struct OpenHashingMap::remove(unsigned long long userid) {
-    size_t idx = HashMap::hashId(userid);
-
-    for (size_t i = 0; i < table[idx].size(); ++i) {
-        data_struct valor = table[idx][i];
-        if (valor.user_id == userid) {
-            table[idx].erase(table[idx].begin() + i);
-            --n;
-            return valor;
-        }
-    }
-
-    data_struct retVal("", 0, "", 0, 0, 0, "");
-    retVal.setValid(false);
-    return retVal;
-
-};
-
-size_t OpenHashingMap::size() {
+template<typename KeyType, typename ValueType>
+size_t OpenHashingMap<KeyType, ValueType>::size() {
     return n;
-};
+}
 
-bool OpenHashingMap::isEmpty() {
+template<typename KeyType, typename ValueType>
+bool OpenHashingMap<KeyType, ValueType>::isEmpty() {
     return n == 0;
-};
+}
+
+
+template class OpenHashingMap<unsigned long long, data_struct>;
+template class OpenHashingMap<std::string, data_struct>;

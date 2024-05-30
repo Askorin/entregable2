@@ -20,6 +20,8 @@ struct data_struct {
     // String por ahora...
     std::string created_at;
     
+    data_struct();
+
     data_struct(std::string university, unsigned long long user_id, std::string username,
             unsigned int n_tweets, unsigned int friend_count, unsigned int follower_count,
             std::string created_at);

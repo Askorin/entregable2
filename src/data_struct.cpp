@@ -1,6 +1,12 @@
 #include "../inc/data_struct.h"
 #include <ostream>
 
+
+
+data_struct::data_struct() : university(), user_id(), username(), n_tweets(), friend_count(),
+            follower_count(), created_at() {}
+
+
 data_struct::data_struct(std::string university, unsigned long long user_id, std::string username,
             unsigned int n_tweets, unsigned int friend_count, unsigned int follower_count,
             std::string created_at) {
