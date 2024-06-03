@@ -5,21 +5,15 @@
 #include <string>
 #include "data_struct.h"
 #include <iostream>
+#include <optional>
 
 
 
-class QuadMap : public HashMap {
+template<typename KeyType, typename ValueType>
+class QuadMap : public HashMap<KeyType, ValueType> {
 private:
-    std::vector<data_struct> table;
+    std::vector<Entry<KeyType, ValueType>> table;
     std::vector<int> mirror;
-    // Función de hasheo para username
-    size_t hashUsername(std::string username);
-
-    // Función de hasheo para username
-    size_t hashId(unsigned long long id);
-
-
-    size_t n;
 
 public:
     enum Status 
@@ -31,28 +25,11 @@ public:
 
     QuadMap();
 
-    /* Para username */
-    data_struct get(std::string username) override;
+    std::optional<ValueType> get(KeyType key) override;
 
-    /* Para userid */
-    data_struct get(unsigned long long user_id) override;
+    std::optional<ValueType> put(KeyType key, ValueType value) override;
 
-    /* Para username */
-    void put(std::string username, data_struct value) override;
-
-    /* Para userid */
-    void put(unsigned long long user_id, data_struct value) override;
-
-    /* Para username */
-    data_struct remove(std::string username) override;
-
-    /* Para userid */
-    data_struct remove(unsigned long long userid) override;
-
-    size_t size() override;
-
-    bool isEmpty() override;
-
+    //ValueType remove(KeyType key) override;
 };
 
 #endif

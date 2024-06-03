@@ -5,41 +5,29 @@
 #include <string>
 #include "data_struct.h"
 #include <iostream>
+#include <optional>
 
 
-
-class OpenHashingMap : public HashMap {
+template<typename KeyType, typename ValueType>
+class OpenHashingMap : public HashMap<KeyType, ValueType> {
 private:
-    std::vector<std::vector<data_struct>> table;
-
-    size_t n;
+    std::vector<std::vector<Entry<KeyType, ValueType>>> table;
 
 public:
     
     OpenHashingMap();
 
-    /* Para username */
-    data_struct get(std::string username) override;
+    std::optional<ValueType> get(KeyType key) override;
 
-    /* Para userid */
-    data_struct get(unsigned long long user_id) override;
+    std::optional<ValueType> put(KeyType key, ValueType value) override;
 
-    /* Para username */
-    void put(std::string username, data_struct value) override;
+    std::vector<std::vector<Entry<KeyType, ValueType>>> getTable();
 
-    /* Para userid */
-    void put(unsigned long long user_id, data_struct value) override;
 
-    /* Para username */
-    data_struct remove(std::string username) override;
+    size_t getCap();
 
-    /* Para userid */
-    data_struct remove(unsigned long long userid) override;
-
-    size_t size() override;
-
-    bool isEmpty() override;
-
+    //ValueType remove(KeyType key) override;
 };
+
 
 #endif
