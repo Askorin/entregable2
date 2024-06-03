@@ -11,10 +11,10 @@ QuadMap<KeyType, ValueType>::QuadMap() :
 template<typename KeyType, typename ValueType>
 std::optional<ValueType> QuadMap<KeyType, ValueType>::get(KeyType key) {
     size_t idx = this->hash(key);
-    for (size_t i = 0; i < this->N; ++i) {
+    for (size_t i = 1; i < this->N; ++i) {
         if (mirror[idx] == Empty) break;
         else if ((mirror[idx] == Occupied) && (table[idx].key == key)) return table[idx].value;
-        idx = (idx + 2 * i + 1) % this->N;
+        idx = (idx + 2 * i - 1) % this->N;
     }
     return std::nullopt;
 }
@@ -29,21 +29,21 @@ std::optional<ValueType> QuadMap<KeyType, ValueType>::put(KeyType key, ValueType
     }
     
     size_t idx = this->hash(key);
-    for (size_t i = 0; i < this->N; ++i) {
+    for (size_t i = 1; i < this->N; ++i) {
         if ((mirror[idx] == Empty) || (mirror[idx] == Available)) {
             table[idx] = Entry<KeyType, ValueType>(key, value);
             mirror[idx] = Occupied;
             ++this->n;
             break;
         }
-        idx = (idx + 2 * i + 1) % this->N;
+        idx = (idx + 2 * i - 1) % this->N;
     }
     return std::nullopt;
 }
 
 
-template<typename KeyType, typename ValueType>
-ValueType QuadMap<KeyType, ValueType>::remove(KeyType key) {}
+//template<typename KeyType, typename ValueType>
+//ValueType QuadMap<KeyType, ValueType>::remove(KeyType key) {}
 
 ///* Para userid */
 //data_struct QuadMap::remove(unsigned long long user_id) {

@@ -57,8 +57,8 @@ std::optional<ValueType> DoubleHash<KeyType, ValueType>::put(KeyType key, ValueT
     return std::nullopt;
 }
 
-template<typename KeyType, typename ValueType>
-ValueType DoubleHash<KeyType, ValueType>::remove(KeyType key) { };
+//template<typename KeyType, typename ValueType>
+//ValueType DoubleHash<KeyType, ValueType>::remove(KeyType key) { };
 
 //data_struct DoubleHash::remove(unsigned long long userid)
 //{

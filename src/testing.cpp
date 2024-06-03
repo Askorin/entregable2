@@ -242,20 +242,19 @@ void insertionTimeTest(vector<data_struct>& datos, size_t nExperimentos, vector<
 }
 
 
-void searchTimeTestTipo1(vector<data_struct>& datos, size_t nExperimentos, vector<size_t> cuentas) {
+void searchTimeTestTipo1(vector<data_struct>& datos, size_t nExperimentos, vector<size_t> nBusquedas) {
     OpenHashingMap<unsigned long long, data_struct> abiertoUl;
     HashLinear<unsigned long long, data_struct> linearUl;
     QuadMap<unsigned long long, data_struct> quadUl;
     DoubleHash<unsigned long long, data_struct> dobleUl;
     unordered_map<unsigned long long, data_struct> stlUl;
-
     
     /* 
      * Los datos se guardaran en cuatro filas, cada una con las columnas:
      * tipo_mapa, cuentas_1000, cuentas_5000 ... 
      */
     vector<string> features = {"mapa"};
-    vector<vector<string>> data_experimento = vector<vector<string>>(5, vector<string>(cuentas.size() + 1));
+    vector<vector<string>> data_experimento(5, vector<string>(nBusquedas.size() + 1));
     data_experimento[0][0] = "hashing_abierto";
     data_experimento[1][0] = "hashing_cerrado_lineal";
     data_experimento[2][0] = "hashing_cerrado_cuadratico";
@@ -263,7 +262,7 @@ void searchTimeTestTipo1(vector<data_struct>& datos, size_t nExperimentos, vecto
     data_experimento[4][0] = "stl";
 
     size_t c = 1;
-    for (auto cuenta : cuentas) {
+    for (auto cuenta : nBusquedas) {
         cout << "### Buscando tipo 1, id, cuenta ###" << cuenta << endl;
         /* Mapas que usaremos para user_id */
         abiertoUl = OpenHashingMap<unsigned long long, data_struct>();
@@ -321,7 +320,7 @@ void searchTimeTestTipo1(vector<data_struct>& datos, size_t nExperimentos, vecto
 
     /* Para username */
     c = 1;
-    for (auto cuenta : cuentas) {
+    for (auto cuenta : nBusquedas) {
         cout << "### Buscando tipo 1, usr, cuenta ###" << cuenta << endl;
         /* Creamos un subconjunto aleatorio del dataset de {cuenta} elementos */
         // sample(datos.begin(), datos.end(), back_inserter(subset), cuenta, std::mt19937{random_device{}()});
@@ -377,7 +376,7 @@ void searchTimeTestTipo1(vector<data_struct>& datos, size_t nExperimentos, vecto
 
 
 void searchTimeTestTipo2(vector<data_struct>& datosInsercion, vector<data_struct>& datosBusqueda,
-        size_t nExperimentos, vector<size_t> cuentas) {
+        size_t nExperimentos, vector<size_t> nBusquedas) {
 
     OpenHashingMap<unsigned long long, data_struct> abiertoUl;
     HashLinear<unsigned long long, data_struct> linearUl;
@@ -402,7 +401,7 @@ void searchTimeTestTipo2(vector<data_struct>& datosInsercion, vector<data_struct
      * Los datos se guardaran en cuatro filas, cada una con las columnas:
      * tipo_mapa, cuentas_1000, cuentas_5000 ... 
      */
-    vector<vector<string>> data_experimento = vector<vector<string>>(5, vector<string>(cuentas.size() + 1, ""));
+    vector<vector<string>> data_experimento(5, vector<string>(nBusquedas.size() + 1, ""));
     data_experimento[0][0] = "hashing_abierto";
     data_experimento[1][0] = "hashing_cerrado_lineal";
     data_experimento[2][0] = "hashing_cerrado_cuadratico";
@@ -416,16 +415,8 @@ void searchTimeTestTipo2(vector<data_struct>& datosInsercion, vector<data_struct
      */
 
     size_t c = 1;
-    for (auto cuenta : cuentas) {
+    for (auto cuenta : nBusquedas) {
         cout << "### Buscando tipo 2, id, cuenta ###" << cuenta << endl;
-        /* Mapas que usaremos para user_id */
-        //abiertoUl = OpenHashingMap<unsigned long long, data_struct>();
-        //linearUl = HashLinear<unsigned long long, data_struct>();
-        //quadUl = QuadMap<unsigned long long, data_struct>();
-        //stlUl = unordered_map<unsigned long long, data_struct>();
-
-
-
         double tiempoAbierto = 0, tiempoLinear = 0, tiempoQuad = 0, tiempoDoble = 0, tiempoStl = 0;
         for (size_t i = 0; i < nExperimentos; ++i) {
             /* Tiempo de busqueda con llaves de user_id */
@@ -451,7 +442,7 @@ void searchTimeTestTipo2(vector<data_struct>& datosInsercion, vector<data_struct
     }
 
     vector<string> features = {"mapa"};
-    for (auto cuenta : cuentas) {
+    for (auto cuenta : nBusquedas) {
         features.push_back(to_string(cuenta));
     }
 
@@ -476,7 +467,7 @@ void searchTimeTestTipo2(vector<data_struct>& datosInsercion, vector<data_struct
 
         
     c = 1;
-    for (auto cuenta : cuentas) {
+    for (auto cuenta : nBusquedas) {
         cout << "### Buscando tipo 2, usr, cuenta ###" << cuenta << endl;
         /* Mapas que usaremos para username */
 
@@ -604,10 +595,25 @@ bool testFuncionamiento(vector<data_struct>& datos) {
     return true;
 }
 
+void countCapacities(vector<data_struct>& datos) {
+    OpenHashingMap<string, data_struct> mapa;
+    
+    /* Insertamos */
+    for (size_t i = 0; i < datos.size(); ++i) {
+        mapa.put(datos[i].username, datos[i]);
+    }
+
+    /* Contamos capacities */
+    cout << mapa.getCap() << endl;
+    
+
+}
+
 
 void doTests(vector<data_struct>& datosReales, vector<data_struct>& datosRandom, size_t nExperimentos) {
     vector<size_t> cuentas;
     size_t c = 0;
+
     while (c < datosReales.size()) {
         c += 1000;
         cuentas.push_back(min(c, datosReales.size()));
@@ -618,6 +624,9 @@ void doTests(vector<data_struct>& datosReales, vector<data_struct>& datosRandom,
         return;
     }
 
+    
+    cout << "### Calculando Tamaño de Hashing Abierto ###\n";
+    countCapacities(datosReales);
     cout << "### Corriendo " << nExperimentos << " experimentos\n";
     cout << "### Probando Inserciones ###\n";
     insertionTimeTest(datosReales, nExperimentos, cuentas);

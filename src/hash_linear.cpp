@@ -44,8 +44,8 @@ std::optional<ValueType> HashLinear<KeyType, ValueType>::put(KeyType key, ValueT
 }
 
 
-template<typename KeyType, typename ValueType>
-ValueType HashLinear<KeyType, ValueType>::remove(KeyType key) {}
+//template<typename KeyType, typename ValueType>
+//ValueType HashLinear<KeyType, ValueType>::remove(KeyType key) {}
 
 
 //data_struct HashLinear::remove(unsigned long long userid) 

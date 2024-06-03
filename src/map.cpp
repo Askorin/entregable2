@@ -15,8 +15,15 @@ HashMap<KeyType, ValueType>::HashMap() : n(0) { }
 
 template<>
 size_t HashMap<unsigned long long, data_struct>::hash(unsigned long long key) {
-    size_t a = 18193, b = 5618;
-    return size_t((a * key + b) % N);
+    //size_t a = 18193, b = 5618;
+    //return size_t((a * key + b) % N);
+    key ^= (key >> 33);
+    key *= 0xff51afd7ed558ccd;
+    key ^= (key >> 33);
+    key *= 0xc4ceb9fe1a85ec53;
+    key ^= (key >> 33);
+
+    return key % N;
 }
 
 template<>

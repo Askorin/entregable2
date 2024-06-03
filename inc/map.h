@@ -28,7 +28,7 @@ public:
 
     virtual std::optional<ValueType> put(KeyType key, ValueType value) = 0;
 
-    virtual ValueType remove(KeyType key) = 0;
+    //virtual ValueType remove(KeyType key) = 0;
 
     size_t size();
 

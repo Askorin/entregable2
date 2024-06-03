@@ -29,7 +29,7 @@ public:
 
     std::optional<ValueType> put(KeyType key, ValueType value) override;
 
-    ValueType remove(KeyType key) override;
+    //ValueType remove(KeyType key) override;
 };
 
 #endif

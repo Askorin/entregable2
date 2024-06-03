@@ -26,8 +26,26 @@ std::optional<ValueType> OpenHashingMap<KeyType, ValueType>::put(KeyType key, Va
     return std::nullopt;
 }
 
+
 template<typename KeyType, typename ValueType>
-ValueType OpenHashingMap<KeyType, ValueType>::remove(KeyType key) {}
+std::vector<std::vector<Entry<KeyType, ValueType>>> OpenHashingMap<KeyType, ValueType>::getTable() {
+    return table;
+}
+
+
+template<typename KeyType, typename ValueType>
+size_t OpenHashingMap<KeyType, ValueType>::getCap() {
+    size_t cap = 0;
+    for (auto& chain : table) {
+        cap += chain.capacity();
+    }
+    return cap;
+}
+
+
+
+//template<typename KeyType, typename ValueType>
+//ValueType OpenHashingMap<KeyType, ValueType>::remove(KeyType key) {}
 
 //data_struct OpenHashingMap::remove(std::string username) {
 //    size_t idx = HashMap::hashUsername(username);

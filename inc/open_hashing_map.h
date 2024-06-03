@@ -21,7 +21,12 @@ public:
 
     std::optional<ValueType> put(KeyType key, ValueType value) override;
 
-    ValueType remove(KeyType key) override;
+    std::vector<std::vector<Entry<KeyType, ValueType>>> getTable();
+
+
+    size_t getCap();
+
+    //ValueType remove(KeyType key) override;
 };
 
 

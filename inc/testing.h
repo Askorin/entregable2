@@ -42,4 +42,7 @@ void searchTimeTestTipo2(std::vector<data_struct>& datosInsercion, std::vector<d
 
 bool testFuncionamiento(std::vector<data_struct>& datos);
 
+
+void countCapacities(std::vector<data_struct>& datos);
+
 #endif
