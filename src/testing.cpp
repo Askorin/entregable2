@@ -151,7 +151,7 @@ void insertionTimeTest(vector<data_struct>& datos, size_t nExperimentos, vector<
     data_experimento[1][0] = "hashing_cerrado_lineal";
     data_experimento[2][0] = "hashing_cerrado_cuadratico";
     data_experimento[3][0] = "hashing_cerrado_doble";
-    data_experimento[4][0] = "stl";
+    data_experimento[4][0] = "std::unordered_map";
     
 
     size_t c = 1;
@@ -259,7 +259,7 @@ void searchTimeTestTipo1(vector<data_struct>& datos, size_t nExperimentos, vecto
     data_experimento[1][0] = "hashing_cerrado_lineal";
     data_experimento[2][0] = "hashing_cerrado_cuadratico";
     data_experimento[3][0] = "hashing_cerrado_doble";
-    data_experimento[4][0] = "stl";
+    data_experimento[4][0] = "std::unordered_map";
 
     size_t c = 1;
     for (auto cuenta : nBusquedas) {
@@ -406,7 +406,7 @@ void searchTimeTestTipo2(vector<data_struct>& datosInsercion, vector<data_struct
     data_experimento[1][0] = "hashing_cerrado_lineal";
     data_experimento[2][0] = "hashing_cerrado_cuadratico";
     data_experimento[3][0] = "hashing_cerrado_doble";
-    data_experimento[4][0] = "stl";
+    data_experimento[4][0] = "std::unordered_map";
 
     /*
      * Se harán 1000 busquedas de elementos no existentes para las 1000 busquedas.
@@ -623,6 +623,17 @@ void doTests(vector<data_struct>& datosReales, vector<data_struct>& datosRandom,
         cout << "Problemilla\n";
         return;
     }
+
+    OpenHashingMap<string, data_struct> abiertoStr{};
+    HashLinear<string, data_struct> linearStr{};
+    QuadMap<string, data_struct> quadStr{};
+    DoubleHash<string, data_struct> dobleStr{};
+
+    cout << "### Tamaño de Mapas (sin contar reservas): ###" << endl;
+    cout << "Abierto: " << sizeof(abiertoStr) << endl;
+    cout << "Lineal Cerrado: " << sizeof(linearStr) << endl;
+    cout << "Quad Cerrado: " << sizeof(quadStr) << endl;
+    cout << "Doble Cerrado: " << sizeof(dobleStr) << endl;
 
     
     cout << "### Calculando Tamaño de Hashing Abierto ###\n";
