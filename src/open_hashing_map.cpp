@@ -19,7 +19,11 @@ template<typename KeyType, typename ValueType>
 std::optional<ValueType> OpenHashingMap<KeyType, ValueType>::put(KeyType key, ValueType value) {
     size_t idx = this->hash(key);
     for (size_t i = 0; i < table[idx].size(); ++i) {
-        if (table[idx][i].key == key) return table[idx][i].value;
+        if (table[idx][i].key == key) {
+            Entry<KeyType, ValueType> prevEntry = table[idx][i];
+            table[idx][i] = Entry<KeyType, ValueType>(key, value);
+            return prevEntry.value;
+        }
     }
     table[idx].push_back(Entry<KeyType, ValueType>(key, value));
     ++this->n;
