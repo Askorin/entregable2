@@ -20,6 +20,8 @@ protected:
     size_t N = 19913;
     size_t n;
     size_t hash(KeyType key);
+    size_t multMod(unsigned long long key);
+    unsigned long long polyRoll(std::string key);
 public:
 
     HashMap();

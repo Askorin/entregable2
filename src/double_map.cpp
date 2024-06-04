@@ -1,12 +1,15 @@
 #include <vector>
 #include "../inc/double_map.h"
 
-//Segunda función Hash, con q un numero primo.
-/* TODO: Redifinir para manejar genericos y weas */
-template<typename KeyType, typename ValueType>
-size_t DoubleHash<KeyType, ValueType>::d1(unsigned long long id) { 
-    int q = 6827; 
-    return q - (id % q);
+/* Segunda función Hash */
+template<>
+size_t DoubleHash<std::string, data_struct>::d1(std::string key) {
+    return 6827 - (this->polyRoll(key) % 6827);
+}
+
+template<>
+size_t DoubleHash<unsigned long long, data_struct>::d1(unsigned long long key) {
+    return 6827 - (key % 6827);
 }
 
 
@@ -19,7 +22,7 @@ DoubleHash<KeyType, ValueType>::DoubleHash() :
 template<typename KeyType, typename ValueType>
 std::optional<ValueType> DoubleHash<KeyType, ValueType>::get(KeyType key) {
     size_t hash1 = this->hash(key);
-    size_t hash2 = d1(this->hash(key));
+    size_t hash2 = d1(key);
     size_t idx;
 
     for (size_t i = 0; i < this->N; ++i) {
@@ -34,25 +37,50 @@ template<typename KeyType, typename ValueType>
 std::optional<ValueType> DoubleHash<KeyType, ValueType>::put(KeyType key, ValueType value) {
 
 
-    /* Esto es más o menos ineficiente, pero funciona */
-    std::optional<ValueType> find = get(key);
-    /* La clave ya se encuentra ingresada. */
-    if (find) {
-        return find.value();
-    }
-
     size_t hash1 = this->hash(key);
-    size_t hash2 = d1(this->hash(key));
+    size_t hash2 = d1(key);
     size_t idx;
-
+    size_t availableIdx = 0;
+    bool availableFound = false;
     for (size_t i = 0; i < this->N; ++i) {
         idx = (hash1 + i * hash2) % this->N;
-        if ((mirror[idx] == Empty) || (mirror[idx] == Available)) {
+        /* La clave ya se encuentra en el mapa, le cambiamos el valor y retornamos el valor anterior. */
+        if ((mirror[idx] == Occupied) && (table[idx].key == key)) {
+            Entry<KeyType, ValueType> prevEntry = table[idx];
             table[idx] = Entry<KeyType, ValueType>(key, value);
-            mirror[idx] = Occupied;
-            ++this->n;
+            return prevEntry.value;
+        }
+
+        /* 
+         * Si encontramos un lugar vacío, la clave no se podría encontrar repetida más adelante,
+         * entonces la insertamos acá de inmediato.
+         */
+        if (mirror[idx] == Empty) {
+            /* 
+             * En verdad no es de mucha importancia ocupar el spot que haya sido descubierto primero,
+             * pero mejor hacerlo así, creo?
+             */
+            if (!availableFound) {
+                availableFound = true;
+                availableIdx = idx;
+            }
             break;
         }
+
+        /*
+         * Si encontramos un lugar disponible, lo recordamos. Pero seguiremos buscando, ya que
+         * puede ser que la llave se encuentre más adelante, si es que más adelante terminamos de 
+         * buscar o encontramos Empty, la ubicaremos acá.
+         */
+        if (mirror[idx] == Available) {
+            availableFound = true;
+            availableIdx = idx;
+        }
+    }
+    if (availableFound) {
+        mirror[availableFound] = Occupied;
+        table[availableIdx] = Entry<KeyType, ValueType>(key, value);
+        ++this->n;
     }
     return std::nullopt;
 }

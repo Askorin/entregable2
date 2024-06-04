@@ -11,7 +11,7 @@ private:
     std::vector<Entry<KeyType, ValueType>> table;
     std::vector<int> mirror;
 
-    size_t d1(unsigned long long id);
+    size_t d1(KeyType key);
 
 
 public:
