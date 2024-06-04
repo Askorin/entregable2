@@ -23,22 +23,52 @@ std::optional<ValueType> HashLinear<KeyType, ValueType>::get(KeyType key) {
 
 template<typename KeyType, typename ValueType>
 std::optional<ValueType> HashLinear<KeyType, ValueType>::put(KeyType key, ValueType value) {
-    /* Esto es más o menos ineficiente, pero funciona */
-    std::optional<ValueType> find = get(key);
-    /* La clave ya se encuentra ingresada. */
-    if (find) {
-        return find.value();
-    }
     
+    size_t availableIdx = 0;
+    bool availableFound = false;
     size_t idx = this->hash(key);
     for (size_t i = 0; i < this->N; ++i) {
-        if ((mirror[idx] == Empty) || (mirror[idx] == Available)) {
+
+        /* La clave ya se encuentra en el mapa, le cambiamos el valor y retornamos el valor anterior. */
+        if ((mirror[idx] == Occupied) && (table[idx].key == key)) {
+            Entry<KeyType, ValueType> prevEntry = table[idx];
             table[idx] = Entry<KeyType, ValueType>(key, value);
-            mirror[idx] = Occupied;
-            ++this->n;
+            return prevEntry.value;
+        }
+
+        /* 
+         * Si encontramos un lugar vacío, la clave no se podría encontrar repetida más adelante,
+         * entonces la insertamos acá de inmediato.
+         */
+        if (mirror[idx] == Empty) {
+            /* 
+             * En verdad no es de mucha importancia ocupar el spot que haya sido descubierto primero,
+             * pero mejor hacerlo así, creo?
+             */
+            if (!availableFound) {
+                availableFound = true;
+                availableIdx = idx;
+            }
             break;
         }
+
+        /*
+         * Si encontramos un lugar disponible, lo recordamos. Pero seguiremos buscando, ya que
+         * puede ser que la llave se encuentre más adelante, si es que más adelante terminamos de 
+         * buscar o encontramos Empty, la ubicaremos acá.
+         */
+        if (mirror[idx] == Available) {
+            availableFound = true;
+            availableIdx = idx;
+        }
+
         idx = (idx + 1) % this->N;
+    }
+
+    if (availableFound) {
+        mirror[availableFound] = Occupied;
+        table[availableIdx] = Entry<KeyType, ValueType>(key, value);
+        ++this->n;
     }
     return std::nullopt;
 }
