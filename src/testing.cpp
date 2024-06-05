@@ -7,6 +7,7 @@
 #include "../inc/double_map.h"
 #include <chrono>
 #include <algorithm>
+#include <cmath>
 
 
 using namespace std;
@@ -152,12 +153,23 @@ void insertionTimeTest(vector<data_struct>& datos, size_t nExperimentos, vector<
     data_experimento[2][0] = "hashing_cerrado_cuadratico";
     data_experimento[3][0] = "hashing_cerrado_doble";
     data_experimento[4][0] = "std::unordered_map";
+
+
+    /* También habra otro vector con las desviaciones estándar. */
+    vector<vector<string>> desviaciones(data_experimento);
+
+    
     
 
     size_t c = 1;
     for (auto cuenta : cuentas) {
         cout << "### Insertando, id, cuenta ###" << cuenta << endl;
-        double tiempoAbierto = 0, tiempoLinear = 0, tiempoQuad = 0, tiempoStl = 0, tiempoDoble = 0;
+        double promTiempoAbierto = 0, promTiempoLinear = 0, promTiempoQuad = 0, promTiempoDoble = 0, 
+               promTiempoStl = 0;
+
+        double dvAbiertoL = 0, dvLinearL = 0, dvQuadL = 0, dvDobleL = 0, 
+               dvStlL = 0;
+
         for (size_t i = 0; i < nExperimentos; ++i) {
             /* Mapas que usaremos para user_id */
             abiertoUl = OpenHashingMap<unsigned long long, data_struct>();
@@ -167,23 +179,51 @@ void insertionTimeTest(vector<data_struct>& datos, size_t nExperimentos, vector<
             stlUl = unordered_map<unsigned long long, data_struct>();
 
             /* Tiempo de inserción con llaves de user_id */
-            tiempoAbierto += insertionTimer(abiertoUl, datos, cuenta);
-            tiempoLinear += insertionTimer(linearUl, datos, cuenta);
-            tiempoQuad += insertionTimer(quadUl, datos, cuenta);
-            tiempoDoble += insertionTimer(dobleUl, datos, cuenta);
-            tiempoStl += insertionTimer(stlUl, datos, cuenta);
+            double tiempoAbierto = insertionTimer(abiertoUl, datos, cuenta);
+            double tiempoLinear = insertionTimer(linearUl, datos, cuenta);
+            double tiempoQuad = insertionTimer(quadUl, datos, cuenta);
+            double tiempoDoble = insertionTimer(dobleUl, datos, cuenta);
+            double tiempoStl = insertionTimer(stlUl, datos, cuenta);
+
+            promTiempoAbierto += tiempoAbierto;
+            promTiempoLinear += tiempoLinear;
+            promTiempoQuad += tiempoQuad;
+            promTiempoDoble += tiempoDoble;
+            promTiempoStl += tiempoStl;
+
+            dvAbiertoL += pow(tiempoAbierto, 2);
+            dvLinearL += pow(tiempoLinear, 2);
+            dvQuadL += pow(tiempoQuad, 2);
+            dvDobleL += pow(tiempoDoble, 2);
+            dvStlL += pow(tiempoStl, 2);
         }
 
-        tiempoAbierto /= nExperimentos;
-        tiempoLinear /= nExperimentos;
-        tiempoQuad /= nExperimentos;
-        tiempoDoble /= nExperimentos;
-        tiempoStl /= nExperimentos;
-        data_experimento[0][c] = to_string(tiempoAbierto);
-        data_experimento[1][c] = to_string(tiempoLinear);
-        data_experimento[2][c] = to_string(tiempoQuad);
-        data_experimento[3][c] = to_string(tiempoDoble);
-        data_experimento[4][c] = to_string(tiempoStl);
+
+        promTiempoAbierto /= nExperimentos;
+        promTiempoLinear /= nExperimentos;
+        promTiempoQuad /= nExperimentos;
+        promTiempoDoble /= nExperimentos;
+        promTiempoStl /= nExperimentos;
+
+
+        double dvAbierto = sqrt((dvAbiertoL - pow(promTiempoAbierto, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvLinear = sqrt((dvLinearL - pow(promTiempoLinear, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvQuad = sqrt((dvQuadL - pow(promTiempoQuad, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvDoble = sqrt((dvDobleL - pow(promTiempoDoble, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvStl = sqrt((dvStlL - pow(promTiempoStl, 2) * nExperimentos) / (nExperimentos - 1));
+
+        data_experimento[0][c] = to_string(promTiempoAbierto);
+        data_experimento[1][c] = to_string(promTiempoLinear);
+        data_experimento[2][c] = to_string(promTiempoQuad);
+        data_experimento[3][c] = to_string(promTiempoDoble);
+        data_experimento[4][c] = to_string(promTiempoStl);
+
+        desviaciones[0][c] = to_string(dvAbierto);
+        desviaciones[1][c] = to_string(dvLinear);
+        desviaciones[2][c] = to_string(dvQuad);
+        desviaciones[3][c] = to_string(dvDoble);
+        desviaciones[4][c] = to_string(dvStl);
+
 
         ++c;
     }
@@ -196,6 +236,10 @@ void insertionTimeTest(vector<data_struct>& datos, size_t nExperimentos, vector<
     write_data(features, 
             data_experimento, "../resultados/inserciones_id.csv");
 
+
+    write_data(features, 
+            desviaciones, "../resultados/dv_inserciones_id.csv");
+
     OpenHashingMap<string, data_struct> abiertoStr;
     HashLinear<string, data_struct> linearStr;
     QuadMap<string, data_struct> quadStr;
@@ -205,7 +249,11 @@ void insertionTimeTest(vector<data_struct>& datos, size_t nExperimentos, vector<
     c = 1;
     for (auto cuenta : cuentas) {
         cout << "### Insertando, usr, cuenta ###" << cuenta << endl;
-        double tiempoAbierto = 0, tiempoLinear = 0, tiempoQuad = 0, tiempoStl = 0, tiempoDoble = 0;
+        double promTiempoAbierto = 0, promTiempoLinear = 0, promTiempoQuad = 0, promTiempoDoble = 0,
+               promTiempoStl = 0; 
+
+        double dvAbiertoL = 0, dvLinearL = 0, dvQuadL = 0, dvDobleL = 0, 
+               dvStlL = 0;
         for (size_t i = 0; i < nExperimentos; ++i) {
             /* Mapas que usaremos para username */
             abiertoStr = OpenHashingMap<string, data_struct>();
@@ -215,29 +263,59 @@ void insertionTimeTest(vector<data_struct>& datos, size_t nExperimentos, vector<
             stlStr = unordered_map<string, data_struct>();
 
             /* Tiempo de inserción con llaves de username */
-            tiempoAbierto += insertionTimer(abiertoStr, datos, cuenta); 
-            tiempoLinear += insertionTimer(linearStr, datos, cuenta); 
-            tiempoQuad += insertionTimer(quadStr, datos, cuenta); 
-            tiempoDoble += insertionTimer(dobleStr, datos, cuenta); 
-            tiempoStl += insertionTimer(stlStr, datos, cuenta);
+            double tiempoAbierto = insertionTimer(abiertoStr, datos, cuenta);
+            double tiempoLinear = insertionTimer(linearStr, datos, cuenta);
+            double tiempoQuad = insertionTimer(quadStr, datos, cuenta);
+            double tiempoDoble = insertionTimer(dobleStr, datos, cuenta);
+            double tiempoStl = insertionTimer(stlStr, datos, cuenta);
+
+            promTiempoAbierto += tiempoAbierto;
+            promTiempoLinear += tiempoLinear;
+            promTiempoQuad += tiempoQuad;
+            promTiempoDoble += tiempoDoble;
+            promTiempoStl += tiempoStl;
+
+            dvAbiertoL += pow(tiempoAbierto, 2);
+            dvLinearL += pow(tiempoLinear, 2);
+            dvQuadL += pow(tiempoQuad, 2);
+            dvDobleL += pow(tiempoDoble, 2);
+            dvStlL += pow(tiempoStl, 2);
         }
 
-        tiempoAbierto /= nExperimentos;
-        tiempoLinear /= nExperimentos;
-        tiempoQuad /= nExperimentos;
-        tiempoDoble /= nExperimentos;
-        tiempoStl /= nExperimentos;
-        data_experimento[0][c] = to_string(tiempoAbierto);
-        data_experimento[1][c] = to_string(tiempoLinear);
-        data_experimento[2][c] = to_string(tiempoQuad);
-        data_experimento[3][c] = to_string(tiempoDoble);
-        data_experimento[4][c] = to_string(tiempoStl);
+        promTiempoAbierto /= nExperimentos;
+        promTiempoLinear /= nExperimentos;
+        promTiempoQuad /= nExperimentos;
+        promTiempoDoble /= nExperimentos;
+        promTiempoStl /= nExperimentos;
+
+
+        double dvAbierto = sqrt((dvAbiertoL - pow(promTiempoAbierto, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvLinear = sqrt((dvLinearL - pow(promTiempoLinear, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvQuad = sqrt((dvQuadL - pow(promTiempoQuad, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvDoble = sqrt((dvDobleL - pow(promTiempoDoble, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvStl = sqrt((dvStlL - pow(promTiempoStl, 2) * nExperimentos) / (nExperimentos - 1));
+
+        data_experimento[0][c] = to_string(promTiempoAbierto);
+        data_experimento[1][c] = to_string(promTiempoLinear);
+        data_experimento[2][c] = to_string(promTiempoQuad);
+        data_experimento[3][c] = to_string(promTiempoDoble);
+        data_experimento[4][c] = to_string(promTiempoStl);
+
+        desviaciones[0][c] = to_string(dvAbierto);
+        desviaciones[1][c] = to_string(dvLinear);
+        desviaciones[2][c] = to_string(dvQuad);
+        desviaciones[3][c] = to_string(dvDoble);
+        desviaciones[4][c] = to_string(dvStl);
 
         ++c;
     }
 
     write_data(features, 
             data_experimento, "../resultados/inserciones_username.csv");
+
+
+    write_data(features, 
+            desviaciones, "../resultados/dv_inserciones_username.csv");
 
 }
 
@@ -261,6 +339,9 @@ void searchTimeTestTipo1(vector<data_struct>& datos, size_t nExperimentos, vecto
     data_experimento[3][0] = "hashing_cerrado_doble";
     data_experimento[4][0] = "std::unordered_map";
 
+    /* También habra otro vector con las desviaciones estándar. */
+    vector<vector<string>> desviaciones(data_experimento);
+
     size_t c = 1;
     for (auto cuenta : nBusquedas) {
         cout << "### Buscando tipo 1, id, cuenta ###" << cuenta << endl;
@@ -281,36 +362,67 @@ void searchTimeTestTipo1(vector<data_struct>& datos, size_t nExperimentos, vecto
         }
 
 
-        // features.push_back(to_string(abiertoUl.getLoadFactor()));
         features.push_back(to_string(cuenta));
 
 
-        double tiempoAbierto = 0, tiempoLinear = 0, tiempoQuad = 0, tiempoStl = 0, tiempoDoble = 0;
+        double promTiempoAbierto = 0, promTiempoLinear = 0, promTiempoQuad = 0, promTiempoDoble = 0, 
+               promTiempoStl = 0;
+
+        double dvAbiertoL = 0, dvLinearL = 0, dvQuadL = 0, dvDobleL = 0, dvStlL = 0;
         for (size_t i = 0; i < nExperimentos; ++i) {
             /* Tiempo de busqueda con llaves de user_id */
-            tiempoAbierto += searchTimer(abiertoUl, datos, cuenta, 0);
-            tiempoLinear += searchTimer(linearUl, datos, cuenta, 0);
-            tiempoQuad += searchTimer(quadUl, datos, cuenta, 0);
-            tiempoDoble += searchTimer(dobleUl, datos, cuenta, 0);
-            tiempoStl += searchTimer(stlUl, datos, cuenta, 0);
+            double tiempoAbierto = searchTimer(abiertoUl, datos, cuenta, 0);
+            double tiempoLinear = searchTimer(linearUl, datos, cuenta, 0);
+            double tiempoQuad = searchTimer(quadUl, datos, cuenta, 0);
+            double tiempoDoble = searchTimer(dobleUl, datos, cuenta, 0);
+            double tiempoStl = searchTimer(stlUl, datos, cuenta, 0);
+
+            promTiempoAbierto += tiempoAbierto;
+            promTiempoLinear += tiempoLinear;
+            promTiempoQuad += tiempoQuad;
+            promTiempoDoble += tiempoDoble;
+            promTiempoStl += tiempoStl;
+
+            dvAbiertoL += pow(tiempoAbierto, 2);
+            dvLinearL += pow(tiempoLinear, 2);
+            dvQuadL += pow(tiempoQuad, 2);
+            dvDobleL += pow(tiempoDoble, 2);
+            dvStlL += pow(tiempoStl, 2);
         }
 
-        tiempoAbierto /= nExperimentos;
-        tiempoLinear /= nExperimentos;
-        tiempoQuad /= nExperimentos;
-        tiempoDoble /= nExperimentos;
-        tiempoStl /= nExperimentos;
-        data_experimento[0][c] = to_string(tiempoAbierto);
-        data_experimento[1][c] = to_string(tiempoLinear);
-        data_experimento[2][c] = to_string(tiempoQuad);
-        data_experimento[3][c] = to_string(tiempoDoble);
-        data_experimento[4][c] = to_string(tiempoStl);
+        promTiempoAbierto /= nExperimentos;
+        promTiempoLinear /= nExperimentos;
+        promTiempoQuad /= nExperimentos;
+        promTiempoDoble /= nExperimentos;
+        promTiempoStl /= nExperimentos;
+
+
+        double dvAbierto = sqrt((dvAbiertoL - pow(promTiempoAbierto, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvLinear = sqrt((dvLinearL - pow(promTiempoLinear, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvQuad = sqrt((dvQuadL - pow(promTiempoQuad, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvDoble = sqrt((dvDobleL - pow(promTiempoDoble, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvStl = sqrt((dvStlL - pow(promTiempoStl, 2) * nExperimentos) / (nExperimentos - 1));
+
+        data_experimento[0][c] = to_string(promTiempoAbierto);
+        data_experimento[1][c] = to_string(promTiempoLinear);
+        data_experimento[2][c] = to_string(promTiempoQuad);
+        data_experimento[3][c] = to_string(promTiempoDoble);
+        data_experimento[4][c] = to_string(promTiempoStl);
+
+        desviaciones[0][c] = to_string(dvAbierto);
+        desviaciones[1][c] = to_string(dvLinear);
+        desviaciones[2][c] = to_string(dvQuad);
+        desviaciones[3][c] = to_string(dvDoble);
+        desviaciones[4][c] = to_string(dvStl);
 
         ++c;
     }
 
     write_data(features, 
             data_experimento, "../resultados/busquedas1_id.csv");
+
+    write_data(features, 
+            desviaciones, "../resultados/dv_busquedas1_id.csv");
 
     OpenHashingMap<string, data_struct> abiertoStr;
     HashLinear<string, data_struct> linearStr;
@@ -322,10 +434,6 @@ void searchTimeTestTipo1(vector<data_struct>& datos, size_t nExperimentos, vecto
     c = 1;
     for (auto cuenta : nBusquedas) {
         cout << "### Buscando tipo 1, usr, cuenta ###" << cuenta << endl;
-        /* Creamos un subconjunto aleatorio del dataset de {cuenta} elementos */
-        // sample(datos.begin(), datos.end(), back_inserter(subset), cuenta, std::mt19937{random_device{}()});
-        //
-
         /* Mapas que usaremos para username */
         abiertoStr = OpenHashingMap<string, data_struct>();
         linearStr = HashLinear<string, data_struct>();
@@ -344,26 +452,55 @@ void searchTimeTestTipo1(vector<data_struct>& datos, size_t nExperimentos, vecto
         }
 
 
-        double tiempoAbierto = 0, tiempoLinear = 0, tiempoQuad = 0, tiempoStl = 0, tiempoDoble = 0;
+        double promTiempoAbierto = 0, promTiempoLinear = 0, promTiempoQuad = 0, promTiempoDoble = 0,
+               promTiempoStl; 
+
+        double dvAbiertoL = 0, dvLinearL = 0, dvQuadL = 0, dvDobleL = 0, dvStlL = 0;
         for (size_t i = 0; i < nExperimentos; ++i) {
             /* Tiempo de busqueda con llaves de username */
-            tiempoAbierto += searchTimer(abiertoStr, datos, cuenta, 0); 
-            tiempoLinear += searchTimer(linearStr, datos, cuenta, 0); 
-            tiempoQuad += searchTimer(quadStr, datos, cuenta, 0); 
-            tiempoDoble += searchTimer(dobleStr, datos, cuenta, 0);
-            tiempoStl += searchTimer(stlStr, datos, cuenta, 0);
+            double tiempoAbierto = searchTimer(abiertoStr, datos, cuenta, 0);
+            double tiempoLinear = searchTimer(linearStr, datos, cuenta, 0);
+            double tiempoQuad = searchTimer(quadStr, datos, cuenta, 0);
+            double tiempoDoble = searchTimer(dobleStr, datos, cuenta, 0);
+            double tiempoStl = searchTimer(stlStr, datos, cuenta, 0);
+
+            promTiempoAbierto += tiempoAbierto;
+            promTiempoLinear += tiempoLinear;
+            promTiempoQuad += tiempoQuad;
+            promTiempoDoble += tiempoDoble;
+            promTiempoStl += tiempoStl;
+
+            dvAbiertoL += pow(tiempoAbierto, 2);
+            dvLinearL += pow(tiempoLinear, 2);
+            dvQuadL += pow(tiempoQuad, 2);
+            dvDobleL += pow(tiempoDoble, 2);
+            dvStlL += pow(tiempoStl, 2);
         }
 
-        tiempoAbierto /= nExperimentos;
-        tiempoLinear /= nExperimentos;
-        tiempoQuad /= nExperimentos;
-        tiempoDoble /= nExperimentos;
-        tiempoStl /= nExperimentos;
-        data_experimento[0][c] = to_string(tiempoAbierto);
-        data_experimento[1][c] = to_string(tiempoLinear);
-        data_experimento[2][c] = to_string(tiempoQuad);
-        data_experimento[3][c] = to_string(tiempoDoble);
-        data_experimento[4][c] = to_string(tiempoStl);
+        promTiempoAbierto /= nExperimentos;
+        promTiempoLinear /= nExperimentos;
+        promTiempoQuad /= nExperimentos;
+        promTiempoDoble /= nExperimentos;
+        promTiempoStl /= nExperimentos;
+
+
+        double dvAbierto = sqrt((dvAbiertoL - pow(promTiempoAbierto, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvLinear = sqrt((dvLinearL - pow(promTiempoLinear, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvQuad = sqrt((dvQuadL - pow(promTiempoQuad, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvDoble = sqrt((dvDobleL - pow(promTiempoDoble, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvStl = sqrt((dvStlL - pow(promTiempoStl, 2) * nExperimentos) / (nExperimentos - 1));
+
+        data_experimento[0][c] = to_string(promTiempoAbierto);
+        data_experimento[1][c] = to_string(promTiempoLinear);
+        data_experimento[2][c] = to_string(promTiempoQuad);
+        data_experimento[3][c] = to_string(promTiempoDoble);
+        data_experimento[4][c] = to_string(promTiempoStl);
+
+        desviaciones[0][c] = to_string(dvAbierto);
+        desviaciones[1][c] = to_string(dvLinear);
+        desviaciones[2][c] = to_string(dvQuad);
+        desviaciones[3][c] = to_string(dvDoble);
+        desviaciones[4][c] = to_string(dvStl);
 
         ++c;
 
@@ -372,6 +509,9 @@ void searchTimeTestTipo1(vector<data_struct>& datos, size_t nExperimentos, vecto
 
     write_data(features, 
             data_experimento, "../resultados/busquedas1_username.csv");
+
+    write_data(features, 
+            desviaciones, "../resultados/dv_busquedas1_username.csv");
 }
 
 
@@ -407,6 +547,8 @@ void searchTimeTestTipo2(vector<data_struct>& datosInsercion, vector<data_struct
     data_experimento[2][0] = "hashing_cerrado_cuadratico";
     data_experimento[3][0] = "hashing_cerrado_doble";
     data_experimento[4][0] = "std::unordered_map";
+    /* También habra otro vector con las desviaciones estándar. */
+    vector<vector<string>> desviaciones(data_experimento);
 
     /*
      * Se harán 1000 busquedas de elementos no existentes para las 1000 busquedas.
@@ -417,26 +559,56 @@ void searchTimeTestTipo2(vector<data_struct>& datosInsercion, vector<data_struct
     size_t c = 1;
     for (auto cuenta : nBusquedas) {
         cout << "### Buscando tipo 2, id, cuenta ###" << cuenta << endl;
-        double tiempoAbierto = 0, tiempoLinear = 0, tiempoQuad = 0, tiempoDoble = 0, tiempoStl = 0;
+
+        double promTiempoAbierto = 0, promTiempoLinear = 0, promTiempoQuad = 0, promTiempoDoble = 0, 
+               promTiempoStl = 0;
+
+        double dvAbiertoL = 0, dvLinearL = 0, dvQuadL = 0, dvDobleL = 0, dvStlL = 0;
         for (size_t i = 0; i < nExperimentos; ++i) {
             /* Tiempo de busqueda con llaves de user_id */
-            tiempoAbierto += searchTimer(abiertoUl, datosBusqueda, cuenta, 0); 
-            tiempoLinear += searchTimer(linearUl, datosBusqueda, cuenta, 0); 
-            tiempoQuad += searchTimer(quadUl, datosBusqueda, cuenta, 0); 
-            tiempoDoble += searchTimer(dobleUl, datosBusqueda, cuenta, 0); 
-            tiempoStl += searchTimer(stlUl, datosBusqueda, cuenta, 0);
+            double tiempoAbierto = searchTimer(abiertoUl, datosBusqueda, cuenta, 0);
+            double tiempoLinear = searchTimer(linearUl, datosBusqueda, cuenta, 0);
+            double tiempoQuad = searchTimer(quadUl, datosBusqueda, cuenta, 0);
+            double tiempoDoble = searchTimer(dobleUl, datosBusqueda, cuenta, 0);
+            double tiempoStl = searchTimer(stlUl, datosBusqueda, cuenta, 0);
+
+            promTiempoAbierto += tiempoAbierto;
+            promTiempoLinear += tiempoLinear;
+            promTiempoQuad += tiempoQuad;
+            promTiempoDoble += tiempoDoble;
+            promTiempoStl += tiempoStl;
+
+            dvAbiertoL += pow(tiempoAbierto, 2);
+            dvLinearL += pow(tiempoLinear, 2);
+            dvQuadL += pow(tiempoQuad, 2);
+            dvDobleL += pow(tiempoDoble, 2);
+            dvStlL += pow(tiempoStl, 2);
         }
 
-        tiempoAbierto /= nExperimentos;
-        tiempoLinear /= nExperimentos;
-        tiempoQuad /= nExperimentos;
-        tiempoDoble /= nExperimentos;
-        tiempoStl /= nExperimentos;
-        data_experimento[0][c] = to_string(tiempoAbierto);
-        data_experimento[1][c] = to_string(tiempoLinear);
-        data_experimento[2][c] = to_string(tiempoQuad);
-        data_experimento[3][c] = to_string(tiempoDoble);
-        data_experimento[4][c] = to_string(tiempoStl);
+        promTiempoAbierto /= nExperimentos;
+        promTiempoLinear /= nExperimentos;
+        promTiempoQuad /= nExperimentos;
+        promTiempoDoble /= nExperimentos;
+        promTiempoStl /= nExperimentos;
+
+
+        double dvAbierto = sqrt((dvAbiertoL - pow(promTiempoAbierto, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvLinear = sqrt((dvLinearL - pow(promTiempoLinear, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvQuad = sqrt((dvQuadL - pow(promTiempoQuad, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvDoble = sqrt((dvDobleL - pow(promTiempoDoble, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvStl = sqrt((dvStlL - pow(promTiempoStl, 2) * nExperimentos) / (nExperimentos - 1));
+
+        data_experimento[0][c] = to_string(promTiempoAbierto);
+        data_experimento[1][c] = to_string(promTiempoLinear);
+        data_experimento[2][c] = to_string(promTiempoQuad);
+        data_experimento[3][c] = to_string(promTiempoDoble);
+        data_experimento[4][c] = to_string(promTiempoStl);
+
+        desviaciones[0][c] = to_string(dvAbierto);
+        desviaciones[1][c] = to_string(dvLinear);
+        desviaciones[2][c] = to_string(dvQuad);
+        desviaciones[3][c] = to_string(dvDoble);
+        desviaciones[4][c] = to_string(dvStl);
 
         ++c;
     }
@@ -448,6 +620,9 @@ void searchTimeTestTipo2(vector<data_struct>& datosInsercion, vector<data_struct
 
     write_data(features, 
             data_experimento, "../resultados/busquedas2_id.csv");
+
+    write_data(features, 
+            desviaciones, "../resultados/dv_busquedas2_id.csv");
 
 
 
@@ -471,32 +646,65 @@ void searchTimeTestTipo2(vector<data_struct>& datosInsercion, vector<data_struct
         cout << "### Buscando tipo 2, usr, cuenta ###" << cuenta << endl;
         /* Mapas que usaremos para username */
 
-        double tiempoAbierto = 0, tiempoLinear = 0, tiempoQuad = 0, tiempoDoble = 0, tiempoStl = 0;
+        double promTiempoAbierto = 0, promTiempoLinear = 0, promTiempoQuad = 0, promTiempoDoble = 0, 
+               promTiempoStl = 0;
+
+        double dvAbiertoL = 0, dvLinearL = 0, dvQuadL = 0, dvDobleL = 0, dvStlL = 0;
+
         for (size_t i = 0; i < nExperimentos; ++i) {
             /* Tiempo de busqueda con llaves de username */
-            tiempoAbierto += searchTimer(abiertoStr, datosBusqueda, cuenta, 0); 
-            tiempoLinear += searchTimer(linearStr, datosBusqueda, cuenta, 0); 
-            tiempoQuad += searchTimer(quadStr, datosBusqueda, cuenta, 0); 
-            tiempoDoble += searchTimer(dobleStr, datosBusqueda, cuenta, 0); 
-            tiempoStl += searchTimer(stlStr, datosBusqueda, cuenta, 0);
+            double tiempoAbierto = searchTimer(abiertoStr, datosBusqueda, cuenta, 0);
+            double tiempoLinear = searchTimer(linearStr, datosBusqueda, cuenta, 0);
+            double tiempoQuad = searchTimer(quadStr, datosBusqueda, cuenta, 0);
+            double tiempoDoble = searchTimer(dobleStr, datosBusqueda, cuenta, 0);
+            double tiempoStl = searchTimer(stlStr, datosBusqueda, cuenta, 0);
+
+            promTiempoAbierto += tiempoAbierto;
+            promTiempoLinear += tiempoLinear;
+            promTiempoQuad += tiempoQuad;
+            promTiempoDoble += tiempoDoble;
+            promTiempoStl += tiempoStl;
+
+            dvAbiertoL += pow(tiempoAbierto, 2);
+            dvLinearL += pow(tiempoLinear, 2);
+            dvQuadL += pow(tiempoQuad, 2);
+            dvDobleL += pow(tiempoDoble, 2);
+            dvStlL += pow(tiempoStl, 2);
         }
 
-        tiempoAbierto /= nExperimentos;
-        tiempoLinear /= nExperimentos;
-        tiempoQuad /= nExperimentos;
-        tiempoDoble /= nExperimentos;
-        tiempoStl /= nExperimentos;
-        data_experimento[0][c] = to_string(tiempoAbierto);
-        data_experimento[1][c] = to_string(tiempoLinear);
-        data_experimento[2][c] = to_string(tiempoQuad);
-        data_experimento[3][c] = to_string(tiempoDoble);
-        data_experimento[4][c] = to_string(tiempoStl);
+        promTiempoAbierto /= nExperimentos;
+        promTiempoLinear /= nExperimentos;
+        promTiempoQuad /= nExperimentos;
+        promTiempoDoble /= nExperimentos;
+        promTiempoStl /= nExperimentos;
+
+
+        double dvAbierto = sqrt((dvAbiertoL - pow(promTiempoAbierto, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvLinear = sqrt((dvLinearL - pow(promTiempoLinear, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvQuad = sqrt((dvQuadL - pow(promTiempoQuad, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvDoble = sqrt((dvDobleL - pow(promTiempoDoble, 2) * nExperimentos) / (nExperimentos - 1));
+        double dvStl = sqrt((dvStlL - pow(promTiempoStl, 2) * nExperimentos) / (nExperimentos - 1));
+
+        data_experimento[0][c] = to_string(promTiempoAbierto);
+        data_experimento[1][c] = to_string(promTiempoLinear);
+        data_experimento[2][c] = to_string(promTiempoQuad);
+        data_experimento[3][c] = to_string(promTiempoDoble);
+        data_experimento[4][c] = to_string(promTiempoStl);
+
+        desviaciones[0][c] = to_string(dvAbierto);
+        desviaciones[1][c] = to_string(dvLinear);
+        desviaciones[2][c] = to_string(dvQuad);
+        desviaciones[3][c] = to_string(dvDoble);
+        desviaciones[4][c] = to_string(dvStl);
 
         ++c;
     }
 
     write_data(features, 
             data_experimento, "../resultados/busquedas2_username.csv");
+
+    write_data(features, 
+            desviaciones, "../resultados/dv_busquedas2_username.csv");
 }
 
 bool testFuncionamiento(vector<data_struct>& datos) {
