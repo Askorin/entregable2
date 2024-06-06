@@ -13,7 +13,7 @@ HashMap<KeyType, ValueType>::HashMap() : n(0) {}
 template <typename KeyType, typename ValueType>
 size_t HashMap<KeyType, ValueType>::multMod(unsigned long long key) {
     return size_t((18193 * key + 5618) % N);
-    //return size_t(key % N);
+    // return size_t(key % N);
 }
 
 template <typename KeyType, typename ValueType>
@@ -33,6 +33,11 @@ unsigned long long HashMap<KeyType, ValueType>::polyRoll(std::string key) {
         sum = (alpha * sum + int(ch));
     }
     return sum;
+}
+
+template <typename KeyType, typename ValueType>
+size_t HashMap<KeyType, ValueType>::getMaxCapacity() {
+    return this->N;
 }
 
 template <>

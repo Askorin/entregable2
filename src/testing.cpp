@@ -170,6 +170,8 @@ void insertionTimeTest(vector<dataStruct>& datos, size_t nExperimentos,
             quadUl = QuadMap<unsigned long long, dataStruct>();
             dobleUl = DoubleHash<unsigned long long, dataStruct>();
             stlUl = unordered_map<unsigned long long, dataStruct>();
+            stlUl.max_load_factor(1);
+            stlUl.rehash(abiertoUl.getMaxCapacity());
 
             /* Tiempo de inserción con llaves de user_id */
             double tiempoAbierto = insertionTimer(abiertoUl, datos, cuenta);
@@ -257,6 +259,8 @@ void insertionTimeTest(vector<dataStruct>& datos, size_t nExperimentos,
             quadStr = QuadMap<string, dataStruct>();
             dobleStr = DoubleHash<string, dataStruct>();
             stlStr = unordered_map<string, dataStruct>();
+            stlStr.max_load_factor(1);
+            stlStr.rehash(abiertoStr.getMaxCapacity());
 
             /* Tiempo de inserción con llaves de username */
             double tiempoAbierto = insertionTimer(abiertoStr, datos, cuenta);
@@ -368,6 +372,8 @@ void searchTimeTestTipo1(vector<dataStruct>& datos, size_t nExperimentos,
         quadUl = QuadMap<unsigned long long, dataStruct>();
         dobleUl = DoubleHash<unsigned long long, dataStruct>();
         stlUl = unordered_map<unsigned long long, dataStruct>();
+        stlUl.max_load_factor(1);
+        stlUl.rehash(abiertoUl.getMaxCapacity());
 
         /* Insertamos los datos */
         for (size_t i = 0; i < size_t(factor * datos.size()); ++i) {
@@ -461,6 +467,8 @@ void searchTimeTestTipo1(vector<dataStruct>& datos, size_t nExperimentos,
         quadStr = QuadMap<string, dataStruct>();
         dobleStr = DoubleHash<string, dataStruct>();
         stlStr = unordered_map<string, dataStruct>();
+        stlStr.max_load_factor(1);
+        stlStr.rehash(abiertoStr.getMaxCapacity());
 
         /* Insertamos los datos */
         for (size_t i = 0; i < size_t(factor * datos.size()); ++i) {
@@ -587,6 +595,8 @@ void searchTimeTestTipo2(vector<dataStruct>& datosInsercion,
             quadUl.put(datosInsercion[i].userId, datosInsercion[i]);
             dobleUl.put(datosInsercion[i].userId, datosInsercion[i]);
             stlUl.insert({datosInsercion[i].userId, datosInsercion[i]});
+            stlUl.max_load_factor(1);
+            stlUl.rehash(abiertoUl.getMaxCapacity());
         }
 
         double promTiempoAbierto = 0, promTiempoLinear = 0, promTiempoQuad = 0,
@@ -672,6 +682,8 @@ void searchTimeTestTipo2(vector<dataStruct>& datosInsercion,
             quadStr.put(datosInsercion[i].userName, datosInsercion[i]);
             dobleStr.put(datosInsercion[i].userName, datosInsercion[i]);
             stlStr.insert({datosInsercion[i].userName, datosInsercion[i]});
+            stlStr.max_load_factor(1);
+            stlStr.rehash(abiertoStr.getMaxCapacity());
         }
         double promTiempoAbierto = 0, promTiempoLinear = 0, promTiempoQuad = 0,
                promTiempoDoble = 0, promTiempoStl = 0;
@@ -865,8 +877,6 @@ void doTests(vector<dataStruct>& datosReales, vector<dataStruct>& datosRandom,
         factoresBusquedas.push_back(factor);
     }
 
-    /* Cantidad de elementos a llenar en las búsquedas */
-    vector<size_t> cuentasBusquedas;
 
     /* Generamos el vector de cantidad de inserciones */
     size_t c = 0;
@@ -875,11 +885,6 @@ void doTests(vector<dataStruct>& datosReales, vector<dataStruct>& datosRandom,
         cuentasInserciones.push_back(min(c, datosReales.size()));
     }
 
-    /* Generamos el vector de cantidad de elementos a ingresar para las
-     * búsquedas */
-    for (auto factor : factoresBusquedas) {
-        cuentasBusquedas.push_back(size_t(factor * datosReales.size()));
-    }
 
     if (!testFuncionamiento(datosReales)) {
         cout << "Problemilla\n";
