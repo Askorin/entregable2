@@ -20,7 +20,6 @@ double insertionTimer(HashMap<unsigned long long, data_struct>& mapa,
     }
     auto end = chrono::high_resolution_clock::now();
 
-    // auto delta = chrono::duration_cast<chrono::milliseconds>(end - start);
     /* milisegundos tipo double */
     auto delta = chrono::duration<double, milli>(end - start);
 
@@ -36,7 +35,6 @@ double insertionTimer(HashMap<string, data_struct>& mapa,
     }
     auto end = chrono::high_resolution_clock::now();
 
-    // auto delta = chrono::duration_cast<chrono::milliseconds>(end - start);
     /* milisegundos tipo double */
     auto delta = chrono::duration<double, std::milli>(end - start);
 
@@ -52,7 +50,6 @@ double insertionTimer(unordered_map<unsigned long long, data_struct>& mapa,
     }
     auto end = chrono::high_resolution_clock::now();
 
-    // auto delta = chrono::duration_cast<chrono::milliseconds>(end - start);
     /* milisegundos tipo double */
     auto delta = chrono::duration<double, milli>(end - start);
 
@@ -68,7 +65,6 @@ double insertionTimer(unordered_map<string, data_struct>& mapa,
     }
     auto end = chrono::high_resolution_clock::now();
 
-    // auto delta = chrono::duration_cast<chrono::milliseconds>(end - start);
     /* milisegundos tipo double */
     auto delta = chrono::duration<double, std::milli>(end - start);
 
@@ -84,6 +80,8 @@ double searchTimer(HashMap<unsigned long long, data_struct>& mapa,
     }
 
     auto end = chrono::high_resolution_clock::now();
+
+    /* milisegundos tipo double */
     auto delta = chrono::duration<double, std::milli>(end - start);
     return delta.count();
 }
@@ -98,7 +96,6 @@ double searchTimer(HashMap<string, data_struct>& mapa,
 
     auto end = chrono::high_resolution_clock::now();
 
-    // auto delta = chrono::duration_cast<chrono::milliseconds>(end - start);
     /* milisegundos tipo double */
     auto delta = chrono::duration<double, std::milli>(end - start);
     return delta.count();
@@ -114,7 +111,6 @@ double searchTimer(unordered_map<unsigned long long, data_struct>& mapa,
 
     auto end = chrono::high_resolution_clock::now();
 
-    // auto delta = chrono::duration_cast<chrono::milliseconds>(end - start);
     /* milisegundos tipo double */
     auto delta = chrono::duration<double, std::milli>(end - start);
     return delta.count();
@@ -130,7 +126,6 @@ double searchTimer(unordered_map<string, data_struct>& mapa,
 
     auto end = chrono::high_resolution_clock::now();
 
-    // auto delta = chrono::duration_cast<chrono::milliseconds>(end - start);
     /* milisegundos tipo double */
     auto delta = chrono::duration<double, std::milli>(end - start);
     return delta.count();
@@ -148,16 +143,16 @@ void insertionTimeTest(vector<data_struct>& datos, size_t nExperimentos,
      * Los datos se guardaran en cuatro filas, cada una con las columnas:
      * tipo_mapa, cuentas_1000, cuentas_5000 ...
      */
-    vector<vector<string>> data_experimento =
+    vector<vector<string>> dataExperimento =
         vector<vector<string>>(5, vector<string>(cuentas.size() + 1, ""));
-    data_experimento[0][0] = "hashing_abierto";
-    data_experimento[1][0] = "hashing_cerrado_lineal";
-    data_experimento[2][0] = "hashing_cerrado_cuadratico";
-    data_experimento[3][0] = "hashing_cerrado_doble";
-    data_experimento[4][0] = "std::unordered_map";
+    dataExperimento[0][0] = "hashing_abierto";
+    dataExperimento[1][0] = "hashing_cerrado_lineal";
+    dataExperimento[2][0] = "hashing_cerrado_cuadratico";
+    dataExperimento[3][0] = "hashing_cerrado_doble";
+    dataExperimento[4][0] = "std::unordered_map";
 
     /* También habra otro vector con las desviaciones estándar. */
-    vector<vector<string>> desviaciones(data_experimento);
+    vector<vector<string>> desviaciones(dataExperimento);
 
     size_t c = 1;
     for (auto cuenta : cuentas) {
@@ -217,11 +212,11 @@ void insertionTimeTest(vector<data_struct>& datos, size_t nExperimentos,
         double dvStl = sqrt((dvStlL - pow(promTiempoStl, 2) * nExperimentos) /
                             (nExperimentos - 1));
 
-        data_experimento[0][c] = to_string(promTiempoAbierto);
-        data_experimento[1][c] = to_string(promTiempoLinear);
-        data_experimento[2][c] = to_string(promTiempoQuad);
-        data_experimento[3][c] = to_string(promTiempoDoble);
-        data_experimento[4][c] = to_string(promTiempoStl);
+        dataExperimento[0][c] = to_string(promTiempoAbierto);
+        dataExperimento[1][c] = to_string(promTiempoLinear);
+        dataExperimento[2][c] = to_string(promTiempoQuad);
+        dataExperimento[3][c] = to_string(promTiempoDoble);
+        dataExperimento[4][c] = to_string(promTiempoStl);
 
         desviaciones[0][c] = to_string(dvAbierto);
         desviaciones[1][c] = to_string(dvLinear);
@@ -237,7 +232,7 @@ void insertionTimeTest(vector<data_struct>& datos, size_t nExperimentos,
         features.push_back(to_string(cuenta));
     }
 
-    write_data(features, data_experimento, "../resultados/inserciones_id.csv");
+    write_data(features, dataExperimento, "../resultados/inserciones_id.csv");
 
     write_data(features, desviaciones, "../resultados/dv_inserciones_id.csv");
 
@@ -304,11 +299,11 @@ void insertionTimeTest(vector<data_struct>& datos, size_t nExperimentos,
         double dvStl = sqrt((dvStlL - pow(promTiempoStl, 2) * nExperimentos) /
                             (nExperimentos - 1));
 
-        data_experimento[0][c] = to_string(promTiempoAbierto);
-        data_experimento[1][c] = to_string(promTiempoLinear);
-        data_experimento[2][c] = to_string(promTiempoQuad);
-        data_experimento[3][c] = to_string(promTiempoDoble);
-        data_experimento[4][c] = to_string(promTiempoStl);
+        dataExperimento[0][c] = to_string(promTiempoAbierto);
+        dataExperimento[1][c] = to_string(promTiempoLinear);
+        dataExperimento[2][c] = to_string(promTiempoQuad);
+        dataExperimento[3][c] = to_string(promTiempoDoble);
+        dataExperimento[4][c] = to_string(promTiempoStl);
 
         desviaciones[0][c] = to_string(dvAbierto);
         desviaciones[1][c] = to_string(dvLinear);
@@ -319,7 +314,7 @@ void insertionTimeTest(vector<data_struct>& datos, size_t nExperimentos,
         ++c;
     }
 
-    write_data(features, data_experimento,
+    write_data(features, dataExperimento,
                "../resultados/inserciones_username.csv");
 
     write_data(features, desviaciones,
@@ -339,16 +334,16 @@ void searchTimeTestTipo1(vector<data_struct>& datos, size_t nExperimentos,
      * tipo_mapa, cuentas_1000, cuentas_5000 ...
      */
     vector<string> features = {"mapa"};
-    vector<vector<string>> data_experimento(
+    vector<vector<string>> dataExperimento(
         5, vector<string>(nBusquedas.size() + 1));
-    data_experimento[0][0] = "hashing_abierto";
-    data_experimento[1][0] = "hashing_cerrado_lineal";
-    data_experimento[2][0] = "hashing_cerrado_cuadratico";
-    data_experimento[3][0] = "hashing_cerrado_doble";
-    data_experimento[4][0] = "std::unordered_map";
+    dataExperimento[0][0] = "hashing_abierto";
+    dataExperimento[1][0] = "hashing_cerrado_lineal";
+    dataExperimento[2][0] = "hashing_cerrado_cuadratico";
+    dataExperimento[3][0] = "hashing_cerrado_doble";
+    dataExperimento[4][0] = "std::unordered_map";
 
     /* También habra otro vector con las desviaciones estándar. */
-    vector<vector<string>> desviaciones(data_experimento);
+    vector<vector<string>> desviaciones(dataExperimento);
 
     size_t c = 1;
     for (auto cuenta : nBusquedas) {
@@ -418,11 +413,11 @@ void searchTimeTestTipo1(vector<data_struct>& datos, size_t nExperimentos,
         double dvStl = sqrt((dvStlL - pow(promTiempoStl, 2) * nExperimentos) /
                             (nExperimentos - 1));
 
-        data_experimento[0][c] = to_string(promTiempoAbierto);
-        data_experimento[1][c] = to_string(promTiempoLinear);
-        data_experimento[2][c] = to_string(promTiempoQuad);
-        data_experimento[3][c] = to_string(promTiempoDoble);
-        data_experimento[4][c] = to_string(promTiempoStl);
+        dataExperimento[0][c] = to_string(promTiempoAbierto);
+        dataExperimento[1][c] = to_string(promTiempoLinear);
+        dataExperimento[2][c] = to_string(promTiempoQuad);
+        dataExperimento[3][c] = to_string(promTiempoDoble);
+        dataExperimento[4][c] = to_string(promTiempoStl);
 
         desviaciones[0][c] = to_string(dvAbierto);
         desviaciones[1][c] = to_string(dvLinear);
@@ -433,7 +428,7 @@ void searchTimeTestTipo1(vector<data_struct>& datos, size_t nExperimentos,
         ++c;
     }
 
-    write_data(features, data_experimento, "../resultados/busquedas1_id.csv");
+    write_data(features, dataExperimento, "../resultados/busquedas1_id.csv");
 
     write_data(features, desviaciones, "../resultados/dv_busquedas1_id.csv");
 
@@ -509,11 +504,11 @@ void searchTimeTestTipo1(vector<data_struct>& datos, size_t nExperimentos,
         double dvStl = sqrt((dvStlL - pow(promTiempoStl, 2) * nExperimentos) /
                             (nExperimentos - 1));
 
-        data_experimento[0][c] = to_string(promTiempoAbierto);
-        data_experimento[1][c] = to_string(promTiempoLinear);
-        data_experimento[2][c] = to_string(promTiempoQuad);
-        data_experimento[3][c] = to_string(promTiempoDoble);
-        data_experimento[4][c] = to_string(promTiempoStl);
+        dataExperimento[0][c] = to_string(promTiempoAbierto);
+        dataExperimento[1][c] = to_string(promTiempoLinear);
+        dataExperimento[2][c] = to_string(promTiempoQuad);
+        dataExperimento[3][c] = to_string(promTiempoDoble);
+        dataExperimento[4][c] = to_string(promTiempoStl);
 
         desviaciones[0][c] = to_string(dvAbierto);
         desviaciones[1][c] = to_string(dvLinear);
@@ -524,7 +519,7 @@ void searchTimeTestTipo1(vector<data_struct>& datos, size_t nExperimentos,
         ++c;
     }
 
-    write_data(features, data_experimento,
+    write_data(features, dataExperimento,
                "../resultados/busquedas1_username.csv");
 
     write_data(features, desviaciones,
@@ -556,15 +551,15 @@ void searchTimeTestTipo2(vector<data_struct>& datosInsercion,
      * Los datos se guardaran en cuatro filas, cada una con las columnas:
      * tipo_mapa, cuentas_1000, cuentas_5000 ...
      */
-    vector<vector<string>> data_experimento(
+    vector<vector<string>> dataExperimento(
         5, vector<string>(nBusquedas.size() + 1, ""));
-    data_experimento[0][0] = "hashing_abierto";
-    data_experimento[1][0] = "hashing_cerrado_lineal";
-    data_experimento[2][0] = "hashing_cerrado_cuadratico";
-    data_experimento[3][0] = "hashing_cerrado_doble";
-    data_experimento[4][0] = "std::unordered_map";
+    dataExperimento[0][0] = "hashing_abierto";
+    dataExperimento[1][0] = "hashing_cerrado_lineal";
+    dataExperimento[2][0] = "hashing_cerrado_cuadratico";
+    dataExperimento[3][0] = "hashing_cerrado_doble";
+    dataExperimento[4][0] = "std::unordered_map";
     /* También habra otro vector con las desviaciones estándar. */
-    vector<vector<string>> desviaciones(data_experimento);
+    vector<vector<string>> desviaciones(dataExperimento);
 
     /*
      * Se harán 1000 busquedas de elementos no existentes para las 1000
@@ -626,11 +621,11 @@ void searchTimeTestTipo2(vector<data_struct>& datosInsercion,
         double dvStl = sqrt((dvStlL - pow(promTiempoStl, 2) * nExperimentos) /
                             (nExperimentos - 1));
 
-        data_experimento[0][c] = to_string(promTiempoAbierto);
-        data_experimento[1][c] = to_string(promTiempoLinear);
-        data_experimento[2][c] = to_string(promTiempoQuad);
-        data_experimento[3][c] = to_string(promTiempoDoble);
-        data_experimento[4][c] = to_string(promTiempoStl);
+        dataExperimento[0][c] = to_string(promTiempoAbierto);
+        dataExperimento[1][c] = to_string(promTiempoLinear);
+        dataExperimento[2][c] = to_string(promTiempoQuad);
+        dataExperimento[3][c] = to_string(promTiempoDoble);
+        dataExperimento[4][c] = to_string(promTiempoStl);
 
         desviaciones[0][c] = to_string(dvAbierto);
         desviaciones[1][c] = to_string(dvLinear);
@@ -646,7 +641,7 @@ void searchTimeTestTipo2(vector<data_struct>& datosInsercion,
         features.push_back(to_string(cuenta));
     }
 
-    write_data(features, data_experimento, "../resultados/busquedas2_id.csv");
+    write_data(features, dataExperimento, "../resultados/busquedas2_id.csv");
 
     write_data(features, desviaciones, "../resultados/dv_busquedas2_id.csv");
 
@@ -718,11 +713,11 @@ void searchTimeTestTipo2(vector<data_struct>& datosInsercion,
         double dvStl = sqrt((dvStlL - pow(promTiempoStl, 2) * nExperimentos) /
                             (nExperimentos - 1));
 
-        data_experimento[0][c] = to_string(promTiempoAbierto);
-        data_experimento[1][c] = to_string(promTiempoLinear);
-        data_experimento[2][c] = to_string(promTiempoQuad);
-        data_experimento[3][c] = to_string(promTiempoDoble);
-        data_experimento[4][c] = to_string(promTiempoStl);
+        dataExperimento[0][c] = to_string(promTiempoAbierto);
+        dataExperimento[1][c] = to_string(promTiempoLinear);
+        dataExperimento[2][c] = to_string(promTiempoQuad);
+        dataExperimento[3][c] = to_string(promTiempoDoble);
+        dataExperimento[4][c] = to_string(promTiempoStl);
 
         desviaciones[0][c] = to_string(dvAbierto);
         desviaciones[1][c] = to_string(dvLinear);
@@ -733,7 +728,7 @@ void searchTimeTestTipo2(vector<data_struct>& datosInsercion,
         ++c;
     }
 
-    write_data(features, data_experimento,
+    write_data(features, dataExperimento,
                "../resultados/busquedas2_username.csv");
 
     write_data(features, desviaciones,
