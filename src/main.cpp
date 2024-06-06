@@ -1,9 +1,8 @@
+#include "../inc/data_parsing.h"
+#include "../inc/testing.h"
 #include <iostream>
 #include <string>
 #include <vector>
-#include <string>
-#include "../inc/data_parsing.h"
-#include "../inc/testing.h"
 /* TODO: Proablemente dejar en un header y compilar por separado */
 
 using namespace std;
@@ -21,33 +20,30 @@ size_t h2(string username, size_t m) {
     /* se calcula de manera recursiva como: */
     size_t alpha = 33;
     unsigned long long sum = 0;
-    
-    for (auto &ch : username) {
-        sum = (alpha * sum + (int) ch);
+
+    for (auto& ch : username) {
+        sum = (alpha * sum + (int)ch);
     }
 
-
-    /* mult mod prime con a, b menores a m (tamaño de la tabla, número primo, quizás). */
+    /* mult mod prime con a, b menores a m (tamaño de la tabla, número primo,
+     * quizás). */
     size_t a = 45382, b = 11923;
-    
+
     return (a * sum + b) % m;
 }
 
-
 // Función Hash para el user ID
-unsigned long long h1(unsigned long long user_id)
-{
+unsigned long long h1(unsigned long long user_id) {
     size_t m = 49157, a = 45382, b = 11923;
 
     return (a * user_id + b) % m;
 }
 
-
 void testColisionesUsername() {
     size_t m = 49157;
-    vector<vector<string>> data = read_csv("../data/universities_followers_no_dups.csv");
+    vector<vector<string>> data =
+        read_csv("../data/universities_followers_no_dups.csv");
     vector<data_struct> convertedData = convertData(data);
-
 
     /* Guardaremos cuenta de las veces que se hasheo a cada indice aquí */
     vector<int> resultados(m, 0);
@@ -67,10 +63,10 @@ void testColisionesUsername() {
         if (count > 1) {
             cant_colisiones += count - 1;
         }
-        
     }
 
-    cout << "cantidad de veces máxima hasheada al mismo índice: " << max << endl;
+    cout << "cantidad de veces máxima hasheada al mismo índice: " << max
+         << endl;
     cout << "cantidad de colisiones: " << cant_colisiones << endl;
 
     write_csv(resultados, "../data/results.csv");
@@ -78,9 +74,9 @@ void testColisionesUsername() {
 
 void testColisionesUserId() {
     size_t m = 49157;
-    vector<vector<string>> data = read_csv("../data/universities_followers_no_dups.csv");
+    vector<vector<string>> data =
+        read_csv("../data/universities_followers_no_dups.csv");
     vector<data_struct> convertedData = convertData(data);
-
 
     /* Guardaremos cuenta de las veces que se hasheo a cada indice aquí */
     vector<int> resultados(m, 0);
@@ -100,20 +96,17 @@ void testColisionesUserId() {
         if (count > 1) {
             cant_colisiones += count - 1;
         }
-        
     }
 
-    cout << "cantidad de veces máxima hasheada al mismo índice: " << max << endl;
+    cout << "cantidad de veces máxima hasheada al mismo índice: " << max
+         << endl;
     cout << "cantidad de colisiones: " << cant_colisiones << endl;
 
     write_csv(resultados, "../data/results.csv");
 }
 
-
-
-
 int main(int argc, char* argv[]) {
-        
+
     size_t nExperimentos;
     if (argc == 2) {
         nExperimentos = stoi(argv[1]);
@@ -121,14 +114,18 @@ int main(int argc, char* argv[]) {
         nExperimentos = 10;
     }
     /* Leemos los datos y convertimos en vector de data_struct */
-    vector<vector<string>> datosReales = read_csv("../data/universities_followers_no_dups.csv");
-    vector<vector<string>> datosRandom = read_csv("../data/universities_followers_no_dups_random.csv");
+    vector<vector<string>> datosReales =
+        read_csv("../data/universities_followers_no_dups.csv");
+    vector<vector<string>> datosRandom =
+        read_csv("../data/universities_followers_no_dups_random.csv");
     vector<data_struct> datosRealesConverted = convertData(datosReales);
     vector<data_struct> datosRandomConverted = convertData(datosRandom);
-    cout << "### Dataset real con " << datosRealesConverted.size() << " elementos ###\n";
-    cout << "### Dataset random con " << datosRandomConverted.size() << " elementos ###\n";
+    cout << "### Dataset real con " << datosRealesConverted.size()
+         << " elementos ###\n";
+    cout << "### Dataset random con " << datosRandomConverted.size()
+         << " elementos ###\n";
 
     doTests(datosRealesConverted, datosRandomConverted, nExperimentos);
-   
+
     return 0;
 }

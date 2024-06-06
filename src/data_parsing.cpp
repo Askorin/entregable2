@@ -1,6 +1,6 @@
 #include "../inc/data_parsing.h"
-#include <ios>
 #include <fstream>
+#include <ios>
 #include <sstream>
 
 using namespace std;
@@ -24,7 +24,6 @@ vector<vector<string>> read_csv(string filepath) {
         rows.push_back(row);
     }
     return rows;
-
 }
 
 void write_csv(vector<int> mivector, string filepath) {
@@ -36,28 +35,30 @@ void write_csv(vector<int> mivector, string filepath) {
     }
 }
 
-void write_data(vector<string> columnas, vector<vector<string>> datos, string filepath) {
+void write_data(vector<string> columnas, vector<vector<string>> datos,
+                string filepath) {
     ofstream fout;
     fout.open(filepath, ios::out | ios::trunc);
     for (size_t i = 0; i < columnas.size(); ++i) {
         fout << columnas[i];
-        if (i != columnas.size() - 1) fout << ",";
+        if (i != columnas.size() - 1)
+            fout << ",";
     }
     fout << "\n";
-    
+
     for (auto fila : datos) {
         for (size_t i = 0; i < fila.size(); ++i) {
             fout << fila[i];
-            if (i != fila.size() - 1) fout << ",";
+            if (i != fila.size() - 1)
+                fout << ",";
         }
         fout << "\n";
     }
 }
 
-
-
 vector<data_struct> convertData(vector<vector<string>> data) {
-    vector<data_struct> res = vector<data_struct>();;
+    vector<data_struct> res = vector<data_struct>();
+    ;
     for (auto elemento : data) {
         string university = elemento[0];
         unsigned long long user_id = stoull(elemento[1]);
@@ -67,8 +68,9 @@ vector<data_struct> convertData(vector<vector<string>> data) {
         unsigned int follower_count = stoul(elemento[5]);
         string created_at = elemento[6];
 
-        data_struct elementoConvertido = data_struct(university, user_id, username, n_tweets,
-                friend_count, follower_count, created_at);
+        data_struct elementoConvertido =
+            data_struct(university, user_id, username, n_tweets, friend_count,
+                        follower_count, created_at);
         res.push_back(elementoConvertido);
     }
     return res;

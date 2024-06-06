@@ -17,17 +17,17 @@ struct data_struct {
     unsigned int follower_count;
     /* */
     std::string created_at;
-    
+
     data_struct();
 
-    data_struct(std::string university, unsigned long long user_id, std::string username,
-            unsigned int n_tweets, unsigned int friend_count, unsigned int follower_count,
-            std::string created_at);
+    data_struct(std::string university, unsigned long long user_id,
+                std::string username, unsigned int n_tweets,
+                unsigned int friend_count, unsigned int follower_count,
+                std::string created_at);
 
-    bool operator == (const data_struct& data);
+    bool operator==(const data_struct& data);
 };
 
-std::ostream& operator << (std::ostream &os, const data_struct &elem);
-
+std::ostream& operator<<(std::ostream& os, const data_struct& elem);
 
 #endif
