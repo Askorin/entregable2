@@ -7,6 +7,11 @@
 #include <string>
 #include <vector>
 
+
+/*
+ * Mapa derivado de HashMap implemenado a través de un std::vector de Entry's, resuelve
+ * colisiones con probing cuadrático.
+ */
 template <typename KeyType, typename ValueType>
 class QuadMap : public HashMap<KeyType, ValueType> {
   private:

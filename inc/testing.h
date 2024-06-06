@@ -5,6 +5,8 @@
 #include <unordered_map>
 #include <vector>
 
+/* Aquí se encuentran todas las funciones de testeo, hacen lo que dicen los nombres. */
+
 void doTests(std::vector<dataStruct>& datosReales,
              std::vector<dataStruct>& datosRandom, size_t nExperimentos);
 

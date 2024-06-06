@@ -5,12 +5,17 @@
 #include <string>
 #include <vector>
 
+/*
+ * Mapa derivado de HashMap implemenado a través de un std::vector de Entry's, resuelve
+ * colisiones con doble hashing
+ */
 template <typename KeyType, typename ValueType>
 class DoubleHash : public HashMap<KeyType, ValueType> {
   private:
     std::vector<Entry<KeyType, ValueType>> table;
     std::vector<int> mirror;
 
+    /* Segunda función de hasheo para resolver colisiones */
     size_t d1(KeyType key);
 
   public:

@@ -7,9 +7,14 @@
 #include <string>
 #include <vector>
 
+/*
+ * Mapa derivado de HashMap implemenado a través de encadenamiento separado,
+ * con std::vector
+ */
 template <typename KeyType, typename ValueType>
 class OpenHashingMap : public HashMap<KeyType, ValueType> {
   private:
+    /* La tabla guarda "cadenas", vectores que albergan las Entry's. */
     std::vector<std::vector<Entry<KeyType, ValueType>>> table;
 
   public:
@@ -19,8 +24,10 @@ class OpenHashingMap : public HashMap<KeyType, ValueType> {
 
     std::optional<ValueType> put(KeyType key, ValueType value) override;
 
+    /* Retorna la table, ya no está en uso. */
     std::vector<std::vector<Entry<KeyType, ValueType>>> getTable();
 
+    /* Método auxiliar, retorna el total de espacio reservado para Entry's */
     size_t getCap();
 
     // ValueType remove(KeyType key) override;

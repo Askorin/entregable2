@@ -139,10 +139,6 @@ void insertionTimeTest(vector<dataStruct>& datos, size_t nExperimentos,
     DoubleHash<unsigned long long, dataStruct> dobleUl;
     unordered_map<unsigned long long, dataStruct> stlUl;
 
-    /*
-     * Los datos se guardaran en cuatro filas, cada una con las columnas:
-     * tipo_mapa, cuentas_1000, cuentas_5000 ...
-     */
     vector<vector<string>> dataExperimento =
         vector<vector<string>>(5, vector<string>(cuentas.size() + 1, ""));
     dataExperimento[0][0] = "hashing_abierto";
@@ -333,20 +329,7 @@ void searchTimeTestTipo1(vector<dataStruct>& datos, size_t nExperimentos,
     DoubleHash<unsigned long long, dataStruct> dobleUl;
     unordered_map<unsigned long long, dataStruct> stlUl;
 
-    /*
-     * En este caso nos gusta desordenar el vector de datos, ya que luego
-     * realizaremos consultas sobre el mismo, parece conveniente que no se hagan
-     * en el mismo orden en el que los elementos fueron insertados. En el
-     * segundo tipo de búsqueda no debería ser necesario hacer esto, ya que se
-     * consulta desde un dataset distinto.
-     */
-    std::vector<dataStruct> datosBusqueda(datos);
-    std::shuffle(begin(datosBusqueda), end(datosBusqueda), mt19937{random_device{}()});
-
-    /*
-     * Los datos se guardaran en cuatro filas, cada una con las columnas:
-     * tipo_mapa, cuentas_1000, cuentas_5000 ...
-     */
+    
     vector<string> features = {"mapa"};
 
     for (auto factor : factoresBusquedas) {
@@ -363,6 +346,9 @@ void searchTimeTestTipo1(vector<dataStruct>& datos, size_t nExperimentos,
     /* También habra otro vector con las desviaciones estándar. */
     vector<vector<string>> desviaciones(dataExperimento);
 
+    /* Para barajar las busquedas */
+    mt19937 rdDevice{random_device{}()};
+
     size_t c = 1;
     for (auto factor : factoresBusquedas) {
         cout << "### Buscando tipo 1, id, cuenta ### " << factor << endl;
@@ -375,6 +361,15 @@ void searchTimeTestTipo1(vector<dataStruct>& datos, size_t nExperimentos,
         stlUl.max_load_factor(1);
         stlUl.rehash(abiertoUl.getMaxCapacity());
 
+        /*
+         * En este caso nos gusta desordenar el vector de datos, ya que luego
+         * realizaremos consultas sobre el mismo, parece conveniente que no se hagan
+         * en el mismo orden en el que los elementos fueron insertados. En el
+         * segundo tipo de búsqueda no debería ser necesario hacer esto, ya que se
+         * consulta desde un dataset distinto.
+         */
+        vector<dataStruct> datosBusqueda;
+
         /* Insertamos los datos */
         for (size_t i = 0; i < size_t(factor * datos.size()); ++i) {
             abiertoUl.put(datos[i].userId, datos[i]);
@@ -382,7 +377,12 @@ void searchTimeTestTipo1(vector<dataStruct>& datos, size_t nExperimentos,
             quadUl.put(datos[i].userId, datos[i]);
             dobleUl.put(datos[i].userId, datos[i]);
             stlUl.insert({datos[i].userId, datos[i]});
+            datosBusqueda.push_back(datos[i]);
         }
+
+
+        /* Barajamos los datos a buscar */
+        shuffle(begin(datosBusqueda), end(datosBusqueda), rdDevice); 
 
         double promTiempoAbierto = 0, promTiempoLinear = 0, promTiempoQuad = 0,
                promTiempoDoble = 0, promTiempoStl = 0;
@@ -470,6 +470,8 @@ void searchTimeTestTipo1(vector<dataStruct>& datos, size_t nExperimentos,
         stlStr.max_load_factor(1);
         stlStr.rehash(abiertoStr.getMaxCapacity());
 
+        vector<dataStruct> datosBusqueda;
+
         /* Insertamos los datos */
         for (size_t i = 0; i < size_t(factor * datos.size()); ++i) {
             abiertoStr.put(datos[i].userName, datos[i]);
@@ -477,7 +479,12 @@ void searchTimeTestTipo1(vector<dataStruct>& datos, size_t nExperimentos,
             quadStr.put(datos[i].userName, datos[i]);
             dobleStr.put(datos[i].userName, datos[i]);
             stlStr.insert({datos[i].userName, datos[i]});
+            datosBusqueda.push_back(datos[i]);
         }
+
+
+        /* Barajamos los datos a buscar */
+        shuffle(begin(datosBusqueda), end(datosBusqueda), rdDevice);
 
         double promTiempoAbierto = 0, promTiempoLinear = 0, promTiempoQuad = 0,
                promTiempoDoble = 0, promTiempoStl;
@@ -587,6 +594,14 @@ void searchTimeTestTipo2(vector<dataStruct>& datosInsercion,
     size_t c = 1;
     for (auto factor : factoresBusquedas) {
 
+        abiertoUl = OpenHashingMap<unsigned long long, dataStruct>();
+        linearUl = HashLinear<unsigned long long, dataStruct>();
+        quadUl = QuadMap<unsigned long long, dataStruct>();
+        dobleUl = DoubleHash<unsigned long long, dataStruct>();
+        stlUl = unordered_map<unsigned long long, dataStruct>();
+        stlUl.max_load_factor(1);
+        stlUl.rehash(abiertoUl.getMaxCapacity());
+
         cout << "### Buscando tipo 2, id, factor ### " << factor << endl;
         /* Insertamos los datos */
         for (size_t i = 0; i < size_t(factor * datosInsercion.size()); ++i) {
@@ -676,14 +691,23 @@ void searchTimeTestTipo2(vector<dataStruct>& datosInsercion,
     for (auto factor : factoresBusquedas) {
         cout << "### Buscando tipo 2, usr, factor ### " << factor << endl;
 
+        abiertoStr = OpenHashingMap<string, dataStruct>();
+        linearStr = HashLinear<string, dataStruct>();
+        quadStr = QuadMap<string, dataStruct>();
+        dobleStr = DoubleHash<string, dataStruct>();
+        stlStr = unordered_map<string, dataStruct>();
+        stlStr.max_load_factor(1);
+        stlStr.rehash(abiertoStr.getMaxCapacity());
+        stlStr.max_load_factor(1);
+        stlStr.rehash(abiertoStr.getMaxCapacity());
+
+
         for (size_t i = 0; i < size_t(factor * datosInsercion.size()); ++i) {
             abiertoStr.put(datosInsercion[i].userName, datosInsercion[i]);
             linearStr.put(datosInsercion[i].userName, datosInsercion[i]);
             quadStr.put(datosInsercion[i].userName, datosInsercion[i]);
             dobleStr.put(datosInsercion[i].userName, datosInsercion[i]);
             stlStr.insert({datosInsercion[i].userName, datosInsercion[i]});
-            stlStr.max_load_factor(1);
-            stlStr.rehash(abiertoStr.getMaxCapacity());
         }
         double promTiempoAbierto = 0, promTiempoLinear = 0, promTiempoQuad = 0,
                promTiempoDoble = 0, promTiempoStl = 0;
