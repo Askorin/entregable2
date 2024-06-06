@@ -40,11 +40,11 @@ void insertionTimeTest(std::vector<dataStruct>& datos, size_t nExperimentos,
                        std::vector<size_t> cuentas);
 
 void searchTimeTestTipo1(std::vector<dataStruct>& datos, size_t nExperimentos,
-                         std::vector<size_t> cuentas);
+                         std::vector<float> factoresBusquedas);
 
 void searchTimeTestTipo2(std::vector<dataStruct>& datosInsercion,
                          std::vector<dataStruct>& datosBusqueda,
-                         size_t nExperimentos, std::vector<size_t> cuentas);
+                         size_t nExperimentos, std::vector<float> factoresBusquedas);
 
 bool testFuncionamiento(std::vector<dataStruct>& datos);
 
