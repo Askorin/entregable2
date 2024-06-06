@@ -751,29 +751,29 @@ bool testFuncionamiento(vector<dataStruct>& datos) {
     cout << "X Inserciones para userid\n";
 
     for (size_t i = 0; i < datos.size(); ++i) {
-        std::optional<dataStruct> datoAbierto =
-            abiertoUl.get(datos[i].userId);
-        std::optional<dataStruct> datoLinear = abiertoUl.get(datos[i].userId);
-        std::optional<dataStruct> datoQuad = abiertoUl.get(datos[i].userId);
-        std::optional<dataStruct> datoDoble = abiertoUl.get(datos[i].userId);
+        std::optional<dataStruct> datoAbierto = abiertoUl.get(datos[i].userId);
+        std::optional<dataStruct> datoLinear = linearUl.get(datos[i].userId);
+        std::optional<dataStruct> datoQuad = quadUl.get(datos[i].userId);
+        std::optional<dataStruct> datoDoble = dobleUl.get(datos[i].userId);
+
 
         if (!datoAbierto || !(datoAbierto.value() == datos[i])) {
-            cout << "En abierto, error para:\n";
+            cout << "En abierto UL, error para:\n";
             cout << datos[i];
             return false;
         }
         if (!datoLinear || !(datoLinear.value() == datos[i])) {
-            cout << "En linear, error para:\n";
+            cout << "En linear UL, error para:\n";
             cout << datos[i];
             return false;
         }
         if (!datoQuad || !(datoQuad.value() == datos[i])) {
-            cout << "En quad, error para:\n";
+            cout << "En quad UL, error para:\n";
             cout << datos[i];
             return false;
         }
         if (!datoDoble || !(datoDoble.value() == datos[i])) {
-            cout << "En doble, error para:\n";
+            cout << "En doble UL, error para:\n";
             cout << datos[i];
             return false;
         }
@@ -797,11 +797,10 @@ bool testFuncionamiento(vector<dataStruct>& datos) {
     cout << "X Inserciones para username\n";
 
     for (size_t i = 0; i < datos.size(); ++i) {
-        std::optional<dataStruct> datoAbierto =
-            abiertoUl.get(datos[i].userId);
-        std::optional<dataStruct> datoLinear = abiertoUl.get(datos[i].userId);
-        std::optional<dataStruct> datoQuad = abiertoUl.get(datos[i].userId);
-        std::optional<dataStruct> datoDoble = abiertoUl.get(datos[i].userId);
+        std::optional<dataStruct> datoAbierto = abiertoStr.get(datos[i].userName);
+        std::optional<dataStruct> datoLinear = linearStr.get(datos[i].userName);
+        std::optional<dataStruct> datoQuad = quadStr.get(datos[i].userName);
+        std::optional<dataStruct> datoDoble = dobleStr.get(datos[i].userName);
 
         if (!datoAbierto || !(datoAbierto.value() == datos[i])) {
             cout << "En abierto, error para:\n";
