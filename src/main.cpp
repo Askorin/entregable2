@@ -3,7 +3,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-/* TODO: Proablemente dejar en un header y compilar por separado */
 
 using namespace std;
 
@@ -21,6 +20,7 @@ int main(int argc, char* argv[]) {
         read_csv("../data/universities_followers_no_dups.csv");
     vector<vector<string>> datosRandom =
         read_csv("../data/universities_followers_no_dups_random.csv");
+
     vector<dataStruct> datosRealesConverted = convertData(datosReales);
     vector<dataStruct> datosRandomConverted = convertData(datosRandom);
     cout << "### Dataset real con " << datosRealesConverted.size()

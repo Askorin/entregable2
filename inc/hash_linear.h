@@ -5,13 +5,19 @@
 #include <string>
 #include <vector>
 
+/*
+ * Mapa derivado de HashMap implemenado a través de un std::vector de Entry's, resuelve
+ * colisiones con probing lineal.
+ */
 template <typename KeyType, typename ValueType>
 class HashLinear : public HashMap<KeyType, ValueType> {
   private:
     std::vector<Entry<KeyType, ValueType>> table;
+    /* Este vector guarda disponibilidades, con el enumerador Status */
     std::vector<int> mirror;
 
   public:
+    /* Enumerador para llevar registro de la disponibilidad de un bucket. */
     enum Status { Empty, Available, Occupied };
 
     HashLinear();
