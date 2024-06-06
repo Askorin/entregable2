@@ -79,7 +79,7 @@ std::optional<ValueType> DoubleHash<KeyType, ValueType>::put(KeyType key,
         }
     }
     if (availableFound) {
-        mirror[availableFound] = Occupied;
+        mirror[availableIdx] = Occupied;
         table[availableIdx] = Entry<KeyType, ValueType>(key, value);
         ++this->n;
     }

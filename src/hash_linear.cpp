@@ -68,7 +68,9 @@ std::optional<ValueType> HashLinear<KeyType, ValueType>::put(KeyType key,
     }
 
     if (availableFound) {
-        mirror[availableFound] = Occupied;
+        //std::cout << "Valor: \n" << value << std::endl;
+        //std::cout << "En: " << availableIdx << std::endl;
+        mirror[availableIdx] = Occupied;
         table[availableIdx] = Entry<KeyType, ValueType>(key, value);
         ++this->n;
     }

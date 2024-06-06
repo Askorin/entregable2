@@ -63,7 +63,7 @@ std::optional<ValueType> QuadMap<KeyType, ValueType>::put(KeyType key,
         idx = (idx + 2 * i - 1) % this->N;
     }
     if (availableFound) {
-        mirror[availableFound] = Occupied;
+        mirror[availableIdx] = Occupied;
         table[availableIdx] = Entry<KeyType, ValueType>(key, value);
         ++this->n;
     }
