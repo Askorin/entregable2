@@ -35,11 +35,11 @@ unsigned long long HashMap<KeyType, ValueType>::polyRoll(std::string key) {
 }
 
 template <>
-size_t HashMap<unsigned long long, data_struct>::hash(unsigned long long key) {
+size_t HashMap<unsigned long long, dataStruct>::hash(unsigned long long key) {
     return multMod(key);
 }
 
-template <> size_t HashMap<std::string, data_struct>::hash(std::string key) {
+template <> size_t HashMap<std::string, dataStruct>::hash(std::string key) {
     return multMod(polyRoll(key));
 }
 
@@ -58,8 +58,8 @@ bool HashMap<KeyType, ValueType>::isEmpty() {
     return n == 0;
 }
 
-template struct Entry<unsigned long long, data_struct>;
-template struct Entry<std::string, data_struct>;
+template struct Entry<unsigned long long, dataStruct>;
+template struct Entry<std::string, dataStruct>;
 
-template class HashMap<unsigned long long, data_struct>;
-template class HashMap<std::string, data_struct>;
+template class HashMap<unsigned long long, dataStruct>;
+template class HashMap<std::string, dataStruct>;

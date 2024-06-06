@@ -21,8 +21,8 @@ int main(int argc, char* argv[]) {
         read_csv("../data/universities_followers_no_dups.csv");
     vector<vector<string>> datosRandom =
         read_csv("../data/universities_followers_no_dups_random.csv");
-    vector<data_struct> datosRealesConverted = convertData(datosReales);
-    vector<data_struct> datosRandomConverted = convertData(datosRandom);
+    vector<dataStruct> datosRealesConverted = convertData(datosReales);
+    vector<dataStruct> datosRandomConverted = convertData(datosRandom);
     cout << "### Dataset real con " << datosRealesConverted.size()
          << " elementos ###\n";
     cout << "### Dataset random con " << datosRandomConverted.size()

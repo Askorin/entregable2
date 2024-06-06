@@ -102,5 +102,5 @@ std::optional<ValueType> HashLinear<KeyType, ValueType>::put(KeyType key,
 //     }
 // }
 
-template class HashLinear<unsigned long long, data_struct>;
-template class HashLinear<std::string, data_struct>;
+template class HashLinear<unsigned long long, dataStruct>;
+template class HashLinear<std::string, dataStruct>;

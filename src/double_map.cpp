@@ -2,12 +2,12 @@
 #include <vector>
 
 /* Segunda función Hash */
-template <> size_t DoubleHash<std::string, data_struct>::d1(std::string key) {
+template <> size_t DoubleHash<std::string, dataStruct>::d1(std::string key) {
     return 6827 - (this->polyRoll(key) % 6827);
 }
 
 template <>
-size_t DoubleHash<unsigned long long, data_struct>::d1(unsigned long long key) {
+size_t DoubleHash<unsigned long long, dataStruct>::d1(unsigned long long key) {
     return 6827 - (key % 6827);
 }
 
@@ -109,5 +109,5 @@ std::optional<ValueType> DoubleHash<KeyType, ValueType>::put(KeyType key,
 //     }
 // }
 
-template class DoubleHash<unsigned long long, data_struct>;
-template class DoubleHash<std::string, data_struct>;
+template class DoubleHash<unsigned long long, dataStruct>;
+template class DoubleHash<std::string, dataStruct>;

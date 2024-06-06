@@ -96,5 +96,5 @@ std::optional<ValueType> QuadMap<KeyType, ValueType>::put(KeyType key,
 //     return returnValue;
 // };
 
-template class QuadMap<unsigned long long, data_struct>;
-template class QuadMap<std::string, data_struct>;
+template class QuadMap<unsigned long long, dataStruct>;
+template class QuadMap<std::string, dataStruct>;

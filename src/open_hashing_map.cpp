@@ -85,5 +85,5 @@ size_t OpenHashingMap<KeyType, ValueType>::getCap() {
 //
 // };
 
-template class OpenHashingMap<unsigned long long, data_struct>;
-template class OpenHashingMap<std::string, data_struct>;
+template class OpenHashingMap<unsigned long long, dataStruct>;
+template class OpenHashingMap<std::string, dataStruct>;
