@@ -1,5 +1,4 @@
 src/main
 .ipynb_checkpoints
 .vscode
-results.csv
-output/*
+/resultados/*.csv
