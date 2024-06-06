@@ -1,26 +1,20 @@
 #ifndef HASH_DOUBLE_H
 #define HASH_DOUBLE_H
-#include "../inc/map.h"
-#include <vector>
-#include <string>
 #include "../inc/data_struct.h"
+#include "../inc/map.h"
+#include <string>
+#include <vector>
 
-template<typename KeyType, typename ValueType>
+template <typename KeyType, typename ValueType>
 class DoubleHash : public HashMap<KeyType, ValueType> {
-private:
+  private:
     std::vector<Entry<KeyType, ValueType>> table;
     std::vector<int> mirror;
 
     size_t d1(KeyType key);
 
-
-public:
-    enum Status 
-    {
-        Empty,
-        Available,
-        Occupied
-    };
+  public:
+    enum Status { Empty, Available, Occupied };
 
     DoubleHash();
 
@@ -28,7 +22,7 @@ public:
 
     std::optional<ValueType> put(KeyType key, ValueType value) override;
 
-    //ValueType remove(KeyType key) override;
+    // ValueType remove(KeyType key) override;
 };
 
 #endif

@@ -1,20 +1,20 @@
 #include "../inc/data_parsing.h"
-#include <ios>
 #include <fstream>
+#include <ios>
 #include <sstream>
 
 using namespace std;
 
 vector<vector<string>> read_csv(string filepath) {
-    ifstream fin;
+    ifstream fIn;
 
-    fin.open(filepath, ios::in);
+    fIn.open(filepath, ios::in);
 
     vector<vector<string>> rows;
     string line, temp;
     /* Removemos la primera fila */
-    getline(fin, line);
-    while (getline(fin, line)) {
+    getline(fIn, line);
+    while (getline(fIn, line)) {
         stringstream ss(line);
         vector<string> row = vector<string>(0);
         string column;
@@ -24,51 +24,53 @@ vector<vector<string>> read_csv(string filepath) {
         rows.push_back(row);
     }
     return rows;
-
 }
 
-void write_csv(vector<int> mivector, string filepath) {
-    ofstream fout;
-    fout.open(filepath, ios::out | ios::trunc);
-    fout << "idx,count\n";
-    for (size_t i = 0; i < mivector.size(); ++i) {
-        fout << i << "," << mivector[i] << "\n";
+void write_csv(vector<int> datos, string filepath) {
+    ofstream fOut;
+    fOut.open(filepath, ios::out | ios::trunc);
+    fOut << "idx,count\n";
+    for (size_t i = 0; i < datos.size(); ++i) {
+        fOut << i << "," << datos[i] << "\n";
     }
 }
 
-void write_data(vector<string> columnas, vector<vector<string>> datos, string filepath) {
-    ofstream fout;
-    fout.open(filepath, ios::out | ios::trunc);
+void write_data(vector<string> columnas, vector<vector<string>> datos,
+                string filepath) {
+    ofstream fOut;
+    fOut.open(filepath, ios::out | ios::trunc);
     for (size_t i = 0; i < columnas.size(); ++i) {
-        fout << columnas[i];
-        if (i != columnas.size() - 1) fout << ",";
+        fOut << columnas[i];
+        if (i != columnas.size() - 1)
+            fOut << ",";
     }
-    fout << "\n";
-    
+    fOut << "\n";
+
     for (auto fila : datos) {
         for (size_t i = 0; i < fila.size(); ++i) {
-            fout << fila[i];
-            if (i != fila.size() - 1) fout << ",";
+            fOut << fila[i];
+            if (i != fila.size() - 1)
+                fOut << ",";
         }
-        fout << "\n";
+        fOut << "\n";
     }
 }
 
-
-
-vector<data_struct> convertData(vector<vector<string>> data) {
-    vector<data_struct> res = vector<data_struct>();;
-    for (auto elemento : data) {
+vector<dataStruct> convertData(vector<vector<string>> datos) {
+    vector<dataStruct> res = vector<dataStruct>();
+    ;
+    for (auto elemento : datos) {
         string university = elemento[0];
         unsigned long long user_id = stoull(elemento[1]);
-        string username = elemento[2];
-        unsigned int n_tweets = stoul(elemento[3]);
-        unsigned int friend_count = stoul(elemento[4]);
-        unsigned int follower_count = stoul(elemento[5]);
-        string created_at = elemento[6];
+        string userName = elemento[2];
+        unsigned int nTweets = stoul(elemento[3]);
+        unsigned int friendCount = stoul(elemento[4]);
+        unsigned int followerCount = stoul(elemento[5]);
+        string createdAt = elemento[6];
 
-        data_struct elementoConvertido = data_struct(university, user_id, username, n_tweets,
-                friend_count, follower_count, created_at);
+        dataStruct elementoConvertido =
+            dataStruct(university, user_id, userName, nTweets, friendCount,
+                        followerCount, createdAt);
         res.push_back(elementoConvertido);
     }
     return res;

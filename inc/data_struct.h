@@ -2,32 +2,32 @@
 #define DATA_STRUCT_H
 #include <string>
 
-struct data_struct {
+struct dataStruct {
 
     std::string university;
     /* 64 bits */
-    unsigned long long user_id;
+    unsigned long long userId;
     /* 15 chars en el peor caso, 15 bytes */
-    std::string username;
+    std::string userName;
     /* 4 bytes */
-    unsigned int n_tweets;
+    unsigned int nTweets;
     /* 4 bytes */
-    unsigned int friend_count;
+    unsigned int friendCount;
     /* 4 bytes */
-    unsigned int follower_count;
+    unsigned int followerCount;
     /* */
-    std::string created_at;
-    
-    data_struct();
+    std::string createdAt;
 
-    data_struct(std::string university, unsigned long long user_id, std::string username,
-            unsigned int n_tweets, unsigned int friend_count, unsigned int follower_count,
-            std::string created_at);
+    dataStruct();
 
-    bool operator == (const data_struct& data);
+    dataStruct(std::string university, unsigned long long userId,
+                std::string userName, unsigned int nTweets,
+                unsigned int friendCount, unsigned int followerCount,
+                std::string createdAt);
+
+    bool operator==(const dataStruct& data);
 };
 
-std::ostream& operator << (std::ostream &os, const data_struct &elem);
-
+std::ostream& operator<<(std::ostream& os, const dataStruct& elem);
 
 #endif

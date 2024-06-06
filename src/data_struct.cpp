@@ -1,39 +1,39 @@
 #include "../inc/data_struct.h"
 #include <ostream>
 
+dataStruct::dataStruct()
+    : university(), userId(), userName(), nTweets(), friendCount(),
+      followerCount(), createdAt() {}
 
+dataStruct::dataStruct(std::string university, unsigned long long userId,
+                         std::string userName, unsigned int nTweets,
+                         unsigned int friendCount, unsigned int followerCount,
+                         std::string createdAt) {
 
-data_struct::data_struct() : university(), user_id(), username(), n_tweets(), friend_count(),
-            follower_count(), created_at() {}
-
-
-data_struct::data_struct(std::string university, unsigned long long user_id, std::string username,
-            unsigned int n_tweets, unsigned int friend_count, unsigned int follower_count,
-            std::string created_at) {
-
-        this->university = university;
-        this->user_id = user_id;
-        this->username = username;
-        this->n_tweets = n_tweets;
-        this->friend_count = friend_count;
-        this->follower_count = follower_count;
-        this->created_at = created_at;
+    this->university = university;
+    this->userId = userId;
+    this->userName = userName;
+    this->nTweets = nTweets;
+    this->friendCount = friendCount;
+    this->followerCount = followerCount;
+    this->createdAt = createdAt;
 }
 
-bool data_struct::operator == (const data_struct& data) {
-    if (this->university != data.university || this->user_id != data.user_id || this->username != data.username ||
-            this->n_tweets != data.n_tweets || this->friend_count != data.friend_count || this->follower_count != data.follower_count ||
-            this->created_at != data.created_at) {
+bool dataStruct::operator==(const dataStruct& data) {
+    if (this->university != data.university || this->userId != data.userId ||
+        this->userName != data.userName || this->nTweets != data.nTweets ||
+        this->friendCount != data.friendCount ||
+        this->followerCount != data.followerCount ||
+        this->createdAt != data.createdAt) {
         return false;
     }
     return true;
 }
 
-std::ostream& operator << (std::ostream &os, const data_struct &elem) {
-        return (os << "university: " << elem.university << "\nuser_id: " << elem.user_id 
-                << "\nusername: " << elem.username << "\nn_tweets: " << elem.n_tweets
-                << "\nfriend_count: " << elem.friend_count << "\nfollower_count: "
-                << elem.follower_count << "\ncreated_at: " << elem.created_at);
+std::ostream& operator<<(std::ostream& os, const dataStruct& elem) {
+    return (
+        os << "university: " << elem.university << "\nuser_id: " << elem.userId
+           << "\nusername: " << elem.userName << "\nn_tweets: " << elem.nTweets
+           << "\nfriend_count: " << elem.friendCount << "\nfollower_count: "
+           << elem.followerCount << "\ncreated_at: " << elem.createdAt);
 }
-
-

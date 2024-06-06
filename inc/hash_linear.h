@@ -1,23 +1,18 @@
 #ifndef HASH_LINEAR_H
 #define HASH_LINEAR_H
-#include <vector>
-#include <string>
 #include "../inc/data_struct.h"
 #include "../inc/map.h"
+#include <string>
+#include <vector>
 
-template<typename KeyType, typename ValueType>
+template <typename KeyType, typename ValueType>
 class HashLinear : public HashMap<KeyType, ValueType> {
-private:
+  private:
     std::vector<Entry<KeyType, ValueType>> table;
     std::vector<int> mirror;
 
-public:
-    enum Status 
-    {
-        Empty,
-        Available,
-        Occupied
-    };
+  public:
+    enum Status { Empty, Available, Occupied };
 
     HashLinear();
 
@@ -25,7 +20,7 @@ public:
 
     std::optional<ValueType> put(KeyType key, ValueType value) override;
 
-    //ValueType remove(KeyType key) override;
+    // ValueType remove(KeyType key) override;
 };
 
 #endif

@@ -1,27 +1,20 @@
 #ifndef QUAD_MAP_H
 #define QUAD_MAP_H
-#include "map.h"
-#include <vector>
-#include <string>
 #include "data_struct.h"
+#include "map.h"
 #include <iostream>
 #include <optional>
+#include <string>
+#include <vector>
 
-
-
-template<typename KeyType, typename ValueType>
+template <typename KeyType, typename ValueType>
 class QuadMap : public HashMap<KeyType, ValueType> {
-private:
+  private:
     std::vector<Entry<KeyType, ValueType>> table;
     std::vector<int> mirror;
 
-public:
-    enum Status 
-    {
-        Empty,
-        Available,
-        Occupied
-    };
+  public:
+    enum Status { Empty, Available, Occupied };
 
     QuadMap();
 
@@ -29,7 +22,7 @@ public:
 
     std::optional<ValueType> put(KeyType key, ValueType value) override;
 
-    //ValueType remove(KeyType key) override;
+    // ValueType remove(KeyType key) override;
 };
 
 #endif
